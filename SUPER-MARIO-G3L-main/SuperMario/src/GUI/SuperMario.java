@@ -76,7 +76,8 @@ public class SuperMario extends JFrame{
 		        		player.saltar();
 		        	}
 		        	*/
-		        	player.saltar(obstaculo);
+		        		player.saltar(obstaculo);
+		        	
 		        } 
 		        
 		    }

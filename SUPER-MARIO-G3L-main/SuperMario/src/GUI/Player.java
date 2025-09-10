@@ -52,9 +52,11 @@ import javax.swing.Timer;
 		}
 
 		public void saltar(Obstaculo obstaculo) { 
-			if(teclaPresionada) {
-			int altura_limite = 100;
 			int velocidad_salto = 5;
+			if(teclaPresionada) {
+			int altura_minima = 470;
+			int altura_limite = 100;
+			
 			
 			Timer timer = new Timer(30, new ActionListener() {
 				int alturaActual = 0;
@@ -68,21 +70,23 @@ import javax.swing.Timer;
 					if (sube == true) { // Subiendo
 						teclaPresionada=false;
 		                if (alturaActual < altura_limite) {
-		                	if (!chequeoColisionY(velocidad_salto, obstaculo)) {
 		                		setLocation(posX, posY - velocidad_salto);
 		                    	alturaActual += velocidad_salto;
-		                	}
-		                	else {
-		                		sube = false;
-		                		setLocation(posX, posY - obstaculo.getHeight());
-		                	}
 		                } else {
 		                    sube = false; // Cambia a bajada
 		                }
 		            } else { // Bajando
 		                if (alturaActual > 0) {
-		                    setLocation(posX, posY + velocidad_salto);
-		                    alturaActual -= velocidad_salto;
+		                	if (!chequeoColisionY(velocidad_salto, obstaculo)) {
+		                		setLocation(posX, posY + velocidad_salto);
+			                    alturaActual -= velocidad_salto;
+		        			}
+		                	else {
+		                		setLocation(getX(), getY() - obstaculo.getHeight());
+		                		((Timer) e.getSource()).stop(); // Termina el salto
+		                        teclaPresionada = true;
+		        			}
+		                    
 		                } else {
 		                    ((Timer) e.getSource()).stop(); // Termina el salto
 		                    teclaPresionada=true;
@@ -94,9 +98,13 @@ import javax.swing.Timer;
 						teclaPresionada=true;
 					}
 				}
+				
 			});
+			
+			
 			timer.start();
 			}
+			
 		}
 
 	
