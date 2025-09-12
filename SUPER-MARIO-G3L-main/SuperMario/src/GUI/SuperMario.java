@@ -1,12 +1,15 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class SuperMario extends JFrame{
 	private JPanel contentPane;	
@@ -37,10 +40,18 @@ public class SuperMario extends JFrame{
 		contentPane.add(obstaculo);
 		obstaculos.add(obstaculo);
 		
-		Obstaculo obstaculo2 = new Obstaculo(200, 370, 80, 10);
+		Obstaculo obstaculo2 = new Obstaculo(200, 400, 80, 10);
 		obstaculo2.setBackground(Color.GREEN);
 		contentPane.add(obstaculo2);
 		obstaculos.add(obstaculo2);
+		
+		Obstaculo suelo = new Obstaculo(0, 500, 1000, 10);
+		suelo.setBackground(Color.black);
+		contentPane.add(suelo);
+		obstaculos.add(suelo);
+		
+		
+		
 
 		
 		addKeyListener(new KeyListener() { // Se abre el listener para poder escuchar input del teclado en el juego.
@@ -97,6 +108,14 @@ public class SuperMario extends JFrame{
 		        if (teclaPresionada == KeyEvent.VK_W) { wPressed = false; }
 		    }
 		});
+		Timer gravedad = new Timer(30, new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        if (!player.estaApoyado(obstaculos)) {
+		            player.setLocation(player.getX(), player.getY() + 1); // velocidad de caída
+		        }
+		    }
+		});
+		gravedad.start();
 	}
 
 	public static void main(String[] args) {

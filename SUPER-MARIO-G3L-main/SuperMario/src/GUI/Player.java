@@ -1,6 +1,7 @@
 	package GUI;
 
 	import java.awt.Rectangle;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -44,6 +45,15 @@ import javax.swing.Timer;
 		    return futuraPos.intersects(obstaculo.getBounds());
 		}
 
+		public boolean estaApoyado (ArrayList<Obstaculo> obstaculos) {
+			for (Obstaculo obstaculo : obstaculos) {
+				Rectangle abajoJugador = new Rectangle (getX(), getY() + 1, getWidth(), getHeight());
+				if (abajoJugador.intersects(obstaculo.getBounds())) {
+					return true;
+				}	
+			}
+			return false;
+		}
 
 		
 		public void moverDerecha(int anchoPanel) {
