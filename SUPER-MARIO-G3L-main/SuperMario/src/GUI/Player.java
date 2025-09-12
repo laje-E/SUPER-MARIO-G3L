@@ -3,6 +3,7 @@
 	import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -14,6 +15,8 @@ import javax.swing.Timer;
 		
 		private boolean teclaPresionada=true;
 		
+		public ArrayList<Obstaculo> obstaculos;
+		
 		public Player(int posX, int posY, int ancho, int alto) {
 			setBounds(posX, posY, ancho, alto);
 		}
@@ -21,16 +24,26 @@ import javax.swing.Timer;
 		public boolean chequeoColisionX(int dx, Obstaculo obstaculo) {
 		    int nuevaX = getX() + dx;
 		    int nuevaY = getY();
-		    return new java.awt.Rectangle(nuevaX, nuevaY, getWidth(), getHeight())
-		            .intersects(obstaculo.getBounds());
+		    Rectangle futuraPos = new Rectangle(nuevaX, nuevaY, getWidth(), getHeight());
+		    
+		    return futuraPos.intersects(obstaculo.getBounds());
+		    
 		}
 		
-		public boolean chequeoColisionY(int dy, Obstaculo obstaculo) {
+		public boolean chequeoColisionArriba(int dy, Obstaculo obstaculo) {
 		    int nuevaX = getX();
 		    int nuevaY = getY() - dy; // Movimiento hacia arriba
 		    Rectangle futuraPos = new Rectangle(nuevaX, nuevaY, getWidth(), getHeight());
 		    return futuraPos.intersects(obstaculo.getBounds());
 		}
+		
+		public boolean chequeoColisionAbajo(int dy, Obstaculo obstaculo) {
+		    int nuevaX = getX();
+		    int nuevaY = getY() + dy; // Movimiento hacia abajo
+		    Rectangle futuraPos = new Rectangle(nuevaX, nuevaY, getWidth(), getHeight());
+		    return futuraPos.intersects(obstaculo.getBounds());
+		}
+
 
 		
 		public void moverDerecha(int anchoPanel) {
@@ -51,7 +64,7 @@ import javax.swing.Timer;
 			}
 		}
 
-		public void saltar(Obstaculo obstaculo) { 
+		public void saltar(ArrayList<Obstaculo> obstaculos) { 
 			int velocidad_salto = 5;
 			if(teclaPresionada) {
 			int altura_minima = 470;
@@ -67,22 +80,44 @@ import javax.swing.Timer;
 					int posY = getY();
 					
 					
+					
 					if (sube == true) { // Subiendo
 						teclaPresionada=false;
 		                if (alturaActual < altura_limite) {
+		                	boolean colisionSubida = false;
+		                	for (Obstaculo obstaculo : obstaculos) {
+		                		if (chequeoColisionArriba(velocidad_salto, obstaculo)) {
+		                			colisionSubida = true;
+		                			break;
+		        				}
+		                	}
+		                	if (!colisionSubida) {
 		                		setLocation(posX, posY - velocidad_salto);
 		                    	alturaActual += velocidad_salto;
+		                	}
+		                	else {
+		                		sube = false;
+		                	}
 		                } else {
 		                    sube = false; // Cambia a bajada
 		                }
+		                
 		            } else { // Bajando
 		                if (alturaActual > 0) {
-		                	if (!chequeoColisionY(velocidad_salto, obstaculo)) {
+		                	boolean colisionBajada = false;
+		                	for (Obstaculo obstaculo : obstaculos) {
+		                		if (chequeoColisionAbajo(velocidad_salto, obstaculo)) {
+		                			colisionBajada = true;
+		                			setLocation(getX(), getY() - (obstaculo.getHeight() - getHeight()));
+		                			break;
+		                		}
+		                	}
+		                	if (!colisionBajada) {
 		                		setLocation(posX, posY + velocidad_salto);
 			                    alturaActual -= velocidad_salto;
-		        			}
+		                	}
 		                	else {
-		                		setLocation(getX(), getY() - obstaculo.getHeight());
+		                		
 		                		((Timer) e.getSource()).stop(); // Termina el salto
 		                        teclaPresionada = true;
 		        			}
@@ -98,6 +133,7 @@ import javax.swing.Timer;
 						teclaPresionada=true;
 					}
 				}
+			
 				
 			});
 			

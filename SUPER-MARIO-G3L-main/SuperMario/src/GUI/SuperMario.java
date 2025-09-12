@@ -3,6 +3,7 @@ package GUI;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,6 +13,7 @@ public class SuperMario extends JFrame{
 	private boolean aPressed = false;
 	private boolean dPressed = false;
 	private boolean wPressed = false;
+	public ArrayList<Obstaculo> obstaculos;
 	
 	public SuperMario(){
 		
@@ -23,6 +25,8 @@ public class SuperMario extends JFrame{
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		obstaculos = new ArrayList<>();
 	
 		Player player = new Player(360, 470, 80, 10);
 		player.setBackground(Color.red);
@@ -31,7 +35,12 @@ public class SuperMario extends JFrame{
 		Obstaculo obstaculo = new Obstaculo(100, 470, 80, 10);
 		obstaculo.setBackground(Color.GREEN);
 		contentPane.add(obstaculo);
+		obstaculos.add(obstaculo);
 		
+		Obstaculo obstaculo2 = new Obstaculo(200, 370, 80, 10);
+		obstaculo2.setBackground(Color.GREEN);
+		contentPane.add(obstaculo2);
+		obstaculos.add(obstaculo2);
 
 		
 		addKeyListener(new KeyListener() { // Se abre el listener para poder escuchar input del teclado en el juego.
@@ -46,37 +55,35 @@ public class SuperMario extends JFrame{
 		        if (teclaPresionada == KeyEvent.VK_W) { wPressed = true; }
 
 		        if (aPressed) { 
-		        		/*alternativa = player.getX() <= obstaculo.getX() + obstaculo.getWidth() && player.getX() + getWidth() >= obstaculo.getX() &&
-		        						player.getY() <= obstaculo.getY() + obstaculo.getHeight() && player.getY() + getHeight() >= obstaculo.getY()*/
-		        	/*
-		        	{
-		        		player.moverDerecha(contentPane.getWidth());
-		        	}
-		        	else {
+		        	boolean puede_mover = true;	
+		        	for (Obstaculo obstaculo : obstaculos) {
+		        		if (player.chequeoColisionX(-15, obstaculo)) {
+		        				puede_mover = false;
+		        				break;
+		        			}
+		        	
+		        		}
+		        	if (puede_mover) {
 		        		player.moverIzquierda(); 
 		        	}
-		        	*/
-		        	if (!player.chequeoColisionX(-15, obstaculo)) {
-		        			player.moverIzquierda(); 
+		        	}
+		        if (dPressed) { 
+		        	boolean puede_mover = true;
+		        	for (Obstaculo obstaculo : obstaculos) {
+		        		if (player.chequeoColisionX(15, obstaculo)) {
+		        			puede_mover = false;
+		        			break;
+		        			
 		        		}
 		        	
 		        	}
-		        if (dPressed) { 
-		        	if (!player.chequeoColisionX(15, obstaculo)) {
+		        	if (puede_mover) {
 		        		player.moverDerecha(contentPane.getWidth());
 		        	}
-		        	
 		        }
 		        if (wPressed) { 
-		        	/*
-		        	if (player.getBounds().intersects(obstaculo.getBounds())) {
-		        		
-		        	}
-		        	else {
-		        		player.saltar();
-		        	}
-		        	*/
-		        		player.saltar(obstaculo);
+		        	
+		        		player.saltar(obstaculos);
 		        	
 		        } 
 		        
