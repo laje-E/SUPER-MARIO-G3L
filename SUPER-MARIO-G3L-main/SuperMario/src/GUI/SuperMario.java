@@ -31,8 +31,8 @@ public class SuperMario extends JFrame{
 		
 		obstaculos = new ArrayList<>();
 	
-		Player player = new Player(360, 470, 80, 10);
-		player.setBackground(Color.red);
+		Player player = new Player(360, 470, 20, 20);
+		player.setBackground(Color.BLUE);
 		contentPane.add(player);
 		
 		Obstaculo obstaculo = new Obstaculo(100, 470, 80, 10);
@@ -40,7 +40,7 @@ public class SuperMario extends JFrame{
 		contentPane.add(obstaculo);
 		obstaculos.add(obstaculo);
 		
-		Obstaculo obstaculo2 = new Obstaculo(200, 400, 80, 10);
+		Obstaculo obstaculo2 = new Obstaculo(200, 420, 80, 10);
 		obstaculo2.setBackground(Color.GREEN);
 		contentPane.add(obstaculo2);
 		obstaculos.add(obstaculo2);
@@ -50,7 +50,11 @@ public class SuperMario extends JFrame{
 		contentPane.add(suelo);
 		obstaculos.add(suelo);
 		
+		Enemigo enemigo = new Enemigo (600, 450, 50, 50);
+		enemigo.setBackground(Color.RED);
+		contentPane.add(enemigo);
 		
+		enemigo.moverDerecha(contentPane.getWidth());
 		
 
 		

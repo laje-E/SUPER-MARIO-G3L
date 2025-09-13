@@ -1,12 +1,14 @@
 	package GUI;
 
-	import java.awt.Rectangle;
+	import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -18,9 +20,28 @@ import javax.swing.Timer;
 		
 		public ArrayList<Obstaculo> obstaculos;
 		
+		private ImageIcon marioIcon;
+		
 		public Player(int posX, int posY, int ancho, int alto) {
 			setBounds(posX, posY, ancho, alto);
 		}
+		
+		/*
+		public Player(ImageIcon mario) {
+			this.marioIcon = mario;
+			setOpaque(false); // esto sirve para que el fondo no tape la imagen
+		}
+		*/
+		
+		/*
+		@Override
+		protected void paintComponent(Graphics g) {
+		    super.paintComponent(g);
+		    if (marioIcon != null) {
+		        g.drawImage(marioIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
+		    }
+		}
+		*/
 		
 		public boolean chequeoColisionX(int dx, Obstaculo obstaculo) {
 		    int nuevaX = getX() + dx;
@@ -118,7 +139,7 @@ import javax.swing.Timer;
 		                	for (Obstaculo obstaculo : obstaculos) {
 		                		if (chequeoColisionAbajo(velocidad_salto, obstaculo)) {
 		                			colisionBajada = true;
-		                			setLocation(getX(), getY() - (obstaculo.getHeight() - getHeight()));
+		                			setLocation(getX(), getY() - (obstaculo.getHeight() /*+ getHeight()*/));
 		                			break;
 		                		}
 		                	}
