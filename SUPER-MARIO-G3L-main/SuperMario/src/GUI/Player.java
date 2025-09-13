@@ -56,23 +56,22 @@ import javax.swing.Timer;
 		}
 
 		
-		public void moverDerecha(int anchoPanel) {
+		public void moverDerecha(int anchoPanel, int velocidad) {
 			int posX = getX();
 			int posY = getY();
-
 			if (posX + getWidth() < anchoPanel) {
-				setLocation(posX + 15, posY);
+				setLocation(posX + velocidad, posY);
 			}
-		}
-		
-		public void moverIzquierda() {
+		}	
+
+		public void moverIzquierda(int velocidad) {
 			int posX = getX();
 			int posY = getY();
-			
 			if (posX > 0) {
-				setLocation(posX - 15, posY);
+				setLocation(posX - velocidad, posY);
 			}
 		}
+
 
 		public void saltar(ArrayList<Obstaculo> obstaculos) { 
 			int velocidad_salto = 5;
