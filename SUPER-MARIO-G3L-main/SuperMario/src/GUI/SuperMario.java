@@ -36,7 +36,7 @@ public class SuperMario extends JFrame {
 
         obstaculos = new ArrayList<>();
 
-        player = new Player(360, 470, 80, 10);
+        player = new Player(360, 470, 80, 10, obstaculos);
         player.setBackground(Color.RED);
         player.setFocusable(false); // que el jugador no robe el foco
         contentPane.add(player);
@@ -111,21 +111,14 @@ public class SuperMario extends JFrame {
                     }
                 }
                 if (wPressed) {
-                    player.saltar(obstaculos);
+                    player.saltar();
                     wPressed = false;
                 }
             }
         });
         movimientoFluido.start();
 
-        Timer gravedad = new Timer(30, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (!player.estaApoyado(obstaculos)) {
-                    player.setLocation(player.getX(), player.getY() + 1);
-                }
-            }
-        });
-        gravedad.start();
+
     }
 
     public static void main(String[] args) {
