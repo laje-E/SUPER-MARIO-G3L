@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -30,10 +32,15 @@ public class SuperMario extends JFrame{
 		contentPane.setLayout(null);
 		
 		obstaculos = new ArrayList<>();
+		Enemigo enemigo = new Enemigo (500, 450, 50, 50, 500, 801);
+		enemigo.setBackground(Color.RED);
+		contentPane.add(enemigo);
 	
-		Player player = new Player(360, 470, 20, 20);
+		Player player = new Player(360, 470, 20, 20, obstaculos, enemigo);
 		player.setBackground(Color.BLUE);
 		contentPane.add(player);
+		player.setFocusable(false);
+
 		
 		Obstaculo obstaculo = new Obstaculo(100, 470, 80, 10);
 		obstaculo.setBackground(Color.GREEN);
@@ -55,15 +62,13 @@ public class SuperMario extends JFrame{
 		contentPane.add(pared);
 		obstaculos.add(pared);
 		
-		Enemigo enemigo = new Enemigo (500, 450, 50, 50, 500, 801);
-		enemigo.setBackground(Color.RED);
-		contentPane.add(enemigo);
+		
 		
 		enemigo.patrullar();
 		
 
 		
-		addKeyListener(new KeyListener() { // Se abre el listener para poder escuchar input del teclado en el juego.
+		contentPane.addKeyListener(new KeyListener() { // Se abre el listener para poder escuchar input del teclado en el juego.
 			
 			public void keyTyped(KeyEvent e) {} 
 
@@ -72,43 +77,7 @@ public class SuperMario extends JFrame{
 		        
 		        if (teclaPresionada == KeyEvent.VK_A) { aPressed = true; }      // Actualiza los booleanos de las teclas cuando están presionadas.
 		        if (teclaPresionada == KeyEvent.VK_D) { dPressed = true; }
-		        if (teclaPresionada == KeyEvent.VK_W) { wPressed = true; }
-
-		        if (aPressed) { 
-		        	boolean puede_mover = true;	
-		        	for (Obstaculo obstaculo : obstaculos) {
-		        		if (player.chequeoColisionX(-15, obstaculo)) {
-		        				puede_mover = false;
-		        				break;
-		        			}
-		        	
-		        		}
-		        	if (puede_mover) {
-		        		player.moverIzquierda(); 
-		        	}
-		        	}
-		        if (dPressed) { 
-		        	boolean puede_mover = true;
-		        	for (Obstaculo obstaculo : obstaculos) {
-		        		if (player.chequeoColisionX(15, obstaculo)) {
-		        			puede_mover = false;
-		        			break;
-		        			
-		        		}
-		        	
-		        	}
-		        	if (puede_mover) {
-		        		player.moverDerecha(contentPane.getWidth());
-		        	}
-		        }
-		        if (wPressed) { 
-		        	
-		        		player.saltar(obstaculos, enemigo);
-		        		
-		        		
-		        	
-		        } 
-		        
+		        if (teclaPresionada == KeyEvent.VK_W) { wPressed = true; }	        
 		    }
 
 		    @Override
@@ -119,6 +88,49 @@ public class SuperMario extends JFrame{
 		        if (teclaPresionada == KeyEvent.VK_W) { wPressed = false; }
 		    }
 		});
+		
+		// Pide mantener bien el foco para cuando la ventana se abra
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                contentPane.requestFocusInWindow();
+            }
+        });
+		
+		Timer movimientoFluido = new Timer(15, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (aPressed) {
+                    boolean puede_mover = true;
+                    for (Obstaculo o : obstaculos) {
+                        if (player.chequeoColisionX(-3, o)) {
+                            puede_mover = false;
+                            break;
+                        }
+                    }
+                    if (puede_mover) {
+                        player.moverIzquierda(3);
+                    }
+                }
+                if (dPressed) {
+                    boolean puede_mover = true;
+                    for (Obstaculo o : obstaculos) {
+                        if (player.chequeoColisionX(3, o)) {
+                            puede_mover = false;
+                            break;
+                        }
+                    }
+                    if (puede_mover) {
+                        player.moverDerecha(contentPane.getWidth(), 3);
+                    }
+                }
+                if (wPressed) {
+                    player.saltar(obstaculos, enemigo);
+                    wPressed = false;
+                }
+            }
+        });
+        movimientoFluido.start();
+		/*
 		Timer gravedad = new Timer(30, new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        if (!player.estaApoyado(obstaculos)) {
@@ -127,6 +139,7 @@ public class SuperMario extends JFrame{
 		    }
 		});
 		gravedad.start();
+		*/
 	}
 
 	public static void main(String[] args) {

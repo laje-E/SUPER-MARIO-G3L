@@ -22,8 +22,54 @@ import javax.swing.Timer;
 		
 		private ImageIcon marioIcon;
 		
-		public Player(int posX, int posY, int ancho, int alto) {
+		private int velocidadY = 0;
+		private int fuerzaSalto = -13; // negativa porque sube
+		private int gravedad = 1;
+		private boolean enElAire = false;
+		
+		public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, Enemigo enemigo) {
 			setBounds(posX, posY, ancho, alto);
+			this.obstaculos = obstaculos;
+			
+			// Se va a ejecutar el timer de gravedad dentro del Player
+	        Timer gravedadTimer = new Timer(30, new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                aplicarGravedad(enemigo);
+	            }
+	        });
+	        gravedadTimer.start();
+		}
+		
+		private void aplicarGravedad(Enemigo enemigo) {
+		    velocidadY += gravedad;
+		    setLocation(getX(), getY() + velocidadY);
+
+		    for (Obstaculo obstaculo : obstaculos) {
+		        if (chequeoColisionAbajo(0, obstaculo)) {
+		            if (velocidadY > 0) {
+		                setLocation(getX(), obstaculo.getY() - getHeight());
+		                velocidadY = 0;
+		                enElAire = false;
+		            } else {
+		                // Si está subiendo, se va a detener el salto.
+		                velocidadY = 0;
+		            }
+		            
+		        }
+		        if (chequeoColisionArriba(3, obstaculo)) {
+		        	// Si está subiendo, se va a detener el salto.
+	                velocidadY = 0;
+	            }
+		    }
+		    if (colisionaConEnemigoDesdeArriba(enemigo)) {
+            	// Eliminar enemigo del panel
+                enemigo.setVisible(false);
+           	    getParent().remove(enemigo);
+           	    getParent().repaint();
+           	    
+           	    
+        	}
 		}
 		
 		/*
@@ -83,113 +129,36 @@ import javax.swing.Timer;
 		}
 
 		
-		public void moverDerecha(int anchoPanel) {
-			int posX = getX();
-			int posY = getY();
-
-			if (posX + getWidth() < anchoPanel) {
-				setLocation(posX + 15, posY);
-			}
+		public void moverIzquierda(int velocidad) {
+		    int posX = getX();
+		    int posY = getY();
+		    if (posX > 0) {
+		        setLocation(posX - velocidad, posY);
+		    }
 		}
 		
-		public void moverIzquierda() {
-			int posX = getX();
-			int posY = getY();
-			
-			if (posX > 0) {
-				setLocation(posX - 15, posY);
-			}
+		public void moverDerecha(int anchoPanel, int velocidad) {
+		    int posX = getX();
+		    int posY = getY();
+		    if (posX + getWidth() < anchoPanel) {
+		        setLocation(posX + velocidad, posY);
+		    }
 		}
 
 		public void saltar(ArrayList<Obstaculo> obstaculos, Enemigo enemigo) { 
 			int velocidad_salto = 5;
-			if(teclaPresionada) {
 			int altura_minima = 470;
 			int altura_limite = 100;
-			
-			
-			Timer timer = new Timer(30, new ActionListener() {
-				int alturaActual = 0;
-				boolean sube = true;
-				
-				public void actionPerformed(ActionEvent e) {
-					int posX = getX();
-					int posY = getY();
 					
-					
-					
-					if (sube == true) { // Subiendo
-						teclaPresionada=false;
-		                if (alturaActual < altura_limite) {
-		                	boolean colisionSubida = false;
-		                	for (Obstaculo obstaculo : obstaculos) {
-		                		if (chequeoColisionArriba(velocidad_salto, obstaculo)) {
-		                			colisionSubida = true;
-		                			break;
-		        				}
-		                	}
-		                	if (!colisionSubida) {
-		                		setLocation(posX, posY - velocidad_salto);
-		                    	alturaActual += velocidad_salto;
-		                	}
-		                	else {
-		                		sube = false;
-		                	}
-		                } else {
-		                    sube = false; // Cambia a bajada
-		                }
+						if (!enElAire) { // solo salta si está en el piso
+				            velocidadY = fuerzaSalto;
+				            enElAire = true;
+				        }
+		                	
 		                
-		            } else { // Bajando
-		                if (alturaActual > 0) {
-		                	boolean colisionBajada = false;
-		                	for (Obstaculo obstaculo : obstaculos) {
-		                		if (chequeoColisionAbajo(velocidad_salto, obstaculo)) {
-		                			colisionBajada = true;
-		                			// ¡¡IMPORTANTE PREGUNTAR AL PROFE POR ESTA LINEA!!
-		                			setLocation(getX(), getY() /*- (obstaculo.getHeight() /*+ getHeight())*/); 
-		                			break;
-		                		}
-		                	}
+		                
 		                	
-		                	if (colisionaConEnemigoDesdeArriba(enemigo)) {
-		                		// Eliminar enemigo del panel
-		                	    enemigo.setVisible(false);
-		                	    getParent().remove(enemigo);
-		                	    getParent().repaint();
-
-		                	    ((Timer) e.getSource()).stop(); // Termina el salto
-		                	    teclaPresionada = true;
-		                	    return;
-			        		}
-		                	
-		                	if (!colisionBajada) {
-		                		setLocation(posX, posY + velocidad_salto);
-			                    alturaActual -= velocidad_salto;
-		                	}
-		                	else {
-		                		
-		                		((Timer) e.getSource()).stop(); // Termina el salto
-		                        teclaPresionada = true;
-		        			}
-		                    
-		                } else {
-		                    ((Timer) e.getSource()).stop(); // Termina el salto
-		                    teclaPresionada=true;
-		                }
-		            }
-					
-					if(getX() + getHeight() == 0)
-					{
-						teclaPresionada=true;
-					}
-				}
-			
 				
-			});
-			
-			
-			timer.start();
-			}
 			
 		}
 
