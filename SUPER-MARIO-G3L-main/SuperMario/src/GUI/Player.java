@@ -75,6 +75,12 @@ import javax.swing.Timer;
 			}
 			return false;
 		}
+		
+		public boolean colisionaConEnemigoDesdeArriba(Enemigo enemigo) {
+		    Rectangle abajoJugador = new Rectangle(getX(), getY() + getHeight(), getWidth(), 5);
+		    Rectangle arribaEnemigo = new Rectangle(enemigo.getX(), enemigo.getY(), enemigo.getWidth(), 5);
+		    return abajoJugador.intersects(arribaEnemigo);
+		}
 
 		
 		public void moverDerecha(int anchoPanel) {
@@ -95,7 +101,7 @@ import javax.swing.Timer;
 			}
 		}
 
-		public void saltar(ArrayList<Obstaculo> obstaculos) { 
+		public void saltar(ArrayList<Obstaculo> obstaculos, Enemigo enemigo) { 
 			int velocidad_salto = 5;
 			if(teclaPresionada) {
 			int altura_minima = 470;
@@ -144,6 +150,18 @@ import javax.swing.Timer;
 		                			break;
 		                		}
 		                	}
+		                	
+		                	if (colisionaConEnemigoDesdeArriba(enemigo)) {
+		                		// Eliminar enemigo del panel
+		                	    enemigo.setVisible(false);
+		                	    getParent().remove(enemigo);
+		                	    getParent().repaint();
+
+		                	    ((Timer) e.getSource()).stop(); // Termina el salto
+		                	    teclaPresionada = true;
+		                	    return;
+			        		}
+		                	
 		                	if (!colisionBajada) {
 		                		setLocation(posX, posY + velocidad_salto);
 			                    alturaActual -= velocidad_salto;

@@ -103,7 +103,9 @@ public class SuperMario extends JFrame{
 		        }
 		        if (wPressed) { 
 		        	
-		        		player.saltar(obstaculos);
+		        		player.saltar(obstaculos, enemigo);
+		        		
+		        		
 		        	
 		        } 
 		        
