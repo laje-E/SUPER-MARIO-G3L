@@ -7,11 +7,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Obstaculo extends JPanel {
-    private ArrayList<Obstaculo> obstaculos;
+    
+	private static final long serialVersionUID = 1L;
+	
     private JLabel imagenLabel;
 
     public Obstaculo(ArrayList<Obstaculo> obstaculos, ImageIcon icon) {
-        this.obstaculos = obstaculos;
         this.setLayout(null);
         if (icon != null) {
             imagenLabel = new JLabel(icon);
