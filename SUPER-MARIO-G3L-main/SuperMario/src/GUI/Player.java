@@ -139,7 +139,8 @@ import javax.swing.Timer;
 		                	for (Obstaculo obstaculo : obstaculos) {
 		                		if (chequeoColisionAbajo(velocidad_salto, obstaculo)) {
 		                			colisionBajada = true;
-		                			setLocation(getX(), getY() - (obstaculo.getHeight() /*+ getHeight()*/));
+		                			// ¡¡IMPORTANTE PREGUNTAR AL PROFE POR ESTA LINEA!!
+		                			setLocation(getX(), getY() /*- (obstaculo.getHeight() /*+ getHeight())*/); 
 		                			break;
 		                		}
 		                	}
