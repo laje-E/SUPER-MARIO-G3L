@@ -15,7 +15,7 @@
 			private static final long serialVersionUID = 1L;
 			
 			private int velocidadY = 0;
-			private int fuerzaSalto = -13; // negativa porque sube
+			private int fuerzaSalto = -12; // negativa porque sube
 			private int gravedad = 1;
 			private boolean enElAire = false;
 //			private boolean teclaPresionada=true;
@@ -24,6 +24,7 @@
 			
 			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos) {
 		        setBounds(posX, posY, ancho, alto);
+		        
 		        this.obstaculos = obstaculos;
 				
 				
@@ -42,19 +43,17 @@
 			    velocidadY += gravedad;
 			    setLocation(getX(), getY() + velocidadY);
 
+			    enElAire = true; // asumimos que está en el aire hasta comprobar piso
+
 			    for (Obstaculo obstaculo : obstaculos) {
-			        if (chequeoColisionAbajo(0, obstaculo)) {
-			            if (velocidadY > 0) {
-			                setLocation(getX(), obstaculo.getY() - getHeight());
-			                velocidadY = 0;
-			                enElAire = false;
-			            } else {
-			                // Si está subiendo, se va a detener el salto.
-			                velocidadY = 0;
-			            }
+			        if (velocidadY > 0 && chequeoColisionAbajo(obstaculo)) { // solo si cae
+			            setLocation(getX(), obstaculo.getY() - getHeight());
+			            velocidadY = 0;
+			            enElAire = false;
 			        }
 			    }
 			}
+
 
 
 		    public void saltar() {
@@ -71,9 +70,9 @@
 		        return futuraPos.intersects(obstaculo.getBounds());
 		    }
 
-		    public boolean chequeoColisionAbajo(int dy, Obstaculo obstaculo) {
-		        Rectangle futuraPos = new Rectangle(getX(), getY() + dy, getWidth(), getHeight());
-		        return futuraPos.intersects(obstaculo.getBounds());
+		    public boolean chequeoColisionAbajo(Obstaculo obstaculo) {
+		        Rectangle piesJugador = new Rectangle(getX(), getY() + getHeight(), getWidth(), Math.max(5, velocidadY));
+		        return piesJugador.intersects(obstaculo.getBounds());
 		    }
 		    
 		    
