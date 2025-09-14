@@ -27,8 +27,9 @@ public class FondoPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Fondo: se mueve más lento (parallax lejano)
-        g.drawImage(fondo, -desplazamiento / 4, 0, null);
+        for (int x = -desplazamiento / 4; x < getWidth(); x += fondo.getWidth(null)) {
+            g.drawImage(fondo, x, 0, null);
+        }
 
         // Edificios: se mueven un poco más rápido que el fondo
         g.drawImage(edificios[0], 370 - desplazamiento / 2, 236, 122, 200, this);
