@@ -16,7 +16,6 @@
 			private int fuerzaSalto = -12; // negativa porque sube
 			private int gravedad = 1;
 			private boolean enElAire = false;
-//			private boolean teclaPresionada=true;
 			
 			public ArrayList<Obstaculo> obstaculos;
 			
@@ -43,7 +42,7 @@
 
 			    enElAire = true; // asumimos que está en el aire hasta comprobar piso
 
-			    for (Obstaculo obstaculo : obstaculos) {
+			    for (Obstaculo obstaculo : new ArrayList<>(obstaculos)) {
 			        if (velocidadY > 0 && chequeoColisionAbajo(obstaculo)) { // solo si cae
 			            setLocation(getX(), obstaculo.getY() - getHeight());
 			            velocidadY = 0;

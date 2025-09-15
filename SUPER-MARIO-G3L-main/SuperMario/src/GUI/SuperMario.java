@@ -24,6 +24,9 @@ public class SuperMario extends JFrame {
     public ArrayList<Obstaculo> obstaculos;
     private Player player; // lo declaro arriba por claridad
     private FondoPanel fondoPanel;
+    private int worldOffset = 0; // cuántos píxeles se movió el mundo
+    private int anchoMapa = 4480;
+
 
     public SuperMario() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,8 +59,9 @@ public class SuperMario extends JFrame {
         int alturaVentana = 600;
         int tileSize = 64;
 
+        
         // Calcular cuántos tiles caben en ancho y alto
-        int tilesX = 1000 / tileSize; // ancho del nivel en pixeles / tamaño tile
+        int tilesX = anchoMapa / tileSize; // ancho del nivel en pixeles / tamaño tile
         int tilesAbajo = (alturaVentana - sueloY) / tileSize;
         
         // Capa de pasto (sobre el suelo)
@@ -82,10 +86,11 @@ public class SuperMario extends JFrame {
         int[][] nivel1 = {
                 {50, 400, 80, 10},   // plataforma 1
                 {150, 370, 80, 10},   // plataforma 2
-                {250, 320, 80, 10}    // plataforma 3
+                {250, 320, 80, 10},    // plataforma 3
 //                {370, 236, 122, 200},   // edificio 1. Edificios que después se van a ir al fondo no como obstáculos.
 //                {500, 206, 117, 230},   // edificio 2
 //                {640, 221, 125, 215}   // edificio 3
+//                {4000, 234, 50, 202}   // obelisco
            };
 
             
@@ -97,22 +102,10 @@ public class SuperMario extends JFrame {
                 contentPane.add(o);
                 obstaculos.add(o);
             }
-           
-           
-           
-        
         
         fondoPanel = new FondoPanel();
-        fondoPanel.setBounds(0, 0, 1600, 600);
+        fondoPanel.setBounds(0, 0, anchoMapa, 600);
         contentPane.add(fondoPanel);
-        
-        
-        
-
-        
-        
-        
-       
         
         
      // Se abre el listener para poder escuchar input del teclado en el juego.
@@ -142,20 +135,33 @@ public class SuperMario extends JFrame {
 
         Timer movimientoFluido = new Timer(15, new ActionListener() { 
             public void actionPerformed(ActionEvent e) {
-                if (aPressed) {
-                    boolean puede_mover = true;
-                    for (Obstaculo o : new ArrayList<>(obstaculos)) {
-                        if (player.chequeoColisionX(-3, o)) {
-                            puede_mover = false;
-                            break;
-                        }
-                    }
-                    if (puede_mover) {
-                        player.moverIzquierda(3);
-                        fondoPanel.desplazamiento -= 2; // mueve el fondo hacia la derecha
-                        fondoPanel.repaint();
-                    }
-                }
+            	
+            	if (aPressed) {
+            	    boolean puede_mover = true;
+            	    for (Obstaculo o : new ArrayList<>(obstaculos)) {
+            	        if (player.chequeoColisionX(-3, o)) {
+            	            puede_mover = false;
+            	            break;
+            	        }
+            	    }
+            	    if (puede_mover) {
+            	        // Si Mario todavía no llegó al centro de la pantalla o el mundo ya está en el inicio
+            	        if (player.getX() > getWidth() / 2 || worldOffset <= 0) {
+            	            player.moverIzquierda(3);
+            	        } else {
+            	            // Desplazamos el mundo a la derecha
+            	            worldOffset -= 3;
+            	            fondoPanel.desplazamiento = worldOffset;
+            	            for (Obstaculo o : new ArrayList<>(obstaculos)) {
+            	                o.setLocation(o.getX() + 3, o.getY()); // mover obstáculos para la derecha.
+            	            }
+            	            fondoPanel.repaint();
+            	        }
+            	    }
+            	}
+
+                
+                
                 if (dPressed) {                	
                     boolean puede_mover = true;
                     for (Obstaculo o : new ArrayList<>(obstaculos)) {
@@ -165,16 +171,35 @@ public class SuperMario extends JFrame {
                         }
                     }
                     if (puede_mover) {
-                        player.moverDerecha(contentPane.getWidth(), 3);
-                        fondoPanel.desplazamiento += 2; // mueve el fondo hacia la izquierda
-                        fondoPanel.repaint();
+                        // Si Mario está en la primera mitad de la pantalla o ya llegamos al final del mapa
+                        if (player.getX() < getWidth() / 2 || worldOffset >= anchoMapa - getWidth()) {
+                            player.moverDerecha(contentPane.getWidth(), 3);
+                        } else {
+                            // Se desplaza el mundo a la izquierda.
+                            worldOffset += 3;
+                            fondoPanel.desplazamiento = worldOffset;
+                            for (Obstaculo o : new ArrayList<>(obstaculos)) {
+                                o.setLocation(o.getX() - 3, o.getY()); // mover obstáculos para la izquierda.
+                            }
+                            fondoPanel.repaint();
+                        }
                     }
                 }
+
                 if (wPressed) {
                     player.saltar();
                     wPressed = false;
                 }
+                
+                int posicionJugador = worldOffset + player.getX();
+                if (posicionJugador >= 4155) {
+                    fondoPanel.setearNivelSuperado(true);
+                    repaint();
+                    System.out.println("Nivel superado!");
+                }
+                
             }
+                        
         });
         movimientoFluido.start();
 
