@@ -75,7 +75,7 @@ public class SuperMario extends JFrame {
         
         // Capa de pasto (sobre el suelo)
         for (int i = 0; i < tilesX; i++) {
-            Obstaculo pasto = new Obstaculo(obstaculos, pastoIcon);
+            Obstaculo pasto = new Obstaculo(obstaculos, pastoIcon, false);
             pasto.setBounds(i * tileSize, sueloY - tileSize, tileSize, tileSize);
             contentPane.add(pasto);
             obstaculos.add(pasto);
@@ -84,7 +84,7 @@ public class SuperMario extends JFrame {
         
         for (int y = 0; y < tilesAbajo; y++) {
             for (int i = 0; i < tilesX; i++) {
-                Obstaculo tierra = new Obstaculo(obstaculos, tierraIcon);
+                Obstaculo tierra = new Obstaculo(obstaculos, tierraIcon, false);
                 tierra.setBounds(i * tileSize, sueloY + y * tileSize, tileSize, tileSize);
                 contentPane.add(tierra);
                 obstaculos.add(tierra);
@@ -94,8 +94,8 @@ public class SuperMario extends JFrame {
         
         int[][] nivel1 = {
                 {50, 400, 80, 10},   // plataforma 1
-                {150, 370, 80, 10},   // plataforma 2
-                {250, 320, 80, 10},    // plataforma 3
+                {170, 350, 20, 20},   // plataforma 2
+                {250, 370, 80, 10},    // plataforma 3
                 {500, 390, 10, 50}     // pared 1
 //                {370, 236, 122, 200},   // edificio 1. Edificios que después se van a ir al fondo no como obstáculos.
 //                {500, 206, 117, 230},   // edificio 2
@@ -104,13 +104,21 @@ public class SuperMario extends JFrame {
            };
 
             
-            
+        
+        	int contador = 1;
            for (int[] bloque : nivel1) {
                 Obstaculo o = new Obstaculo(obstaculos);
                 o.setBackground(Color.GREEN);
                 o.setBounds(bloque[0], bloque[1], bloque[2], bloque[3]);
                 contentPane.add(o);
                 obstaculos.add(o);
+                
+                if (contador == 2) { // obstaculo 2
+                	o.traspasable = false;
+                	o.setBackground(Color.black);
+                }
+                
+                contador ++;
             }
         
         fondoPanel = new FondoPanel();
