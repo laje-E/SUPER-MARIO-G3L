@@ -12,9 +12,17 @@ public class Enemigo extends JPanel{
 	
 	private Timer movimiento;
 	
-	private int limiteIzquierdo;
-    private int limiteDerecho;
+	public int limiteIzquierdo;
+    public int limiteDerecho;
+    public int desplazamiento = 0;
 	
+    public void ajustarLimites(int desplazamiento) {
+        limiteIzquierdo += desplazamiento;
+        limiteDerecho += desplazamiento;
+        
+        
+    }
+    
 	public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho) {
 		setBounds(posX, posY, ancho, alto);
 		this.limiteDerecho = limiteDerecho;
@@ -29,7 +37,7 @@ public class Enemigo extends JPanel{
         if (posX + 15 < limiteDerecho) {
             setLocation(posX + 15, posY);
         } else {
-            setLocation(limiteDerecho - getWidth(), posY);
+            setLocation((limiteDerecho) - getWidth(), posY);
         }
 	}
 	

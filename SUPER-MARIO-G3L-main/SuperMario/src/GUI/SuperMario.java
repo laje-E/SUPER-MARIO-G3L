@@ -9,141 +9,223 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class SuperMario extends JFrame{
-	private JPanel contentPane;	
-	private boolean aPressed = false;
-	private boolean dPressed = false;
-	private boolean wPressed = false;
-	public ArrayList<Obstaculo> obstaculos;
-	
-	public SuperMario(){
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable(false);
-		setFocusable(true);
-		requestFocusInWindow();
-		setBounds(100, 100, 816, 572);
-		contentPane = new JPanel();
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		obstaculos = new ArrayList<>();
-		Enemigo enemigo = new Enemigo (500, 450, 50, 50, 500, 801);
+public class SuperMario extends JFrame {
+  
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+    private boolean aPressed = false;
+    private boolean dPressed = false;
+    private boolean wPressed = false;
+    public ArrayList<Obstaculo> obstaculos;
+    public ArrayList<Enemigo> enemigos;
+    private Player player; // lo declaro arriba por claridad
+    private FondoPanel fondoPanel;
+    private int worldOffset = 0; // cuántos píxeles se movió el mundo
+    private int anchoMapa = 4480;
+
+
+    public SuperMario() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setBounds(100, 100, 800, 600);
+
+        contentPane = new JPanel();
+        contentPane.setLayout(null);
+
+        contentPane.setFocusable(true);
+        contentPane.setFocusTraversalKeysEnabled(false);
+
+        setContentPane(contentPane);
+        
+        
+        obstaculos = new ArrayList<>();
+        
+        enemigos = new ArrayList<>();
+
+        
+        Enemigo enemigo = new Enemigo (500, 390, 50, 50, 500, 801);
 		enemigo.setBackground(Color.RED);
 		contentPane.add(enemigo);
-	
-		Player player = new Player(360, 470, 20, 20, obstaculos, enemigo);
-		player.setBackground(Color.BLUE);
-		contentPane.add(player);
-		player.setFocusable(false);
+		enemigos.add(enemigo);
 
-		
-		Obstaculo obstaculo = new Obstaculo(100, 470, 80, 10);
-		obstaculo.setBackground(Color.GREEN);
-		contentPane.add(obstaculo);
-		obstaculos.add(obstaculo);
-		
-		Obstaculo obstaculo2 = new Obstaculo(200, 420, 80, 10);
-		obstaculo2.setBackground(Color.GREEN);
-		contentPane.add(obstaculo2);
-		obstaculos.add(obstaculo2);
-		
-		Obstaculo suelo = new Obstaculo(0, 500, 1000, 10);
-		suelo.setBackground(Color.black);
-		contentPane.add(suelo);
-		obstaculos.add(suelo);
-		
-		Obstaculo pared = new Obstaculo(500, 450, 10, 50);
-		pared.setBackground(Color.black);
-		contentPane.add(pared);
-		obstaculos.add(pared);
-		
-		
-		
+        player = new Player(100, 350, 30, 50, obstaculos, enemigos);
+        player.setBackground(Color.RED);
+        player.setFocusable(false); // que el jugador no robe el foco
+        contentPane.add(player);
+        
 		enemigo.patrullar();
-		
+        
+        ImageIcon pastoIcon = new ImageIcon("bin/img/masPasto64a.png");
+        ImageIcon tierraIcon = new ImageIcon("bin/img/masTierra64a.png");
+        
+        
+        int sueloY = 500; // coordenada Y donde empieza la tierra
+        int alturaVentana = 600;
+        int tileSize = 64;
 
-		
-		contentPane.addKeyListener(new KeyListener() { // Se abre el listener para poder escuchar input del teclado en el juego.
-			
-			public void keyTyped(KeyEvent e) {} 
+        
+        // Calcular cuántos tiles caben en ancho y alto
+        int tilesX = anchoMapa / tileSize; // ancho del nivel en pixeles / tamaño tile
+        int tilesAbajo = (alturaVentana - sueloY) / tileSize;
+        
+        // Capa de pasto (sobre el suelo)
+        for (int i = 0; i < tilesX; i++) {
+            Obstaculo pasto = new Obstaculo(obstaculos, pastoIcon);
+            pasto.setBounds(i * tileSize, sueloY - tileSize, tileSize, tileSize);
+            contentPane.add(pasto);
+            obstaculos.add(pasto);
+        }
+        
+        
+        for (int y = 0; y < tilesAbajo; y++) {
+            for (int i = 0; i < tilesX; i++) {
+                Obstaculo tierra = new Obstaculo(obstaculos, tierraIcon);
+                tierra.setBounds(i * tileSize, sueloY + y * tileSize, tileSize, tileSize);
+                contentPane.add(tierra);
+                obstaculos.add(tierra);
+            }
+        }
+        
+        
+        int[][] nivel1 = {
+                {50, 400, 80, 10},   // plataforma 1
+                {150, 370, 80, 10},   // plataforma 2
+                {250, 320, 80, 10},    // plataforma 3
+                {500, 390, 10, 50}     // pared 1
+//                {370, 236, 122, 200},   // edificio 1. Edificios que después se van a ir al fondo no como obstáculos.
+//                {500, 206, 117, 230},   // edificio 2
+//                {640, 221, 125, 215}   // edificio 3
+//                {4000, 234, 50, 202}   // obelisco
+           };
 
-		    public void keyPressed(KeyEvent e) {
-		        int teclaPresionada = e.getKeyCode();
-		        
-		        if (teclaPresionada == KeyEvent.VK_A) { aPressed = true; }      // Actualiza los booleanos de las teclas cuando están presionadas.
-		        if (teclaPresionada == KeyEvent.VK_D) { dPressed = true; }
-		        if (teclaPresionada == KeyEvent.VK_W) { wPressed = true; }	        
-		    }
+            
+            
+           for (int[] bloque : nivel1) {
+                Obstaculo o = new Obstaculo(obstaculos);
+                o.setBackground(Color.GREEN);
+                o.setBounds(bloque[0], bloque[1], bloque[2], bloque[3]);
+                contentPane.add(o);
+                obstaculos.add(o);
+            }
+        
+        fondoPanel = new FondoPanel();
+        fondoPanel.setBounds(0, 0, anchoMapa, 600);
+        contentPane.add(fondoPanel);
+        
+        
+     // Se abre el listener para poder escuchar input del teclado en el juego.
+        contentPane.addKeyListener(new KeyListener() {
+            public void keyTyped(KeyEvent e) {}
+            public void keyPressed(KeyEvent e) {
+                int tecla = e.getKeyCode();
+                if (tecla == KeyEvent.VK_A) aPressed = true;
+                if (tecla == KeyEvent.VK_D) dPressed = true;
+                if (tecla == KeyEvent.VK_W) wPressed = true;
+            }
+            public void keyReleased(KeyEvent e) {
+                int tecla = e.getKeyCode();
+                if (tecla == KeyEvent.VK_A) aPressed = false;
+                if (tecla == KeyEvent.VK_D) dPressed = false;
+                if (tecla == KeyEvent.VK_W) wPressed = false;
+            }
+        });
 
-		    @Override
-		    public void keyReleased(KeyEvent e) {
-		        int teclaPresionada = e.getKeyCode();
-		        if (teclaPresionada == KeyEvent.VK_A) { aPressed = false; }     // Actualiza los booleanos cuando una tecla es soltada.
-		        if (teclaPresionada == KeyEvent.VK_D) { dPressed = false; }
-		        if (teclaPresionada == KeyEvent.VK_W) { wPressed = false; }
-		    }
-		});
-		
-		// Pide mantener bien el foco para cuando la ventana se abra
+        // Pide mantener bien el foco para cuando la ventana se abra
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowOpened(WindowEvent e) {
                 contentPane.requestFocusInWindow();
             }
         });
-		
-		Timer movimientoFluido = new Timer(15, new ActionListener() {
+
+        Timer movimientoFluido = new Timer(15, new ActionListener() { 
             public void actionPerformed(ActionEvent e) {
-                if (aPressed) {
+            	
+            	if (aPressed) {
+            	    boolean puede_mover = true;
+            	    for (Obstaculo o : new ArrayList<>(obstaculos)) {
+            	        if (player.chequeoColisionX(-3, o)) {
+            	            puede_mover = false;
+            	            break;
+            	        }
+            	    }
+            	    if (puede_mover) {
+            	        // Si Mario todavía no llegó al centro de la pantalla o el mundo ya está en el inicio
+            	        if (player.getX() > getWidth() / 2 || worldOffset <= 0) {
+            	            player.moverIzquierda(3);
+            	        } else {
+            	            // Desplazamos el mundo a la derecha
+            	            worldOffset -= 3;
+            	            fondoPanel.desplazamiento = worldOffset;
+            	            for (Obstaculo o : new ArrayList<>(obstaculos)) {
+            	                o.setLocation(o.getX() + 3, o.getY()); // mover obstáculos para la derecha.
+            	            }
+            	            for (Enemigo enemigo : new ArrayList<>(enemigos)) {
+            	            	enemigo.setLocation(enemigo.getX() + 3, enemigo.getY()); 
+            	            	enemigo.ajustarLimites(3); // si el mundo se mueve a la derecha (A)
+            	            }
+            	            fondoPanel.repaint();
+            	        }
+            	    }
+            	}
+
+                
+                
+                if (dPressed) {                	
                     boolean puede_mover = true;
-                    for (Obstaculo o : obstaculos) {
-                        if (player.chequeoColisionX(-3, o)) {
-                            puede_mover = false;
-                            break;
-                        }
-                    }
-                    if (puede_mover) {
-                        player.moverIzquierda(3);
-                    }
-                }
-                if (dPressed) {
-                    boolean puede_mover = true;
-                    for (Obstaculo o : obstaculos) {
+                    for (Obstaculo o : new ArrayList<>(obstaculos)) {
                         if (player.chequeoColisionX(3, o)) {
                             puede_mover = false;
                             break;
                         }
                     }
                     if (puede_mover) {
-                        player.moverDerecha(contentPane.getWidth(), 3);
+                        // Si Mario está en la primera mitad de la pantalla o ya llegamos al final del mapa
+                        if (player.getX() < getWidth() / 2 || worldOffset >= anchoMapa - getWidth()) {
+                            player.moverDerecha(contentPane.getWidth(), 3);
+                        } else {
+                            // Se desplaza el mundo a la izquierda.
+                            worldOffset += 3;
+                            fondoPanel.desplazamiento = worldOffset;
+                            for (Obstaculo o : new ArrayList<>(obstaculos)) {
+                                o.setLocation(o.getX() - 3, o.getY()); // mover obstáculos para la izquierda.
+                            }
+                            for (Enemigo enemigo : new ArrayList<>(enemigos)) {
+                            	enemigo.setLocation(enemigo.getX() - 3, enemigo.getY());
+                            	enemigo.ajustarLimites(-3); // si el mundo se mueve a la izquierda (D)
+            	            }
+                            fondoPanel.repaint();
+                        }
                     }
                 }
+
                 if (wPressed) {
-                    player.saltar(obstaculos, enemigo);
+                    player.saltar();
                     wPressed = false;
                 }
+                
+                int posicionJugador = worldOffset + player.getX();
+                if (posicionJugador >= 4155) {
+                    fondoPanel.setearNivelSuperado(true);
+                    repaint();
+                    System.out.println("Nivel superado!");
+                }
+                
             }
+                        
         });
         movimientoFluido.start();
-		/*
-		Timer gravedad = new Timer(30, new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        if (!player.estaApoyado(obstaculos)) {
-		            player.setLocation(player.getX(), player.getY() + 1); // velocidad de caída
-		        }
-		    }
-		});
-		gravedad.start();
-		*/
-	}
 
-	public static void main(String[] args) {
-	    SuperMario juego = new SuperMario();
-	    juego.setVisible(true);
-	}
+
+    }
+
+    public static void main(String[] args) {
+        SuperMario juego = new SuperMario();
+        juego.setVisible(true);
+    }
 }
