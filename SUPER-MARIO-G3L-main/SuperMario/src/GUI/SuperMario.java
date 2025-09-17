@@ -48,7 +48,7 @@ public class SuperMario extends JFrame {
         enemigos = new ArrayList<>();
 
         
-        Enemigo enemigo = new Enemigo (500, 390, 50, 50, 500, 801);
+        Enemigo enemigo = new Enemigo (500, 410, 30, 30, 510, 785);
 		enemigo.setBackground(Color.RED);
 		contentPane.add(enemigo);
 		enemigos.add(enemigo);

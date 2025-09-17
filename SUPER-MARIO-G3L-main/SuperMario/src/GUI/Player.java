@@ -56,7 +56,7 @@
 	           	    	getParent().remove(enemigo);
 	           	    	getParent().repaint();
 	           	    
-	           	    	saltar();
+	           	    	rebote();
 			    	}
 	        	}
 			}
@@ -68,6 +68,11 @@
 		            velocidadY = fuerzaSalto;
 		            enElAire = true;
 		        }
+		    }
+		    
+		    public void rebote() {
+		        velocidadY = fuerzaSalto;
+		        enElAire = true;
 		    }
 			
 			
