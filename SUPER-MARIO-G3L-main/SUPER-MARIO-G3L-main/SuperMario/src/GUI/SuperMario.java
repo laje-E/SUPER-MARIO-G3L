@@ -34,6 +34,8 @@ public class SuperMario extends JFrame {
     private int anchoMapa = 4480;
     public boolean nivelSuperado = false;
     private JLabel mensajeFinal;
+    public boolean nivelFinalizado = false;
+
 
 
     public SuperMario() {
@@ -253,11 +255,20 @@ public class SuperMario extends JFrame {
                 }
                 
                 int posicionJugador = worldOffset + player.getX();
-                if (posicionJugador >= 4155) {
+                if (posicionJugador >= 4155 && !nivelFinalizado) {
+                	nivelFinalizado = true; // Evita múltiples ejecuciones
                 	mensajeFinal.setVisible(true);
                     repaint();
                     System.out.println("Nivel superado!");
                     mensajeFinal.repaint();
+                    
+                 // Esperar 2 segundos y pasar al siguiente nivel
+                    new Timer(2000, new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            ((Timer) evt.getSource()).stop();
+                            GestorNiveles.avanzarNivel(SuperMario.this);
+                        }
+                    }).start();
                 }
                 
             }
