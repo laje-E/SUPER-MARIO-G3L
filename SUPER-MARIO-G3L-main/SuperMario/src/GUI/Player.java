@@ -61,6 +61,11 @@
 			    		enemigo.setVisible(false);
 	           	    	getParent().remove(enemigo);
 	           	    	getParent().repaint();
+<<<<<<< HEAD
+=======
+	           	    	
+	           	    	// aqui hay un error que parece que el enemigo no se elimina por completo
+>>>>>>> 966f59d77ff466e7546dbdc85ce82da48a13d3f4
 	           	    
 	           	    	rebote();
 			    	}
