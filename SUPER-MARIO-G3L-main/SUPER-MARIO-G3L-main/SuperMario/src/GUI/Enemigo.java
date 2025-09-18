@@ -19,7 +19,7 @@ public class Enemigo extends JPanel{
     public void ajustarLimites(int desplazamiento) {
         limiteIzquierdo += desplazamiento;
         limiteDerecho += desplazamiento;
-    
+        
         
     }
     

@@ -1,4 +1,4 @@
-		package GUI;
+	package GUI;
 	
 		import java.awt.Rectangle;
 	
@@ -48,6 +48,12 @@
 			            velocidadY = 0;
 			            enElAire = false;
 			        }
+			        if (!obstaculo.traspasable) {
+			        	if (chequeoColisionArriba(3, obstaculo)) {
+				        	// Si está subiendo, se va a detener el salto.
+			                velocidadY = 0;
+			            }
+			        }
 			    }
 			    for (Enemigo enemigo : enemigos) {
 			    	if (colisionaConEnemigoDesdeArriba(enemigo)) {
@@ -55,8 +61,10 @@
 			    		enemigo.setVisible(false);
 	           	    	getParent().remove(enemigo);
 	           	    	getParent().repaint();
+	           	    	
+	           	    	// aqui hay un error que parece que el enemigo no se elimina por completo
 	           	    
-	           	    	saltar();
+	           	    	rebote();
 			    	}
 	        	}
 			}
@@ -68,6 +76,11 @@
 		            velocidadY = fuerzaSalto;
 		            enElAire = true;
 		        }
+		    }
+		    
+		    public void rebote() {
+		        velocidadY = fuerzaSalto;
+		        enElAire = true;
 		    }
 			
 			
@@ -100,12 +113,12 @@
 //			    
 //			}
 //			
-//			public boolean chequeoColisionArriba(int dy, Obstaculo obstaculo) {
-//			    int nuevaX = getX();
-//			    int nuevaY = getY() - dy; // Movimiento hacia arriba
-//			    Rectangle futuraPos = new Rectangle(nuevaX, nuevaY, getWidth(), getHeight());
-//			    return futuraPos.intersects(obstaculo.getBounds());
-//			}
+			public boolean chequeoColisionArriba(int dy, Obstaculo obstaculo) {
+			    int nuevaX = getX();
+			    int nuevaY = getY() - dy; // Movimiento hacia arriba
+			    Rectangle futuraPos = new Rectangle(nuevaX, nuevaY, getWidth(), getHeight());
+			    return futuraPos.intersects(obstaculo.getBounds());
+			}
 //			
 //			public boolean chequeoColisionAbajo(int dy, Obstaculo obstaculo) {
 //			    int nuevaX = getX();

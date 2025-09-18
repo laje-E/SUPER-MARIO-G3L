@@ -33,41 +33,38 @@ public class FondoPanel extends JPanel {
         obelisco = new ImageIcon(getClass().getResource("/img/obeliscoSolo.png")).getImage();
         
         try { // Es una promesa, que si no se cumple, o sea no carga la fuente, que use de manera forzada la default que es ARIAL.
-        	
             marioFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/fuentes/SuperMario64.ttf"));
         }
         catch (FontFormatException | IOException e) { // Tira el error, y usa por default ARIAL.
+        	System.err.println("Error al cargar la fuente: " + e.getMessage());
             marioFont = new Font("Arial", Font.BOLD, 48);
         }
-        
-        
-        JPanel mensajePanel = new JPanel() {
-            /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                if (nivelSuperado) { // verificamos la variable del fondo
-                    g.setFont(new Font("Arial", Font.BOLD, 48));
-                    g.setColor(Color.YELLOW);
-                    g.drawString("Nivel Superado!", getWidth() / 2 - 200, getHeight() / 2);
-                }
-            }
-        };
-        mensajePanel.setOpaque(false); // transparente
-        mensajePanel.setBounds(0, 0, 800, 600);
-        this.add(mensajePanel);
-        
     }
+        
+    
+        
+        
+
     
     
     public void setearNivelSuperado(boolean valor) {
         this.nivelSuperado = valor;
         repaint();
     }
+    
+    protected void paintComponent_mensaje(Graphics g) {
+        if (nivelSuperado) { // verificamos la variable del fondo
+            g.setFont(marioFont);
+            g.setColor(Color.YELLOW);
+            g.drawString("Nivel Superado!", getWidth() / 2 - 200, getHeight() / 2);
+        }
+    
+        //    mensajePanel.setOpaque(false); // transparente
+        //    mensajePanel.setBounds(0, 0, 800, 600);
+        //    this.add(mensajePanel);
+
+    
+}
     
     
     @Override
@@ -85,6 +82,8 @@ public class FondoPanel extends JPanel {
         
         g.drawImage(obelisco, 4155 - desplazamiento, 234, 50, 202, this); // obelisco dibujado, se mueve en primer plano como si fuera un obstáculo solo que sin las colisiones.
         
+        
+        paintComponent_mensaje(g);
     }    
     
 }
