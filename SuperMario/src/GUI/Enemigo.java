@@ -10,46 +10,70 @@ public class Enemigo extends JPanel{
 	
 	private boolean hacia_derecha = true;
 	
-	public Enemigo(int posX, int posY, int ancho, int alto) {
+	private Timer movimiento;
+	
+	public int limiteIzquierdo;
+    public int limiteDerecho;
+    public int desplazamiento = 0;
+	
+    public void ajustarLimites(int desplazamiento) {
+        limiteIzquierdo += desplazamiento;
+        limiteDerecho += desplazamiento;
+        
+        
+    }
+    
+	public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho) {
 		setBounds(posX, posY, ancho, alto);
+		this.limiteDerecho = limiteDerecho;
+		this.limiteIzquierdo = limiteIzquierdo;
 	}
 	
-	public void moverDerecha(int anchoPanel) {
+	public void moverDerecha() {
 		int posX = getX();
 		int posY = getY();
 
-		if (posX + getWidth() < anchoPanel) {
-			setLocation(posX + 15, posY);
-		}
+		// Evita que se pase del borde derecho
+        if (posX + 15 < limiteDerecho) {
+            setLocation(posX + 15, posY);
+        } else {
+            setLocation((limiteDerecho) - getWidth(), posY);
+        }
 	}
 	
 	public void moverIzquierda() {
 		int posX = getX();
 		int posY = getY();
 		
-		if (posX > 0) {
-			setLocation(posX - 15, posY);
-		}
+		// Evita que se meta en el borde izquierdo
+        if (posX - 15 >= limiteIzquierdo) {
+            setLocation(posX - 15, posY);
+        } else {
+            setLocation(limiteIzquierdo, posY);
+        }
 	}
 	
-	public void patrullar (int anchoPanel) {
-		Timer movimiento = new Timer(50, new ActionListener(){
+	public void patrullar () {
+		movimiento = new Timer(50, new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				if (hacia_derecha) {
-					if (getX() + getWidth() + 15 < anchoPanel) {
-	                    moverDerecha(anchoPanel);
+					if (getX() + getWidth() <= limiteDerecho) {
+	                    moverDerecha();
 	                } else {
 	                    hacia_derecha = false;
+	                    moverIzquierda();
 	                }
 				} else {
-					if (getX() - 15 > 0) {
+					if (getX() > limiteIzquierdo) {
 	                    moverIzquierda();
 	                } else {
 	                    hacia_derecha = true;
+	                    moverDerecha();
 	                }
 				}
 			}
 		});
+		movimiento.start();
 	}
 	
 }
