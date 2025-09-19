@@ -1,7 +1,6 @@
 package GUI;
 
 import java.awt.Color;
-import java.io.File;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
