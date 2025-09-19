@@ -51,7 +51,6 @@ public class FondoPanel extends JPanel {
     }
     
     
-    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -60,7 +59,6 @@ public class FondoPanel extends JPanel {
             g.drawImage(fondo, x, 0, null);
         }
 
-        
         
         // Edificios: se mueven un poco más rápido que el fondo
         g.drawImage(edificios[0], 270 - desplazamiento / 2, 236, 122, 200, this);

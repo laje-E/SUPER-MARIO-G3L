@@ -48,7 +48,7 @@ public class SuperMario extends JFrame {
         enemigos = new ArrayList<>();
 
         
-        Enemigo enemigo = new Enemigo (500, 386, 50, 50, 500, 801);
+        Enemigo enemigo = new Enemigo (500, 406, 30, 30, 500, 801);
 		enemigo.setBackground(Color.RED);
 		contentPane.add(enemigo);
 		enemigos.add(enemigo);
@@ -76,7 +76,7 @@ public class SuperMario extends JFrame {
         
         // Capa de pasto (sobre el suelo)
         for (int i = 0; i < tilesX; i++) {
-            Obstaculo pasto = new Obstaculo(obstaculos, pastoIcon);
+            Obstaculo pasto = new Obstaculo(obstaculos, pastoIcon, false);
             pasto.setBounds(i * tileSize, sueloY - tileSize, tileSize, tileSize);
             contentPane.add(pasto);
             obstaculos.add(pasto);
@@ -85,7 +85,7 @@ public class SuperMario extends JFrame {
         
         for (int y = 0; y < tilesAbajo; y++) {
             for (int i = 0; i < tilesX; i++) {
-                Obstaculo tierra = new Obstaculo(obstaculos, tierraIcon);
+                Obstaculo tierra = new Obstaculo(obstaculos, tierraIcon, false);
                 tierra.setBounds(i * tileSize, sueloY + y * tileSize, tileSize, tileSize);
                 contentPane.add(tierra);
                 obstaculos.add(tierra);
@@ -168,13 +168,13 @@ public class SuperMario extends JFrame {
             	            }
             	            for (Enemigo enemigo : new ArrayList<>(enemigos)) {
             	            	enemigo.ajustarLimites(3); // si el mundo se mueve a la derecha (A)
+            	            	enemigo.setLocation(enemigo.getX() + 3, enemigo.getY());
             	            }
             	            fondoPanel.repaint();
             	        }
             	    }
             	}
 
-                
                 
                 if (dPressed) {                	
                     boolean puede_mover = true;
