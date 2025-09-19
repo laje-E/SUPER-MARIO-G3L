@@ -4,8 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 
 
-
 public class Puntaje extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int puntos;
 	private int monedas;
 	private String mundo;

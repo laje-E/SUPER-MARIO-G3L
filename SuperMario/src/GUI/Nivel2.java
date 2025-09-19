@@ -47,8 +47,9 @@ public class Nivel2 extends NivelBase {
 
         setContentPane(contentPane);
         
-        ImageIcon pastoIcon = new ImageIcon("bin/img/masPasto64a.png");
-        ImageIcon tierraIcon = new ImageIcon("bin/img/masTierra64a.png");
+        ImageIcon pastoIcon = new ImageIcon(getClass().getResource("/img/pisos/pastoFixed.png"));
+        ImageIcon tierraIcon = new ImageIcon(getClass().getResource("/img/pisos/tierraFixed.png"));
+
         
         
         int sueloY = 500; // coordenada Y donde empieza la tierra

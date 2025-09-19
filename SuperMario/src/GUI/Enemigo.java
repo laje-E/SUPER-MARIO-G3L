@@ -8,6 +8,9 @@ import javax.swing.Timer;
 
 public class Enemigo extends JPanel{
 	
+	private static final long serialVersionUID = 1L;
+
+
 	private boolean hacia_derecha = true;
 	
 	private Timer movimiento;
@@ -74,6 +77,12 @@ public class Enemigo extends JPanel{
 			}
 		});
 		movimiento.start();
+	}
+	
+	public void detenerPatrulla() {
+	    if (movimiento != null) {
+	        movimiento.stop();
+	    }
 	}
 	
 }

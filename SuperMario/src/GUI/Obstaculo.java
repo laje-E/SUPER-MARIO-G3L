@@ -1,4 +1,3 @@
-
 package GUI;
 
 import java.util.ArrayList;
@@ -28,5 +27,6 @@ public class Obstaculo extends JPanel {
     public Obstaculo(ArrayList<Obstaculo> obstaculos) {
         this(obstaculos, null, true); // constructor sin imagen
   	}
+
 
 }

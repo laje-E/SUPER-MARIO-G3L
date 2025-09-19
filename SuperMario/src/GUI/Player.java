@@ -1,6 +1,6 @@
-		package GUI;
-	
-		import java.awt.Rectangle;
+package GUI;
+
+import java.awt.Rectangle;
 	
 	import java.awt.event.ActionEvent;
 	import java.awt.event.ActionListener;
@@ -55,14 +55,16 @@
 			            }
 			        }
 			    }
-			    for (Enemigo enemigo : enemigos) {
+
+			    for (Enemigo enemigo : new ArrayList<>(enemigos)) {
 			    	if (colisionaConEnemigoDesdeArriba(enemigo)) {
-	            		// Eliminar enemigo del panel
+	            		
+			    		enemigo.detenerPatrulla();
+			    		// Eliminar enemigo del panel
 			    		enemigo.setVisible(false);
 	           	    	getParent().remove(enemigo);
 	           	    	getParent().repaint();
-	           	    	
-	           	    	// aqui hay un error que parece que el enemigo no se elimina por completo
+	           	    	enemigos.remove(enemigo); // Se elimina al enemigo de la lista para que deje de "rastrearlo".
 	           	    
 	           	    	rebote();
 			    	}
@@ -102,41 +104,14 @@
 			}
 		    
 			
-			
-			
-//			public boolean chequeoColisionX(int dx, Obstaculo obstaculo) {
-//			    int nuevaX = getX() + dx;
-//			    int nuevaY = getY();
-//			    Rectangle futuraPos = new Rectangle(nuevaX, nuevaY, getWidth(), getHeight());
-//			    
-//			    return futuraPos.intersects(obstaculo.getBounds());
-//			    
-//			}
-//			
+
 			public boolean chequeoColisionArriba(int dy, Obstaculo obstaculo) {
 			    int nuevaX = getX();
 			    int nuevaY = getY() - dy; // Movimiento hacia arriba
 			    Rectangle futuraPos = new Rectangle(nuevaX, nuevaY, getWidth(), getHeight());
 			    return futuraPos.intersects(obstaculo.getBounds());
 			}
-//			
-//			public boolean chequeoColisionAbajo(int dy, Obstaculo obstaculo) {
-//			    int nuevaX = getX();
-//			    int nuevaY = getY() + dy; // Movimiento hacia abajo
-//			    Rectangle futuraPos = new Rectangle(nuevaX, nuevaY, getWidth(), getHeight());
-//			    return futuraPos.intersects(obstaculo.getBounds());
-//			}
-//	
-//			public boolean estaApoyado (ArrayList<Obstaculo> obstaculos) {
-//				for (Obstaculo obstaculo : obstaculos) {
-//					Rectangle abajoJugador = new Rectangle (getX(), getY() + 1, getWidth(), getHeight());
-//					if (abajoJugador.intersects(obstaculo.getBounds())) {
-//						return true;
-//					}	
-//				}
-//				return false;
-//			}
-	
+
 			
 			public void moverDerecha(int anchoPanel, int velocidad) {
 				int posX = getX();

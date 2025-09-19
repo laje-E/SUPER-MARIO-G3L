@@ -1,22 +1,16 @@
 package GUI;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
-import java.util.ArrayList;
-
+import java.util.ArrayList;	
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 public class SuperMario extends JFrame {
@@ -32,10 +26,7 @@ public class SuperMario extends JFrame {
     private FondoPanel fondoPanel;
     private int worldOffset = 0; // cuántos píxeles se movió el mundo
     private int anchoMapa = 4480;
-    public boolean nivelSuperado = false;
-    private JLabel mensajeFinal;
-    public boolean nivelFinalizado = false;
-
+    private boolean nivelFinalizado = false;
 
 
     public SuperMario() {
@@ -57,7 +48,13 @@ public class SuperMario extends JFrame {
         enemigos = new ArrayList<>();
 
         
-        Enemigo enemigo = new Enemigo (500, 410, 30, 30, 510, 785);
+        Enemigo enemigo = new Enemigo (500, 386, 37, 50, 500, 801); // matecinini --> mirar tamaños!!
+//        Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801); //carboncini --> mirar tamaños!!
+//        Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
+//        Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
+//        Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
+//        Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
+//        Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
 		enemigo.setBackground(Color.RED);
 		contentPane.add(enemigo);
 		enemigos.add(enemigo);
@@ -68,36 +65,10 @@ public class SuperMario extends JFrame {
         contentPane.add(player);
         
 		enemigo.patrullar();
-		
-		Font marioFont;
-		try { // Es una promesa, que si no se cumple, o sea no carga la fuente, que use de manera forzada la default que es ARIAL.
-            marioFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/fuentes/SuperMario64.ttf"));
-            marioFont = marioFont.deriveFont(64f);
-        }
-        catch (FontFormatException | IOException e) { // Tira el error, y usa por default ARIAL.
-        	System.err.println("Error al cargar la fuente: " + e.getMessage());
-            marioFont = new Font("Arial", Font.BOLD, 64);
-        }
-		
-		mensajeFinal = new JLabel("¡Nivel Superado!");
-		mensajeFinal.setFont(marioFont);
-		mensajeFinal.setForeground(Color.YELLOW);
-		mensajeFinal.setBounds(10, 250, 800, 100);
-		mensajeFinal.setVisible(false);
-		mensajeFinal.setOpaque(false);
-		mensajeFinal.setHorizontalAlignment(SwingConstants.CENTER);
-		mensajeFinal.setVerticalAlignment(SwingConstants.CENTER);
-		contentPane.add(mensajeFinal);
-		
-		contentPane.setComponentZOrder(mensajeFinal, 0); // lo pone al frente
-		
-		mensajeFinal.setForeground(Color.RED);
-		
-		
-		
         
-        ImageIcon pastoIcon = new ImageIcon("bin/img/masPasto64a.png");
-        ImageIcon tierraIcon = new ImageIcon("bin/img/masTierra64a.png");
+       ImageIcon pastoIcon = new ImageIcon(getClass().getResource("/img/pisos/pastoFixed.png"));
+       ImageIcon tierraIcon = new ImageIcon(getClass().getResource("/img/pisos/tierraFixed.png"));
+
         
         
         int sueloY = 500; // coordenada Y donde empieza la tierra
@@ -129,11 +100,10 @@ public class SuperMario extends JFrame {
         
         
         int[][] nivel1 = {
-                {50, 400, 80, 10},   // plataforma 1
-                {170, 350, 20, 20},   // plataforma 2
-                {250, 370, 80, 10},    // plataforma 3
-                {500, 390, 10, 50},     // pared 1
-                {795, 390, 10, 50}     // pared 2
+        		{170, 350, 20, 20}, // plataforma 2
+        		{250, 370, 80, 10}, // plataforma 3
+        		{500, 390, 10, 50}, // pared 1
+        		{795, 390, 10, 50}  // pared 2
 //                {370, 236, 122, 200},   // edificio 1. Edificios que después se van a ir al fondo no como obstáculos.
 //                {500, 206, 117, 230},   // edificio 2
 //                {640, 221, 125, 215}   // edificio 3
@@ -141,21 +111,13 @@ public class SuperMario extends JFrame {
            };
 
             
-        
-        	int contador = 1;
+            
            for (int[] bloque : nivel1) {
                 Obstaculo o = new Obstaculo(obstaculos);
                 o.setBackground(Color.GREEN);
                 o.setBounds(bloque[0], bloque[1], bloque[2], bloque[3]);
                 contentPane.add(o);
                 obstaculos.add(o);
-                
-                if (contador == 2) { // obstaculo 2
-                	o.traspasable = false;
-                	o.setBackground(Color.black);
-                }
-                
-                contador ++;
             }
         
         fondoPanel = new FondoPanel();
@@ -220,7 +182,6 @@ public class SuperMario extends JFrame {
             	}
 
                 
-                
                 if (dPressed) {                	
                     boolean puede_mover = true;
                     for (Obstaculo o : new ArrayList<>(obstaculos)) {
@@ -255,12 +216,12 @@ public class SuperMario extends JFrame {
                 }
                 
                 int posicionJugador = worldOffset + player.getX();
+                    
+               
                 if (posicionJugador >= 4155 && !nivelFinalizado) {
-                	nivelFinalizado = true; // Evita múltiples ejecuciones
-                	mensajeFinal.setVisible(true);
+                	nivelFinalizado = true;
+                    fondoPanel.setearNivelSuperado(true);
                     repaint();
-                    System.out.println("Nivel superado!");
-                    mensajeFinal.repaint();
                     
                  // Esperar 2 segundos y pasar al siguiente nivel
                     new Timer(2000, new ActionListener() {
@@ -269,6 +230,8 @@ public class SuperMario extends JFrame {
                             GestorNiveles.avanzarNivel(SuperMario.this);
                         }
                     }).start();
+                    
+                    System.out.println("Nivel superado!");
                 }
                 
             }

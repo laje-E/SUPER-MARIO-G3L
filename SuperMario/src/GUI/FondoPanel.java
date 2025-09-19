@@ -16,55 +16,39 @@ public class FondoPanel extends JPanel {
 
     private Image fondo;
     private Image obelisco;
+    private Image mirthaCasa;
     private Image[] edificios;
-    private Font marioFont;
-
     public int desplazamiento = 0;
     private boolean nivelSuperado = false;
+    private Font marioFont;
     
     public FondoPanel() {
-        fondo = new ImageIcon(getClass().getResource("/img/fondoPrueba2.png")).getImage();
-
+        fondo = new ImageIcon(getClass().getResource("/img/fondo/fondoLejanoPrimerNivel.png")).getImage();
+        
+        mirthaCasa = new ImageIcon(getClass().getResource("/img/edificios/mirthaCasa.png")).getImage();
+        
         edificios = new Image[3];
-        edificios[0] = new ImageIcon(getClass().getResource("/img/edif1.png")).getImage();
-        edificios[1] = new ImageIcon(getClass().getResource("/img/edif2.png")).getImage();
-        edificios[2] = new ImageIcon(getClass().getResource("/img/edif3.png")).getImage();
+        edificios[0] = new ImageIcon(getClass().getResource("/img/edificios/edif1.png")).getImage();
+        edificios[1] = new ImageIcon(getClass().getResource("/img/edificios/edif2.png")).getImage();
+        edificios[2] = new ImageIcon(getClass().getResource("/img/edificios/edif3.png")).getImage();
         
-        obelisco = new ImageIcon(getClass().getResource("/img/obeliscoSolo.png")).getImage();
         
-        try { // Es una promesa, que si no se cumple, o sea no carga la fuente, que use de manera forzada la default que es ARIAL.
-            marioFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/fuentes/SuperMario64.ttf"));
+        obelisco = new ImageIcon(getClass().getResource("/img/edificios/obelisco.png")).getImage();
+        
+        try {
+        	 marioFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/fuentes/SuperMario64.ttf")).deriveFont(48f);
         }
-        catch (FontFormatException | IOException e) { // Tira el error, y usa por default ARIAL.
-        	System.err.println("Error al cargar la fuente: " + e.getMessage());
+        catch (FontFormatException | IOException e) {
             marioFont = new Font("Arial", Font.BOLD, 48);
         }
+        
+        
     }
-        
     
-        
-        
-
-    
-    
-    public void setearNivelSuperado(boolean valor) {
-        this.nivelSuperado = valor;
+    public void setearNivelSuperado(boolean estado) {
+        this.nivelSuperado = estado;
         repaint();
     }
-    
-    protected void paintComponent_mensaje(Graphics g) {
-        if (nivelSuperado) { // verificamos la variable del fondo
-            g.setFont(marioFont);
-            g.setColor(Color.YELLOW);
-            g.drawString("Nivel Superado!", getWidth() / 2 - 200, getHeight() / 2);
-        }
-    
-        //    mensajePanel.setOpaque(false); // transparente
-        //    mensajePanel.setBounds(0, 0, 800, 600);
-        //    this.add(mensajePanel);
-
-    
-}
     
     
     @Override
@@ -75,15 +59,24 @@ public class FondoPanel extends JPanel {
             g.drawImage(fondo, x, 0, null);
         }
 
+        
         // Edificios: se mueven un poco más rápido que el fondo
-        g.drawImage(edificios[0], 370 - desplazamiento / 2, 236, 122, 200, this);
-        g.drawImage(edificios[1], 500 - desplazamiento / 2, 206, 117, 230, this);
-        g.drawImage(edificios[2], 640 - desplazamiento / 2, 221, 125, 215, this);
+        g.drawImage(edificios[0], 270 - desplazamiento / 2, 236, 122, 200, this);
+        g.drawImage(edificios[1], 700 - desplazamiento / 2, 206, 117, 230, this);
+        g.drawImage(edificios[2], 840 - desplazamiento / 2, 221, 125, 215, this);
+        
+     // Casa de Mirtha Legrand:
+        g.drawImage(mirthaCasa, 150 - desplazamiento, 266, 200, 170, this);
         
         g.drawImage(obelisco, 4155 - desplazamiento, 234, 50, 202, this); // obelisco dibujado, se mueve en primer plano como si fuera un obstáculo solo que sin las colisiones.
         
+        if (nivelSuperado) {
+            g.setFont(marioFont);
+            g.setColor(Color.RED);
+            g.drawString("Nivel Superado !", 200, 200);
+        }
         
-        paintComponent_mensaje(g);
+        
     }    
     
 }
