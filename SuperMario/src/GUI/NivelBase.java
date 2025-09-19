@@ -100,7 +100,7 @@ public abstract class NivelBase extends JFrame {
             	
             	if (aPressed) {
             	    boolean puede_mover = true;
-            	    for (Obstaculo o : new ArrayList<>(obstaculos)) {
+            	    for (Obstaculo o : obstaculos) {
             	        if (player.chequeoColisionX(-3, o)) {
             	            puede_mover = false;
             	            break;
@@ -190,7 +190,20 @@ public abstract class NivelBase extends JFrame {
             enemigo.detenerPatrulla(); // suponiendo que tengas este método en Enemigo
         }
         dispose(); // cierra la ventana
+        obstaculos.clear();
+        enemigos.clear();
+        contentPane.removeAll();
+
     }
+    
+    Timer juegoTimer = new Timer(15, e -> {
+    	configurarJugador();
+        construirNivel(); // método abstracto
+        configurarFondo();
+        configurarMovimiento();
+        repaint();
+    });
+
 
     
 }

@@ -23,7 +23,7 @@ import java.awt.Rectangle;
 		        setBounds(posX, posY, ancho, alto);
 		        
 		        this.obstaculos = obstaculos;
-				
+			
 				
 				// Se va a ejecutar el timer de gravedad dentro del Player
 		        Timer gravedadTimer = new Timer(30, new ActionListener() {
@@ -42,7 +42,7 @@ import java.awt.Rectangle;
 
 			    enElAire = true; // asumimos que está en el aire hasta comprobar piso
 
-			    for (Obstaculo obstaculo : new ArrayList<>(obstaculos)) {
+			    for (Obstaculo obstaculo : obstaculos) {
 			        if (velocidadY > 0 && chequeoColisionAbajo(obstaculo)) { // solo si cae
 			            setLocation(getX(), obstaculo.getY() - getHeight());
 			            velocidadY = 0;
@@ -67,6 +67,11 @@ import java.awt.Rectangle;
 	           	    	enemigos.remove(enemigo); // Se elimina al enemigo de la lista para que deje de "rastrearlo".
 	           	    
 	           	    	rebote();
+			    	}
+			    	else if (colisionaConEnemigoDesdeCostado(enemigo)) {
+			    		this.setVisible(false);
+			    		getParent().remove(this);
+			    		getParent().repaint();
 			    	}
 	        	}
 			}
@@ -101,6 +106,12 @@ import java.awt.Rectangle;
 			    Rectangle abajoJugador = new Rectangle(getX(), getY() + getHeight(), getWidth(), 5);
 			    Rectangle arribaEnemigo = new Rectangle(enemigo.getX(), enemigo.getY(), enemigo.getWidth(), 5);
 			    return abajoJugador.intersects(arribaEnemigo);
+			}
+		    
+		    public boolean colisionaConEnemigoDesdeCostado(Enemigo enemigo) {
+		    	Rectangle jugadorCostado = getBounds();
+		        Rectangle enemigoCostado = enemigo.getBounds();
+			    return jugadorCostado.intersects(enemigoCostado) && !colisionaConEnemigoDesdeArriba(enemigo);
 			}
 		    
 			

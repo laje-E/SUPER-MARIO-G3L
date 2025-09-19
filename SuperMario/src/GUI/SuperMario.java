@@ -24,7 +24,7 @@ public class SuperMario extends JFrame {
     public ArrayList<Enemigo> enemigos;
     private Player player; // lo declaro arriba por claridad
     private FondoPanel fondoPanel;
-    private int worldOffset = 0; // cuántos píxeles se movió el mundo
+    public int worldOffset = 0; // cuántos píxeles se movió el mundo
     private int anchoMapa = 4480;
     private boolean nivelFinalizado = false;
 
