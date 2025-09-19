@@ -1,70 +1,145 @@
-	package GUI;
-
-	import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JPanel;
-import javax.swing.Timer;
-
-	public class Player extends JPanel {
-
-		private static final long serialVersionUID = 1L;
-		
-		public Player(int posX, int posY, int ancho, int alto) {
-			setBounds(posX, posY, ancho, alto);
-		}
-		
-		public void moverDerecha(int anchoPanel) {
-			int posX = getX();
-			int posY = getY();
-
-			if (posX + getWidth() < anchoPanel) {
-				setLocation(posX + 15, posY);
-			}
-		}
-		
-		public void moverIzquierda() {
-			int posX = getX();
-			int posY = getY();
-			
-			if (posX > 0) {
-				setLocation(posX - 15, posY);
-			}
-		}
-
-		public void saltar() {
-			int altura_limite = 100;
-			int velocidad_salto = 5;
-			
-			Timer timer = new Timer(30, new ActionListener() {
-				int alturaActual = 0;
-				boolean sube = true;
-				
-				public void actionPerformed(ActionEvent e) {
-					int posX = getX();
-					int posY = getY();
-					
-					
-					if (sube == true) { // Subiendo
-		                if (alturaActual < altura_limite) {
-		                    setLocation(posX, posY - velocidad_salto);
-		                    alturaActual += velocidad_salto;
-		                } else {
-		                    sube = false; // Cambia a bajada
-		                }
-		            } else { // Bajando
-		                if (alturaActual > 0) {
-		                    setLocation(posX, posY + velocidad_salto);
-		                    alturaActual -= velocidad_salto;
-		                } else {
-		                    ((Timer) e.getSource()).stop(); // Termina el salto
-		                }
-		            }
-				}
-			});
-			timer.start();
-			
-		}
-
+		package GUI;
 	
-}
+		import java.awt.Rectangle;
+	
+	import java.awt.event.ActionEvent;
+	import java.awt.event.ActionListener;
+	import java.util.ArrayList;
+	import javax.swing.JPanel;
+	import javax.swing.Timer;
+	
+		public class Player extends JPanel {
+	
+			private static final long serialVersionUID = 1L;
+			
+			private int velocidadY = 0;
+			private int fuerzaSalto = -12; // negativa porque sube
+			private int gravedad = 1;
+			private boolean enElAire = false;
+			
+			public ArrayList<Obstaculo> obstaculos;
+			
+			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos) {
+		        setBounds(posX, posY, ancho, alto);
+		        
+		        this.obstaculos = obstaculos;
+				
+				
+				// Se va a ejecutar el timer de gravedad dentro del Player
+		        Timer gravedadTimer = new Timer(30, new ActionListener() {
+		            @Override
+		            public void actionPerformed(ActionEvent e) {
+		                aplicarGravedad(enemigos);
+		            }
+		        });
+		        gravedadTimer.start();
+			}
+			
+			
+			private void aplicarGravedad(ArrayList<Enemigo> enemigos) {
+			    velocidadY += gravedad;
+			    setLocation(getX(), getY() + velocidadY);
+
+			    enElAire = true; // asumimos que está en el aire hasta comprobar piso
+
+			    for (Obstaculo obstaculo : new ArrayList<>(obstaculos)) {
+			        if (velocidadY > 0 && chequeoColisionAbajo(obstaculo)) { // solo si cae
+			            setLocation(getX(), obstaculo.getY() - getHeight());
+			            velocidadY = 0;
+			            enElAire = false;
+			        }
+			    }
+			    for (Enemigo enemigo : enemigos) {
+			    	if (colisionaConEnemigoDesdeArriba(enemigo)) {
+	            		// Eliminar enemigo del panel
+			    		enemigo.setVisible(false);
+	           	    	getParent().remove(enemigo);
+	           	    	getParent().repaint();
+	           	    
+	           	    	saltar();
+			    	}
+	        	}
+			}
+
+
+
+		    public void saltar() {
+		        if (!enElAire) { // solo salta si está en el piso
+		            velocidadY = fuerzaSalto;
+		            enElAire = true;
+		        }
+		    }
+			
+			
+			
+		    public boolean chequeoColisionX(int dx, Obstaculo obstaculo) {
+		        Rectangle futuraPos = new Rectangle(getX() + dx, getY(), getWidth(), getHeight());
+		        return futuraPos.intersects(obstaculo.getBounds());
+		    }
+
+		    public boolean chequeoColisionAbajo(Obstaculo obstaculo) {
+		        Rectangle piesJugador = new Rectangle(getX(), getY() + getHeight(), getWidth(), Math.max(5, velocidadY));
+		        return piesJugador.intersects(obstaculo.getBounds());
+		    }
+		    
+		    public boolean colisionaConEnemigoDesdeArriba(Enemigo enemigo) {
+			    Rectangle abajoJugador = new Rectangle(getX(), getY() + getHeight(), getWidth(), 5);
+			    Rectangle arribaEnemigo = new Rectangle(enemigo.getX(), enemigo.getY(), enemigo.getWidth(), 5);
+			    return abajoJugador.intersects(arribaEnemigo);
+			}
+		    
+			
+			
+			
+//			public boolean chequeoColisionX(int dx, Obstaculo obstaculo) {
+//			    int nuevaX = getX() + dx;
+//			    int nuevaY = getY();
+//			    Rectangle futuraPos = new Rectangle(nuevaX, nuevaY, getWidth(), getHeight());
+//			    
+//			    return futuraPos.intersects(obstaculo.getBounds());
+//			    
+//			}
+//			
+//			public boolean chequeoColisionArriba(int dy, Obstaculo obstaculo) {
+//			    int nuevaX = getX();
+//			    int nuevaY = getY() - dy; // Movimiento hacia arriba
+//			    Rectangle futuraPos = new Rectangle(nuevaX, nuevaY, getWidth(), getHeight());
+//			    return futuraPos.intersects(obstaculo.getBounds());
+//			}
+//			
+//			public boolean chequeoColisionAbajo(int dy, Obstaculo obstaculo) {
+//			    int nuevaX = getX();
+//			    int nuevaY = getY() + dy; // Movimiento hacia abajo
+//			    Rectangle futuraPos = new Rectangle(nuevaX, nuevaY, getWidth(), getHeight());
+//			    return futuraPos.intersects(obstaculo.getBounds());
+//			}
+//	
+//			public boolean estaApoyado (ArrayList<Obstaculo> obstaculos) {
+//				for (Obstaculo obstaculo : obstaculos) {
+//					Rectangle abajoJugador = new Rectangle (getX(), getY() + 1, getWidth(), getHeight());
+//					if (abajoJugador.intersects(obstaculo.getBounds())) {
+//						return true;
+//					}	
+//				}
+//				return false;
+//			}
+	
+			
+			public void moverDerecha(int anchoPanel, int velocidad) {
+				int posX = getX();
+				int posY = getY();
+				if (posX + getWidth() < anchoPanel) {
+					setLocation(posX + velocidad, posY);
+				}
+			}	
+	
+			public void moverIzquierda(int velocidad) {
+				int posX = getX();
+				int posY = getY();
+				if (posX > 0) {
+					setLocation(posX - velocidad, posY);
+				}
+			}			
+	
+		
+	}
