@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.Container;
 import java.awt.Rectangle;
 	
 	import java.awt.event.ActionEvent;
@@ -18,12 +19,14 @@ import java.awt.Rectangle;
 			private boolean enElAire = false;
 			
 			public ArrayList<Obstaculo> obstaculos;
+
+			private SuperMario superMario;
 			
-			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos) {
+			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, SuperMario SuperMario) {
 		        setBounds(posX, posY, ancho, alto);
 		        
 		        this.obstaculos = obstaculos;
-			
+		        this.superMario = SuperMario;
 				
 				// Se va a ejecutar el timer de gravedad dentro del Player
 		        Timer gravedadTimer = new Timer(30, new ActionListener() {
@@ -69,9 +72,14 @@ import java.awt.Rectangle;
 	           	    	rebote();
 			    	}
 			    	else if (colisionaConEnemigoDesdeCostado(enemigo)) {
+			    		Container parent = getParent(); // guardamos el contenedor antes de remover
 			    		this.setVisible(false);
-			    		getParent().remove(this);
-			    		getParent().repaint();
+			    		if (parent != null) {
+			    		    parent.remove(this);
+			    		    parent.repaint();
+			    		}
+			    		superMario.mostrarPantallaGameOver();
+			    		
 			    	}
 	        	}
 			}

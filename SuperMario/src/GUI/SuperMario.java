@@ -59,12 +59,14 @@ public class SuperMario extends JFrame {
 		contentPane.add(enemigo);
 		enemigos.add(enemigo);
 
-        player = new Player(100, 350, 30, 50, obstaculos, enemigos);
+        player = new Player(100, 350, 30, 50, obstaculos, enemigos, this);
         player.setBackground(Color.RED);
         player.setFocusable(false); // que el jugador no robe el foco
         contentPane.add(player);
         
 		enemigo.patrullar();
+		
+		
         
        ImageIcon pastoIcon = new ImageIcon(getClass().getResource("/img/pisos/pastoFixed.png"));
        ImageIcon tierraIcon = new ImageIcon(getClass().getResource("/img/pisos/tierraFixed.png"));
@@ -241,6 +243,12 @@ public class SuperMario extends JFrame {
 
 
     }
+    
+    public void mostrarPantallaGameOver() {
+	    PantallaGameOver pantalla = new PantallaGameOver();
+	    pantalla.setVisible(true);
+	    dispose(); // Cierra la ventana actual del juego
+	}
 
     public static void main(String[] args) {
         SuperMario juego = new SuperMario();
