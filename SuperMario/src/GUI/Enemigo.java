@@ -81,4 +81,10 @@ public class Enemigo extends JPanel{
 		movimiento.start();
 	}
 	
+	public void detenerPatrulla() {
+	    if (movimiento != null) {
+	        movimiento.stop();
+	    }
+	}
+	
 }

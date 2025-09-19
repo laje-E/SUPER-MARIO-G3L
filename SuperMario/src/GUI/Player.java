@@ -55,14 +55,15 @@
 			            }
 			        }
 			    }
-			    for (Enemigo enemigo : enemigos) {
+			    for (Enemigo enemigo : new ArrayList<>(enemigos)) {
 			    	if (colisionaConEnemigoDesdeArriba(enemigo)) {
-	            		// Eliminar enemigo del panel
+	            		
+			    		enemigo.detenerPatrulla();
+			    		// Eliminar enemigo del panel
 			    		enemigo.setVisible(false);
 	           	    	getParent().remove(enemigo);
 	           	    	getParent().repaint();
-	           	    	
-	           	    	// aqui hay un error que parece que el enemigo no se elimina por completo
+	           	    	enemigos.remove(enemigo); // Se elimina al enemigo de la lista para que deje de "rastrearlo".
 	           	    
 	           	    	rebote();
 			    	}
