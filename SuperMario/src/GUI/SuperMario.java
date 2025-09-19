@@ -47,8 +47,8 @@ public class SuperMario extends JFrame {
         
         enemigos = new ArrayList<>();
 
-        
-        Enemigo enemigo = new Enemigo (500, 386, 37, 50, 500, 801); // matecinini --> mirar tamaños!!
+        ImageIcon enemigoIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/matecinini.png"));
+        Enemigo enemigo = new Enemigo (500, 386, 37, 50, 500, 801, enemigoIcon); // matecinini --> mirar tamaños!!
 //        Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801); //carboncini --> mirar tamaños!!
 //        Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
 //        Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
@@ -164,17 +164,17 @@ public class SuperMario extends JFrame {
             	    if (puede_mover) {
             	        // Si Mario todavía no llegó al centro de la pantalla o el mundo ya está en el inicio
             	        if (player.getX() > getWidth() / 2 || worldOffset <= 0) {
-            	            player.moverIzquierda(3);
+            	            player.moverIzquierda(5);
             	        } else {
             	            // Desplazamos el mundo a la derecha
-            	            worldOffset -= 3;
+            	            worldOffset -= 5;
             	            fondoPanel.desplazamiento = worldOffset;
             	            for (Obstaculo o : new ArrayList<>(obstaculos)) {
-            	                o.setLocation(o.getX() + 3, o.getY()); // mover obstáculos para la derecha.
+            	                o.setLocation(o.getX() + 5, o.getY()); // mover obstáculos para la derecha.
             	            }
             	            for (Enemigo enemigo : new ArrayList<>(enemigos)) {
             	            	enemigo.setLocation(enemigo.getX() + 3, enemigo.getY()); 
-            	            	enemigo.ajustarLimites(3); // si el mundo se mueve a la derecha (A)
+            	            	enemigo.ajustarLimites(5); // si el mundo se mueve a la derecha (A)
             	            }
             	            fondoPanel.repaint();
             	        }
@@ -185,7 +185,7 @@ public class SuperMario extends JFrame {
                 if (dPressed) {                	
                     boolean puede_mover = true;
                     for (Obstaculo o : new ArrayList<>(obstaculos)) {
-                        if (player.chequeoColisionX(3, o)) {
+                        if (player.chequeoColisionX(5, o)) {
                             puede_mover = false;
                             break;
                         }
@@ -193,17 +193,17 @@ public class SuperMario extends JFrame {
                     if (puede_mover) {
                         // Si Mario está en la primera mitad de la pantalla o ya llegamos al final del mapa
                         if (player.getX() < getWidth() / 2 || worldOffset >= anchoMapa - getWidth()) {
-                            player.moverDerecha(contentPane.getWidth(), 3);
+                            player.moverDerecha(contentPane.getWidth(), 5);
                         } else {
                             // Se desplaza el mundo a la izquierda.
-                            worldOffset += 3;
+                            worldOffset += 5;
                             fondoPanel.desplazamiento = worldOffset;
                             for (Obstaculo o : new ArrayList<>(obstaculos)) {
-                                o.setLocation(o.getX() - 3, o.getY()); // mover obstáculos para la izquierda.
+                                o.setLocation(o.getX() - 5, o.getY()); // mover obstáculos para la izquierda.
                             }
                             for (Enemigo enemigo : new ArrayList<>(enemigos)) {
-                            	enemigo.setLocation(enemigo.getX() - 3, enemigo.getY());
-                            	enemigo.ajustarLimites(-3); // si el mundo se mueve a la izquierda (D)
+                            	enemigo.setLocation(enemigo.getX() - 5, enemigo.getY());
+                            	enemigo.ajustarLimites(-5); // si el mundo se mueve a la izquierda (D)
             	            }
                             fondoPanel.repaint();
                         }

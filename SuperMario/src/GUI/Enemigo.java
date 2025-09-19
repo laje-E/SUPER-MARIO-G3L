@@ -1,8 +1,10 @@
 package GUI;
 
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -18,6 +20,7 @@ public class Enemigo extends JPanel{
 	public int limiteIzquierdo;
     public int limiteDerecho;
     public int desplazamiento = 0;
+    public ImageIcon icon;
 	
     public void ajustarLimites(int desplazamiento) {
         limiteIzquierdo += desplazamiento;
@@ -26,10 +29,19 @@ public class Enemigo extends JPanel{
         
     }
     
-	public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho) {
+	public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho, ImageIcon icon) {
 		setBounds(posX, posY, ancho, alto);
+		this.icon = icon;
 		this.limiteDerecho = limiteDerecho;
 		this.limiteIzquierdo = limiteIzquierdo;
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+	    super.paintComponent(g);
+	    if (icon != null) {
+	        g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
+	    }
 	}
 	
 	public void moverDerecha() {

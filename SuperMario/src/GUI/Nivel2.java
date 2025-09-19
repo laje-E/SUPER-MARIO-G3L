@@ -8,7 +8,8 @@ public class Nivel2 extends NivelBase {
     @Override
     protected void construirNivel() {
         // Agregar enemigo
-        Enemigo enemigo = new Enemigo(500, 410, 30, 30, 510, 785);
+    	ImageIcon enemigoIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados.png"));
+        Enemigo enemigo = new Enemigo(500, 410, 30, 30, 510, 785, enemigoIcon);
         enemigo.setBackground(Color.RED);
         contentPane.add(enemigo);
         enemigos.add(enemigo);
