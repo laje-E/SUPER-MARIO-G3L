@@ -21,13 +21,13 @@ public abstract class NivelBase extends JFrame {
     protected ArrayList<Obstaculo> obstaculos = new ArrayList<>();
     protected ArrayList<Enemigo> enemigos = new ArrayList<>();
     protected FondoPanel fondoPanel;
-    protected JLabel mensajeFinal;
     protected int worldOffset = 0;
     protected boolean nivelSuperado = false;
     protected int anchoMapa = 4480;
     boolean aPressed = false;
 	boolean dPressed = false;
 	boolean wPressed = false;
+	protected Timer movimientoFluido;
 
     public NivelBase() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,11 +37,11 @@ public abstract class NivelBase extends JFrame {
         setContentPane(contentPane);
         contentPane.setFocusable(true);
         contentPane.setFocusTraversalKeysEnabled(false);
+        
         configurarJugador();
-        configurarMovimiento();
-        configurarMensajeFinal();
-        configurarFondo();
         construirNivel(); // método abstracto
+        configurarFondo();
+        configurarMovimiento();
     }
 
     protected abstract void construirNivel(); // cada nivel define sus obstáculos y enemigos
@@ -51,17 +51,6 @@ public abstract class NivelBase extends JFrame {
         player.setBackground(Color.RED);
         player.setFocusable(false);
         contentPane.add(player);
-    }
-
-    protected void configurarMensajeFinal() {
-        mensajeFinal = new JLabel("¡Nivel Superado!");
-        mensajeFinal.setFont(new Font("Arial", Font.BOLD, 64));
-        mensajeFinal.setForeground(Color.RED);
-        mensajeFinal.setBounds(10, 250, 800, 100);
-        mensajeFinal.setVisible(false);
-        mensajeFinal.setHorizontalAlignment(SwingConstants.CENTER);
-        contentPane.add(mensajeFinal);
-        contentPane.setComponentZOrder(mensajeFinal, 0);
     }
 
     protected void configurarFondo() {
@@ -81,8 +70,32 @@ public abstract class NivelBase extends JFrame {
                 contentPane.requestFocusInWindow();
             }
         });
+        
+        
+        contentPane.addKeyListener(new java.awt.event.KeyListener() {
+            @Override
+            public void keyTyped(java.awt.event.KeyEvent e) {}
 
-        Timer movimientoFluido = new Timer(15, new ActionListener() { 
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent e) {
+                int tecla = e.getKeyCode();
+                if (tecla == java.awt.event.KeyEvent.VK_A) aPressed = true;
+                if (tecla == java.awt.event.KeyEvent.VK_D) dPressed = true;
+                if (tecla == java.awt.event.KeyEvent.VK_W) wPressed = true;
+            }
+
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                int tecla = e.getKeyCode();
+                if (tecla == java.awt.event.KeyEvent.VK_A) aPressed = false;
+                if (tecla == java.awt.event.KeyEvent.VK_D) dPressed = false;
+                if (tecla == java.awt.event.KeyEvent.VK_W) wPressed = false;
+            }
+        });
+        
+        
+
+        movimientoFluido = new Timer(15, new ActionListener() { 
             public void actionPerformed(ActionEvent e) {
             	
             	if (aPressed) {
@@ -149,13 +162,12 @@ public abstract class NivelBase extends JFrame {
                 }
                 
                 int posicionJugador = worldOffset + player.getX();
-                if (posicionJugador >= 4155) {
-                	mensajeFinal.setVisible(true);
+                if (posicionJugador >= 4155 && !nivelSuperado) {
+                    nivelSuperado = true; 				// evita que se vuelva a superar el nivel.
+                    fondoPanel.setearNivelSuperado(true);
                     repaint();
                     System.out.println("Nivel superado!");
-                    mensajeFinal.repaint();
                     
-                 // Esperar 2 segundos y pasar al siguiente nivel
                     new Timer(2000, new ActionListener() {
                         public void actionPerformed(ActionEvent evt) {
                             ((Timer) evt.getSource()).stop();
@@ -169,4 +181,16 @@ public abstract class NivelBase extends JFrame {
         });
         movimientoFluido.start();
     }
+    
+    public void cerrarNivel() {
+        if (movimientoFluido != null) {
+            movimientoFluido.stop();
+        }
+        for (Enemigo enemigo : enemigos) {
+            enemigo.detenerPatrulla(); // suponiendo que tengas este método en Enemigo
+        }
+        dispose(); // cierra la ventana
+    }
+
+    
 }
