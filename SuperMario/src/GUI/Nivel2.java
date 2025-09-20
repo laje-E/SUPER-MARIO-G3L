@@ -5,6 +5,10 @@ import javax.swing.ImageIcon;
 
 public class Nivel2 extends NivelBase {
 
+	public Nivel2(ControladorJuego controlador) {
+        super(controlador);
+    }
+	
     @Override
     protected void construirNivel() {
         // Agregar enemigo

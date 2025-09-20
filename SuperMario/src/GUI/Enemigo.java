@@ -96,5 +96,7 @@ public class Enemigo extends JPanel{
 	        movimiento.stop();
 	    }
 	}
+
+	
 	
 }

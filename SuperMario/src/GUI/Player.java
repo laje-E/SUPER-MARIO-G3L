@@ -20,13 +20,13 @@ import java.awt.Rectangle;
 			
 			public ArrayList<Obstaculo> obstaculos;
 
-			private SuperMario superMario;
+			private ControladorJuego controlador;
 			
-			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, SuperMario SuperMario) {
+			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, ControladorJuego controlador) {
 		        setBounds(posX, posY, ancho, alto);
 		        
 		        this.obstaculos = obstaculos;
-		        this.superMario = SuperMario;
+		        this.controlador = controlador;
 				
 				// Se va a ejecutar el timer de gravedad dentro del Player
 		        Timer gravedadTimer = new Timer(30, new ActionListener() {
@@ -78,7 +78,7 @@ import java.awt.Rectangle;
 			    		    parent.remove(this);
 			    		    parent.repaint();
 			    		}
-			    		superMario.mostrarPantallaGameOver();
+			    		controlador.mostrarPantallaGameOver();
 			    		
 			    	}
 	        	}
@@ -146,7 +146,90 @@ import java.awt.Rectangle;
 				if (posX > 0) {
 					setLocation(posX - velocidad, posY);
 				}
-			}			
-	
+			}
+
+
+			public void gravedadTimer(ArrayList<Enemigo> enemigos) {
+				Timer gravedadTimer = new Timer(30, new ActionListener() {
+		            @Override
+		            public void actionPerformed(ActionEvent e) {
+		                aplicarGravedad(enemigos);
+		            }
+		        });
+		        gravedadTimer.start();
+			}
+
+
+			public void procesarMovimiento(boolean aPressed, boolean dPressed, boolean wPressed, int worldOffset, int anchoMapa, JPanel contentPane, FondoPanel fondoPanel, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos) {
+				Timer movimientoFluido = new Timer(15, new ActionListener() { 
+		            public void actionPerformed(ActionEvent e) {
+		            	
+		            	if (aPressed) {
+		            	    boolean puede_mover = true;
+		            	    for (Obstaculo o : new ArrayList<>(obstaculos)) {
+		            	        if (chequeoColisionX(-3, o)) {
+		            	            puede_mover = false;
+		            	            break;
+		            	        }
+		            	    }
+		            	    if (puede_mover) {
+		            	        // Si Mario todavía no llegó al centro de la pantalla o el mundo ya está en el inicio
+		            	        if (getX() > getWidth() / 2 || worldOffset <= 0) {
+		            	            moverIzquierda(5);
+		            	        } else {
+		            	            // Desplazamos el mundo a la derecha
+		            	        	worldOffset -= 5;
+		            	            fondoPanel.desplazamiento = worldOffset;
+		            	            for (Obstaculo o : new ArrayList<>(obstaculos)) {
+		            	                o.setLocation(o.getX() + 5, o.getY()); // mover obstáculos para la derecha.
+		            	            }
+		            	            for (Enemigo enemigo : new ArrayList<>(enemigos)) {
+		            	            	enemigo.setLocation(enemigo.getX() + 3, enemigo.getY()); 
+		            	            	enemigo.ajustarLimites(5); // si el mundo se mueve a la derecha (A)
+		            	            }
+		            	            fondoPanel.repaint();
+		            	        }
+		            	    }
+		            	}
+
+		                
+		                if (dPressed) {                	
+		                    boolean puede_mover = true;
+		                    for (Obstaculo o : new ArrayList<>(obstaculos)) {
+		                        if (chequeoColisionX(5, o)) {
+		                            puede_mover = false;
+		                            break;
+		                        }
+		                    }
+		                    if (puede_mover) {
+		                        // Si Mario está en la primera mitad de la pantalla o ya llegamos al final del mapa
+		                        if (getX() < getWidth() / 2 || worldOffset >= anchoMapa - getWidth()) {
+		                            moverDerecha(contentPane.getWidth(), 5);
+		                        } else {
+		                            // Se desplaza el mundo a la izquierda.
+		                            worldOffset += 5;
+		                            fondoPanel.desplazamiento = worldOffset;
+		                            for (Obstaculo o : new ArrayList<>(obstaculos)) {
+		                                o.setLocation(o.getX() - 5, o.getY()); // mover obstáculos para la izquierda.
+		                            }
+		                            for (Enemigo enemigo : new ArrayList<>(enemigos)) {
+		                            	enemigo.setLocation(enemigo.getX() - 5, enemigo.getY());
+		                            	enemigo.ajustarLimites(-5); // si el mundo se mueve a la izquierda (D)
+		            	            }
+		                            fondoPanel.repaint();
+		                        }
+		                    }
+		                }
+
+		                if (wPressed) {
+		                    saltar();
+		                    wPressed = false;
+		                }
+		            }
+	                        
+	        });
+	        movimientoFluido.start();
+			}
+
 		
 	}

@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class SuperMario extends JFrame {
+public class SuperMario extends JFrame implements ControladorJuego {
   
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -229,7 +229,7 @@ public class SuperMario extends JFrame {
                     new Timer(2000, new ActionListener() {
                         public void actionPerformed(ActionEvent evt) {
                             ((Timer) evt.getSource()).stop();
-                            GestorNiveles.avanzarNivel(SuperMario.this);
+                            GestorNiveles.cargarNivel(SuperMario.this);
                         }
                     }).start();
                     
@@ -241,17 +241,22 @@ public class SuperMario extends JFrame {
         });
         movimientoFluido.start();
 
+        
+        
 
     }
+        @Override
+        public void mostrarPantallaGameOver() {
+            PantallaGameOver pantalla = new PantallaGameOver();
+            pantalla.setVisible(true);
+            dispose(); // ahora sí, porque estás en una ventana
+        }
+
+        public static void main(String[] args) {
+            SuperMario juego = new SuperMario();
+            GestorNiveles.setControlador(juego);
+            GestorNiveles.cargarNivel(juego);
+        }
     
-    public void mostrarPantallaGameOver() {
-	    PantallaGameOver pantalla = new PantallaGameOver();
-	    pantalla.setVisible(true);
-	    dispose(); // Cierra la ventana actual del juego
-	}
-
-    public static void main(String[] args) {
-        SuperMario juego = new SuperMario();
-        juego.setVisible(true);
-    }
 }
+

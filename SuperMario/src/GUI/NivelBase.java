@@ -28,8 +28,14 @@ public abstract class NivelBase extends JFrame {
 	boolean dPressed = false;
 	boolean wPressed = false;
 	protected Timer movimientoFluido;
+	protected ControladorJuego controlador;
 
-    public NivelBase() {
+
+
+
+    public NivelBase(ControladorJuego controlador) {
+    	this.controlador = controlador;
+    	
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setBounds(100, 100, 800, 600);
@@ -47,7 +53,7 @@ public abstract class NivelBase extends JFrame {
     protected abstract void construirNivel(); // cada nivel define sus obstáculos y enemigos
 
     protected void configurarJugador() {
-        player = new Player(100, 350, 30, 50, obstaculos, enemigos);
+        player = new Player(100, 350, 30, 50, obstaculos, enemigos, controlador);
         player.setBackground(Color.RED);
         player.setFocusable(false);
         contentPane.add(player);
@@ -95,91 +101,8 @@ public abstract class NivelBase extends JFrame {
         
         
 
-        movimientoFluido = new Timer(15, new ActionListener() { 
-            public void actionPerformed(ActionEvent e) {
-            	
-            	if (aPressed) {
-            	    boolean puede_mover = true;
-            	    for (Obstaculo o : obstaculos) {
-            	        if (player.chequeoColisionX(-3, o)) {
-            	            puede_mover = false;
-            	            break;
-            	        }
-            	    }
-            	    if (puede_mover) {
-            	        // Si Mario todavía no llegó al centro de la pantalla o el mundo ya está en el inicio
-            	        if (player.getX() > getWidth() / 2 || worldOffset <= 0) {
-            	            player.moverIzquierda(3);
-            	        } else {
-            	            // Desplazamos el mundo a la derecha
-            	            worldOffset -= 3;
-            	            fondoPanel.desplazamiento = worldOffset;
-            	            for (Obstaculo o : new ArrayList<>(obstaculos)) {
-            	                o.setLocation(o.getX() + 3, o.getY()); // mover obstáculos para la derecha.
-            	            }
-            	            for (Enemigo enemigo : new ArrayList<>(enemigos)) {
-            	            	enemigo.setLocation(enemigo.getX() + 3, enemigo.getY()); 
-            	            	enemigo.ajustarLimites(3); // si el mundo se mueve a la derecha (A)
-            	            }
-            	            fondoPanel.repaint();
-            	        }
-            	    }
-            	}
+        player.procesarMovimiento(aPressed, dPressed, wPressed, worldOffset, anchoMapa, contentPane, fondoPanel, obstaculos, enemigos);
 
-                
-                
-                if (dPressed) {                	
-                    boolean puede_mover = true;
-                    for (Obstaculo o : new ArrayList<>(obstaculos)) {
-                        if (player.chequeoColisionX(3, o)) {
-                            puede_mover = false;
-                            break;
-                        }
-                    }
-                    if (puede_mover) {
-                        // Si Mario está en la primera mitad de la pantalla o ya llegamos al final del mapa
-                        if (player.getX() < getWidth() / 2 || worldOffset >= anchoMapa - getWidth()) {
-                            player.moverDerecha(contentPane.getWidth(), 3);
-                        } else {
-                            // Se desplaza el mundo a la izquierda.
-                            worldOffset += 3;
-                            fondoPanel.desplazamiento = worldOffset;
-                            for (Obstaculo o : new ArrayList<>(obstaculos)) {
-                                o.setLocation(o.getX() - 3, o.getY()); // mover obstáculos para la izquierda.
-                            }
-                            for (Enemigo enemigo : new ArrayList<>(enemigos)) {
-                            	enemigo.setLocation(enemigo.getX() - 3, enemigo.getY());
-                            	enemigo.ajustarLimites(-3); // si el mundo se mueve a la izquierda (D)
-            	            }
-                            fondoPanel.repaint();
-                        }
-                    }
-                }
-
-                if (wPressed) {
-                    player.saltar();
-                    wPressed = false;
-                }
-                
-                int posicionJugador = worldOffset + player.getX();
-                if (posicionJugador >= 4155 && !nivelSuperado) {
-                    nivelSuperado = true; 				// evita que se vuelva a superar el nivel.
-                    fondoPanel.setearNivelSuperado(true);
-                    repaint();
-                    System.out.println("Nivel superado!");
-                    
-                    new Timer(2000, new ActionListener() {
-                        public void actionPerformed(ActionEvent evt) {
-                            ((Timer) evt.getSource()).stop();
-                            GestorNiveles.avanzarNivel(NivelBase.this);
-                        }
-                    }).start();
-                }
-                
-            }
-                        
-        });
-        movimientoFluido.start();
     }
     
     public void cerrarNivel() {
@@ -203,7 +126,10 @@ public abstract class NivelBase extends JFrame {
         configurarMovimiento();
         repaint();
     });
+    
 
 
     
 }
+
+
