@@ -17,25 +17,24 @@ import java.awt.Rectangle;
 			private int fuerzaSalto = -12; // negativa porque sube
 			private int gravedad = 1;
 			private boolean enElAire = false;
-			
 			public ArrayList<Obstaculo> obstaculos;
+			private NivelBase nivel;
+			private Timer gravedadTimer;
 
-			private SuperMario superMario;
-			
-			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, SuperMario SuperMario) {
+			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, NivelBase nivel) {
 		        setBounds(posX, posY, ancho, alto);
 		        
 		        this.obstaculos = obstaculos;
-		        this.superMario = SuperMario;
+		        this.nivel = nivel;
 				
 				// Se va a ejecutar el timer de gravedad dentro del Player
-		        Timer gravedadTimer = new Timer(30, new ActionListener() {
+		        this.gravedadTimer = new Timer(30, new ActionListener() {
 		            @Override
 		            public void actionPerformed(ActionEvent e) {
 		                aplicarGravedad(enemigos);
 		            }
 		        });
-		        gravedadTimer.start();
+		        this.gravedadTimer.start();
 			}
 			
 			
@@ -45,43 +44,56 @@ import java.awt.Rectangle;
 
 			    enElAire = true; // asumimos que está en el aire hasta comprobar piso
 
-			    for (Obstaculo obstaculo : obstaculos) {
+			    // 👉 copiar obstaculos para evitar CME si se limpian al cambiar de nivel
+			    for (Obstaculo obstaculo : new ArrayList<>(obstaculos)) {
 			        if (velocidadY > 0 && chequeoColisionAbajo(obstaculo)) { // solo si cae
 			            setLocation(getX(), obstaculo.getY() - getHeight());
 			            velocidadY = 0;
 			            enElAire = false;
 			        }
 			        if (!obstaculo.traspasable) {
-			        	if (chequeoColisionArriba(3, obstaculo)) {
-				        	// Si está subiendo, se va a detener el salto.
-			                velocidadY = 0;
+			            if (chequeoColisionArriba(3, obstaculo)) {
+			                velocidadY = 0; // tope al saltar
 			            }
 			        }
 			    }
 
+			    ArrayList<Enemigo> aEliminar = new ArrayList<>();
+
+			    // 👉 también iterar sobre una copia de enemigos
 			    for (Enemigo enemigo : new ArrayList<>(enemigos)) {
-			    	if (colisionaConEnemigoDesdeArriba(enemigo)) {
-	            		
-			    		enemigo.detenerPatrulla();
-			    		// Eliminar enemigo del panel
-			    		enemigo.setVisible(false);
-	           	    	getParent().remove(enemigo);
-	           	    	getParent().repaint();
-	           	    	enemigos.remove(enemigo); // Se elimina al enemigo de la lista para que deje de "rastrearlo".
-	           	    
-	           	    	rebote();
-			    	}
-			    	else if (colisionaConEnemigoDesdeCostado(enemigo)) {
-			    		Container parent = getParent(); // guardamos el contenedor antes de remover
-			    		this.setVisible(false);
-			    		if (parent != null) {
-			    		    parent.remove(this);
-			    		    parent.repaint();
-			    		}
-			    		superMario.mostrarPantallaGameOver();
-			    		
-			    	}
-	        	}
+			        if (colisionaConEnemigoDesdeArriba(enemigo)) {
+			            enemigo.detenerPatrulla();
+			            enemigo.setVisible(false);
+			            if (getParent() != null) {
+			                getParent().remove(enemigo);
+			                getParent().repaint();
+			            }
+			            aEliminar.add(enemigo);
+			            rebote();
+			        } else if (colisionaConEnemigoDesdeCostado(enemigo)) {
+			            // Evitar múltiples disparos de game over
+			            detenerTimers();
+
+			            Container parent = getParent();
+			            setVisible(false);
+			            if (parent != null) {
+			                parent.remove(this);
+			                parent.repaint();
+			            }
+			            nivel.mostrarPantallaGameOver();
+			            return; // salgo para no seguir procesando
+			        }
+			    }
+
+			    // eliminar todos juntos al final (y SOLO una vez)
+			    enemigos.removeAll(aEliminar);
+			}
+			
+			public void detenerTimers() {
+			    if (gravedadTimer != null) {
+			        gravedadTimer.stop();
+			    }
 			}
 
 

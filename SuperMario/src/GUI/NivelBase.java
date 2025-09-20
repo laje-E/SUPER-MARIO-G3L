@@ -1,7 +1,6 @@
 package GUI;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -9,13 +8,15 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 public abstract class NivelBase extends JFrame {	
-// Abstract señala que esta clase es un constructor y que no puede crear nada por si solo, sino que es una base
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	// Abstract señala que esta clase es un constructor y que no puede crear nada por si solo, sino que es una base
 	protected JPanel contentPane;
     protected Player player;
     protected ArrayList<Obstaculo> obstaculos = new ArrayList<>();
@@ -47,7 +48,7 @@ public abstract class NivelBase extends JFrame {
     protected abstract void construirNivel(); // cada nivel define sus obstáculos y enemigos
 
     protected void configurarJugador() {
-        player = new Player(100, 350, 30, 50, obstaculos, enemigos);
+        player = new Player(100, 350, 30, 50, obstaculos, enemigos, this);
         player.setBackground(Color.RED);
         player.setFocusable(false);
         contentPane.add(player);
@@ -60,8 +61,6 @@ public abstract class NivelBase extends JFrame {
     }
 
     protected void configurarMovimiento() {
-    	
-    	
     	
     	// Pide mantener bien el foco para cuando la ventana se abra
         addWindowListener(new WindowAdapter() {
@@ -182,28 +181,37 @@ public abstract class NivelBase extends JFrame {
         movimientoFluido.start();
     }
     
-    public void cerrarNivel() {
-        if (movimientoFluido != null) {
-            movimientoFluido.stop();
-        }
-        for (Enemigo enemigo : enemigos) {
-            enemigo.detenerPatrulla(); // suponiendo que tengas este método en Enemigo
-        }
-        dispose(); // cierra la ventana
-        obstaculos.clear();
-        enemigos.clear();
-        contentPane.removeAll();
+    public void mostrarPantallaGameOver() {
+        if (movimientoFluido != null) movimientoFluido.stop();
+        for (Enemigo enemigo : enemigos) enemigo.detenerPatrulla();
+        if (player != null) player.detenerTimers();
 
-    }
-    
-    Timer juegoTimer = new Timer(15, e -> {
-    	configurarJugador();
-        construirNivel(); // método abstracto
-        configurarFondo();
-        configurarMovimiento();
+        PantallaGameOver gameOver = new PantallaGameOver();
+        setContentPane(gameOver);
+        revalidate();
         repaint();
-    });
-
+    }
 
     
+    
+    
+    public void cerrarNivel() {
+    	 if (movimientoFluido != null) {
+    	        movimientoFluido.stop();
+    	    }
+    	    for (Enemigo enemigo : enemigos) {
+    	        enemigo.detenerPatrulla();
+    	    }
+    	    if (player != null) {
+    	        player.detenerTimers();
+    	    }
+
+    	    // Limpieza
+    	    contentPane.removeAll();
+    	    obstaculos.clear();
+    	    enemigos.clear();
+
+    	    dispose();
+    }
+        
 }

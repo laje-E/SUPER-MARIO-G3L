@@ -34,11 +34,11 @@ public class Enemigo extends JPanel{
 		this.icon = icon;
 		this.limiteDerecho = limiteDerecho;
 		this.limiteIzquierdo = limiteIzquierdo;
+		setOpaque(false);
 	}
 	
 	@Override
 	protected void paintComponent(Graphics g) {
-	    super.paintComponent(g);
 	    if (icon != null) {
 	        g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
 	    }
@@ -49,8 +49,8 @@ public class Enemigo extends JPanel{
 		int posY = getY();
 
 		// Evita que se pase del borde derecho
-        if (posX + 15 < limiteDerecho) {
-            setLocation(posX + 15, posY);
+        if (posX + 3 < limiteDerecho) {
+            setLocation(posX + 3, posY);
         } else {
             setLocation((limiteDerecho) - getWidth(), posY);
         }
@@ -61,15 +61,15 @@ public class Enemigo extends JPanel{
 		int posY = getY();
 		
 		// Evita que se meta en el borde izquierdo
-        if (posX - 15 >= limiteIzquierdo) {
-            setLocation(posX - 15, posY);
+        if (posX - 3 >= limiteIzquierdo) {
+            setLocation(posX - 3, posY);
         } else {
             setLocation(limiteIzquierdo, posY);
         }
 	}
 	
 	public void patrullar () {
-		movimiento = new Timer(50, new ActionListener(){
+		movimiento = new Timer(10, new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				if (hacia_derecha) {
 					if (getX() + getWidth() <= limiteDerecho) {

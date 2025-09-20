@@ -17,7 +17,7 @@ public class GestorNiveles {
 	        JFrame nuevoNivel;
 	        switch (nivelActual) {
 	            case 1:
-	                nuevoNivel = new SuperMario(); break;
+	                nuevoNivel = new Nivel1(); break;
 	            case 2:
 	                nuevoNivel = new Nivel2(); break;
 	            case 3:

@@ -1,9 +1,9 @@
 package GUI;
 
-import java.awt.Color;
 import javax.swing.ImageIcon;
+import java.awt.Color;
 
-public class Nivel2 extends NivelBase {
+public class Nivel1 extends NivelBase {
 
     /**
 	 * 
@@ -13,11 +13,19 @@ public class Nivel2 extends NivelBase {
 	@Override
     protected void construirNivel() {
         // Agregar enemigo
-    	ImageIcon enemigoIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/matecinini.png"));
-        Enemigo enemigo = new Enemigo(500, 410, 30, 30, 510, 785, enemigoIcon);
-//        enemigo.setBackground(Color.RED);
+        ImageIcon enemigoIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
+        Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801, enemigoIcon); //carboncini --> mirar tamaños!!
+        
+//        Enemigo enemigo = new Enemigo(500, 386, 37, 50, 500, 801, enemigoIcon); // Matecinini --> mirar tamaños!!
+////    Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
+////    Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
+////    Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
+////    Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
+////    Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
+        
         contentPane.add(enemigo);
         enemigos.add(enemigo);
+        enemigo.patrullar();
 
         // Agregar tiles
         ImageIcon pastoIcon = new ImageIcon(getClass().getResource("/img/pisos/pastoFixed.png"));
@@ -29,7 +37,6 @@ public class Nivel2 extends NivelBase {
         int tilesX = anchoMapa / tileSize;
         int tilesAbajo = (alturaVentana - sueloY) / tileSize;
 
-        // Capa de pasto
         for (int i = 0; i < tilesX; i++) {
             Obstaculo pasto = new Obstaculo(obstaculos, pastoIcon, false);
             pasto.setBounds(i * tileSize, sueloY - tileSize, tileSize, tileSize);
@@ -37,7 +44,6 @@ public class Nivel2 extends NivelBase {
             obstaculos.add(pasto);
         }
 
-        // Capa de tierra
         for (int y = 0; y < tilesAbajo; y++) {
             for (int i = 0; i < tilesX; i++) {
                 Obstaculo tierra = new Obstaculo(obstaculos, tierraIcon, false);
@@ -47,28 +53,20 @@ public class Nivel2 extends NivelBase {
             }
         }
 
-        // Obstáculos especiales
-        int[][] nivel2 = {
-            {50, 400, 80, 10},  
-            {170, 350, 20, 20}, 
-            {250, 370, 80, 10}, 
-            {500, 390, 10, 50}, 
+        // Obstáculos del nivel
+        int[][] nivel1 = {
+            {170, 350, 20, 20},
+            {250, 370, 80, 10},
+            {500, 390, 10, 50},
             {795, 390, 10, 50}
         };
 
-        int contador = 1;
-        for (int[] bloque : nivel2) {
+        for (int[] bloque : nivel1) {
             Obstaculo o = new Obstaculo(obstaculos);
-            o.setBackground(Color.PINK);
+            o.setBackground(Color.GREEN);
             o.setBounds(bloque[0], bloque[1], bloque[2], bloque[3]);
             contentPane.add(o);
             obstaculos.add(o);
-
-            if (contador == 2) { // obstáculo especial
-                o.traspasable = false;
-                o.setBackground(Color.BLACK);
-            }
-            contador++;
         }
     }
 }
