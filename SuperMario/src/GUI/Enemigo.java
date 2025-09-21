@@ -1,100 +1,104 @@
 package GUI;
 
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class Enemigo extends JPanel{
-	
-	private static final long serialVersionUID = 1L;
+public class Enemigo extends JPanel {
 
+    private static final long serialVersionUID = 1L;
 
-	private boolean hacia_derecha = true;
-	
-	private Timer movimiento;
-	
-	public int limiteIzquierdo;
+    private boolean hacia_derecha = true;
+    private Timer movimiento;
+    private Timer disparoTimer;
+
+    public int limiteIzquierdo;
     public int limiteDerecho;
     public int desplazamiento = 0;
     public ImageIcon icon;
-	
+
+    private boolean dispara; // true si es Matecinini o similar
+
     public void ajustarLimites(int desplazamiento) {
         limiteIzquierdo += desplazamiento;
         limiteDerecho += desplazamiento;
-        
-        
     }
-    
-	public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho, ImageIcon icon) {
-		setBounds(posX, posY, ancho, alto);
-		this.icon = icon;
-		this.limiteDerecho = limiteDerecho;
-		this.limiteIzquierdo = limiteIzquierdo;
-		setOpaque(false);
-	}
-	
-	@Override
-	protected void paintComponent(Graphics g) {
-	    if (icon != null) {
-	        g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
-	    }
-	}
-	
-	public void moverDerecha() {
-		int posX = getX();
-		int posY = getY();
 
-		// Evita que se pase del borde derecho
-        if (posX + 3 < limiteDerecho) {
-            setLocation(posX + 3, posY);
-        } else {
-            setLocation((limiteDerecho) - getWidth(), posY);
+    public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho, ImageIcon icon) {
+        this(posX, posY, ancho, alto, limiteIzquierdo, limiteDerecho, icon, false);
+    }
+
+    public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho, ImageIcon icon, boolean dispara) {
+        setBounds(posX, posY, ancho, alto);
+        this.icon = icon;
+        this.limiteDerecho = limiteDerecho;
+        this.limiteIzquierdo = limiteIzquierdo;
+        this.dispara = dispara;
+        setOpaque(false);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (icon != null) {
+            if (hacia_derecha) {
+                // normal (mirando a la izquierda)
+            	g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(),
+                        icon.getIconWidth(), 0, 0, icon.getIconHeight(), this);
+            	
+            } else {
+                // espejado horizontal (mirando a la derecha)
+            	g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(),
+                        0, 0, icon.getIconWidth(), icon.getIconHeight(), this);
+            }
         }
-	}
-	
-	public void moverIzquierda() {
-		int posX = getX();
-		int posY = getY();
-		
-		// Evita que se meta en el borde izquierdo
-        if (posX - 3 >= limiteIzquierdo) {
-            setLocation(posX - 3, posY);
-        } else {
-            setLocation(limiteIzquierdo, posY);
+    }
+
+    // --- Enemigos que caminan ---
+    public void patrullar() {
+        if (dispara) return; // si dispara, no se mueve
+        movimiento = new Timer(30, e -> {
+            if (hacia_derecha) {
+                if (getX() + getWidth() <= limiteDerecho) {
+                    setLocation(getX() + 3, getY());
+                } else {
+                    hacia_derecha = false;
+                }
+            } else {
+                if (getX() > limiteIzquierdo) {
+                    setLocation(getX() - 3, getY());
+                } else {
+                    hacia_derecha = true;
+                }
+            }
+        });
+        movimiento.start();
+    }
+
+    public void detenerPatrulla() {
+        if (movimiento != null) movimiento.stop();
+        if (disparoTimer != null) disparoTimer.stop();
+    }
+
+    
+    public void empezarADisparar(Player jugador) { // Para enemigos que van a disparar
+        if (!dispara) return;
+        disparoTimer = new Timer(1500, e -> disparar(jugador));
+        disparoTimer.start();
+    }
+
+    private void disparar(Player jugador) {
+        hacia_derecha = (jugador.getX() > getX());   // actualiza la direccion antes de disparar
+
+        int dx = hacia_derecha ? 5 : -5;
+        Bala bala = new Bala(getX() + getWidth() / 2, getY() + getHeight() / 2, dx);
+
+        if (getParent() != null) {
+            getParent().add(bala);
+            getParent().setComponentZOrder(bala, 0);
+            getParent().repaint();
         }
-	}
-	
-	public void patrullar () {
-		movimiento = new Timer(10, new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				if (hacia_derecha) {
-					if (getX() + getWidth() <= limiteDerecho) {
-	                    moverDerecha();
-	                } else {
-	                    hacia_derecha = false;
-	                    moverIzquierda();
-	                }
-				} else {
-					if (getX() > limiteIzquierdo) {
-	                    moverIzquierda();
-	                } else {
-	                    hacia_derecha = true;
-	                    moverDerecha();
-	                }
-				}
-			}
-		});
-		movimiento.start();
-	}
-	
-	public void detenerPatrulla() {
-	    if (movimiento != null) {
-	        movimiento.stop();
-	    }
-	}
-	
+        repaint(); // fuerza redibujo con la dirección actualizada
+    }
 }

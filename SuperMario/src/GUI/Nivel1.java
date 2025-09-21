@@ -1,33 +1,25 @@
-package GUI;
-
-import javax.swing.ImageIcon;
-import java.awt.Color;
-
-public class Nivel1 extends NivelBase {
-
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@Override
-    protected void construirNivel() {
-        // Agregar enemigo
-        ImageIcon enemigoIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
-        Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801, enemigoIcon); //carboncini --> mirar tamaños!!
-        
 //        Enemigo enemigo = new Enemigo(500, 386, 37, 50, 500, 801, enemigoIcon); // Matecinini --> mirar tamaños!!
 ////    Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
 ////    Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
 ////    Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
 ////    Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
 ////    Enemigo enemigo = new Enemigo (500, 391, 48, 45, 500, 801);
-        
-        contentPane.add(enemigo);
-        enemigos.add(enemigo);
-        enemigo.patrullar();
+package GUI;
 
-        // Agregar tiles
+import javax.swing.ImageIcon;
+
+public class Nivel1 extends NivelBase {
+
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    protected void construirNivel() {
+        ImageIcon carbIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
+        Enemigo carboncini = new Enemigo(500, 391, 48, 45, 400, 700, carbIcon, false);
+        contentPane.add(carboncini);
+        enemigos.add(carboncini);
+        carboncini.patrullar();
+
         ImageIcon pastoIcon = new ImageIcon(getClass().getResource("/img/pisos/pastoFixed.png"));
         ImageIcon tierraIcon = new ImageIcon(getClass().getResource("/img/pisos/tierraFixed.png"));
 
@@ -53,20 +45,32 @@ public class Nivel1 extends NivelBase {
             }
         }
 
-        // Obstáculos del nivel
-        int[][] nivel1 = {
-            {170, 350, 20, 20},
-            {250, 370, 80, 10},
-            {500, 390, 10, 50},
-            {795, 390, 10, 50}
-        };
+        ImageIcon metalIcon = new ImageIcon(getClass().getResource("/img/pisos/metal.png"));
+        ImageIcon ladrilloIcon = new ImageIcon(getClass().getResource("/img/pisos/ladrillo.png"));
 
-        for (int[] bloque : nivel1) {
-            Obstaculo o = new Obstaculo(obstaculos);
-            o.setBackground(Color.GREEN);
-            o.setBounds(bloque[0], bloque[1], bloque[2], bloque[3]);
-            contentPane.add(o);
-            obstaculos.add(o);
-        }
+        Obstaculo plataformaMetal1 = new Obstaculo(obstaculos, metalIcon, true);
+        plataformaMetal1.setBounds(200, 380, 128, 16);
+        contentPane.add(plataformaMetal1);
+        obstaculos.add(plataformaMetal1);
+
+        Obstaculo plataformaMetal2 = new Obstaculo(obstaculos, metalIcon, true);
+        plataformaMetal2.setBounds(600, 300, 128, 16);
+        contentPane.add(plataformaMetal2);
+        obstaculos.add(plataformaMetal2);
+
+        Obstaculo bloqueLadrillo1 = new Obstaculo(obstaculos, ladrilloIcon, false);
+        bloqueLadrillo1.setBounds(400, 250, 48, 48);
+        contentPane.add(bloqueLadrillo1);
+        obstaculos.add(bloqueLadrillo1);
+
+        Obstaculo bloqueLadrillo2 = new Obstaculo(obstaculos, ladrilloIcon, false);
+        bloqueLadrillo2.setBounds(448, 250, 48, 48);
+        contentPane.add(bloqueLadrillo2);
+        obstaculos.add(bloqueLadrillo2);
+    }
+
+    @Override
+    protected int getNumeroNivel() {
+        return 1;
     }
 }

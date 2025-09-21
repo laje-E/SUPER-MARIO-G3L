@@ -55,11 +55,14 @@ public abstract class NivelBase extends JFrame {
     }
 
     protected void configurarFondo() {
-        fondoPanel = new FondoPanel();
+        int numeroNivel = getNumeroNivel();  // <- método que cada subnivel implementa
+        fondoPanel = new FondoPanel(numeroNivel);
         fondoPanel.setBounds(0, 0, anchoMapa, 600);
         contentPane.add(fondoPanel);
     }
 
+    protected abstract int getNumeroNivel();
+    
     protected void configurarMovimiento() {
     	
     	// Pide mantener bien el foco para cuando la ventana se abra
@@ -77,6 +80,8 @@ public abstract class NivelBase extends JFrame {
 
             @Override
             public void keyPressed(java.awt.event.KeyEvent e) {
+            	if (nivelSuperado) return;
+            	
                 int tecla = e.getKeyCode();
                 if (tecla == java.awt.event.KeyEvent.VK_A) aPressed = true;
                 if (tecla == java.awt.event.KeyEvent.VK_D) dPressed = true;
@@ -85,6 +90,8 @@ public abstract class NivelBase extends JFrame {
 
             @Override
             public void keyReleased(java.awt.event.KeyEvent e) {
+            	if (nivelSuperado) return;
+            	
                 int tecla = e.getKeyCode();
                 if (tecla == java.awt.event.KeyEvent.VK_A) aPressed = false;
                 if (tecla == java.awt.event.KeyEvent.VK_D) dPressed = false;
@@ -167,7 +174,10 @@ public abstract class NivelBase extends JFrame {
                     repaint();
                     System.out.println("Nivel superado!");
                     
-                    new Timer(2000, new ActionListener() {
+                    aPressed = false;
+                    dPressed = true;
+                    
+                    new Timer(1750, new ActionListener() {
                         public void actionPerformed(ActionEvent evt) {
                             ((Timer) evt.getSource()).stop();
                             GestorNiveles.avanzarNivel(NivelBase.this);
