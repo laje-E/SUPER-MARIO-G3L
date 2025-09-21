@@ -21,19 +21,19 @@ public class Nivel2 extends NivelBase {
         carboncini.patrullar();
         
         ImageIcon pelotaIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/PelotaMaradona.png"));
-        Enemigo pelota = new Enemigo(4000, 391, 48, 45, 3700, 4000, pelotaIcon, false, 1, this);
+        Enemigo pelota = new Enemigo(2800, 391, 30, 30, 2000, 2800, pelotaIcon, false, 1, this);
         contentPane.add(pelota);
         enemigos.add(pelota);
         pelota.patrullar();
         pelota.movimientoVerical(10);
         
-        Enemigo pelota2 = new Enemigo(4000, 300, 48, 45, 3600, 4000, pelotaIcon, false, 1, this);
+        Enemigo pelota2 = new Enemigo(2800, 300, 30, 30, 2100, 2800, pelotaIcon, false, 1, this);
         contentPane.add(pelota2);
         enemigos.add(pelota2);
         pelota2.patrullar();
         pelota2.movimientoVerical(10);
         
-        Enemigo pelota3 = new Enemigo(4000, 400, 48, 45, 3400, 4000, pelotaIcon, false, 1, this);
+        Enemigo pelota3 = new Enemigo(2800, 400, 30, 30, 2200, 2800, pelotaIcon, false, 1, this);
         contentPane.add(pelota3);
         enemigos.add(pelota3);
         pelota3.patrullar();

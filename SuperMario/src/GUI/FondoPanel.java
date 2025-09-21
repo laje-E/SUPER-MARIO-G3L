@@ -78,7 +78,7 @@ public class FondoPanel extends JPanel {
 
         int espacio= 200;      // se dibujan edificios cada 200px, usando siempre sus tamaños originales
 
-        for (int x = 64; x < 4480; x += espacio) {
+        for (int x = 64; x < 3200; x += espacio) {
             Image edificio = edificios[(x / espacio) % edificios.length]; // se asegura que sea 0, 1, o 2.
 
             int width = edificio.getWidth(this);
@@ -100,7 +100,7 @@ public class FondoPanel extends JPanel {
             g.drawImage(mirthaCasa, 150 - desplazamiento, 266, 200, 170, this);
         }
         
-        g.drawImage(obelisco, 4155 - desplazamiento, 234, 50, 202, this); // obelisco dibujado, se mueve en primer plano como si fuera un obstáculo solo que sin las colisiones.
+        g.drawImage(obelisco, 3000 - desplazamiento, 234, 50, 202, this); // obelisco dibujado, se mueve en primer plano como si fuera un obstáculo solo que sin las colisiones.
         
         if (nivelSuperado) {
         	if(nivel == 1) {

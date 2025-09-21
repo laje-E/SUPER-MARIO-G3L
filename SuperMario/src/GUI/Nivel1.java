@@ -27,12 +27,12 @@ public class Nivel1 extends NivelBase {
         enemigos.add(carboncini2);
         carboncini2.movimientoJefe(player);
         
-        ImageIcon mateIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/matecinini.png"));
-        Enemigo matecinini = new Enemigo(4000, 386, 37, 50, 500, 801, mateIcon, true, 1, this);
-        contentPane.add(matecinini);
-        enemigos.add(matecinini);
-        matecinini.empezarADisparar(player);
-        matecinini.movimientoVerical(5);
+        ImageIcon parrilleroIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/parrilleroInfernal.png"));
+        Enemigo parrillero = new Enemigo(2800, 386, 102, 153, 500, 801, parrilleroIcon, true, 1, this);
+        contentPane.add(parrillero);
+        enemigos.add(parrillero);
+        parrillero.empezarADisparar(player);
+        parrillero.movimientoVerical(5);
         
 
         ImageIcon pastoIcon = new ImageIcon(getClass().getResource("/img/pisos/pastoFixed.png"));
@@ -74,17 +74,17 @@ public class Nivel1 extends NivelBase {
         obstaculos.add(plataformaMetal2);
         
         Obstaculo plataformaMetal3 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal3.setBounds(4000, 200, 128, 16);
+        plataformaMetal3.setBounds(2800, 200, 128, 16);
         contentPane.add(plataformaMetal3);
         obstaculos.add(plataformaMetal3);
         
         Obstaculo plataformaMetal4 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal4.setBounds(4000, 280, 128, 16);
+        plataformaMetal4.setBounds(2800, 280, 128, 16);
         contentPane.add(plataformaMetal4);
         obstaculos.add(plataformaMetal4);
         
         Obstaculo plataformaMetal5 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal5.setBounds(4000, 360, 128, 16);
+        plataformaMetal5.setBounds(2800, 360, 128, 16);
         contentPane.add(plataformaMetal5);
         obstaculos.add(plataformaMetal5);
 

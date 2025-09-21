@@ -24,7 +24,7 @@ public abstract class NivelBase extends JFrame {
     protected FondoPanel fondoPanel;
     protected int worldOffset = 0;
     protected boolean nivelSuperado = false;
-    protected int anchoMapa = 4480;
+    protected int anchoMapa = 3200;
     boolean aPressed = false;
 	boolean dPressed = false;
 	boolean wPressed = false;
@@ -181,7 +181,7 @@ public abstract class NivelBase extends JFrame {
                 }
                 
                 int posicionJugador = worldOffset + player.getX();
-                if (posicionJugador >= 4155 && !nivelSuperado) {
+                if (posicionJugador >= 3000 && !nivelSuperado) {
                     nivelSuperado = true; 				// evita que se vuelva a superar el nivel.
                     fondoPanel.setearNivelSuperado(true);
                     repaint();
