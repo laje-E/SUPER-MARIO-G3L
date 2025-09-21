@@ -17,6 +17,8 @@ public class Enemigo extends JPanel {
     public int limiteDerecho;
     public int desplazamiento = 0;
     public ImageIcon icon;
+    public int vida;
+    private NivelBase nivel;
 
     private boolean dispara; // true si es Matecinini o similar
 
@@ -25,16 +27,18 @@ public class Enemigo extends JPanel {
         limiteDerecho += desplazamiento;
     }
 
-    public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho, ImageIcon icon) {
-        this(posX, posY, ancho, alto, limiteIzquierdo, limiteDerecho, icon, false);
+    public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho, ImageIcon icon, NivelBase nivel) {
+        this(posX, posY, ancho, alto, limiteIzquierdo, limiteDerecho, icon, false, 1, nivel);
     }
 
-    public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho, ImageIcon icon, boolean dispara) {
+    public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho, ImageIcon icon, boolean dispara, int vida, NivelBase nivel) {
         setBounds(posX, posY, ancho, alto);
         this.icon = icon;
         this.limiteDerecho = limiteDerecho;
         this.limiteIzquierdo = limiteIzquierdo;
         this.dispara = dispara;
+        this.vida = vida;
+        this.nivel = nivel;
         setOpaque(false);
     }
 
@@ -99,6 +103,25 @@ public class Enemigo extends JPanel {
             getParent().setComponentZOrder(bala, 0);
             getParent().repaint();
         }
+        nivel.agregarBala(bala);
         repaint(); // fuerza redibujo con la dirección actualizada
+    }
+    
+    public void movimientoJefe(Player player) {
+    		movimiento = new Timer(75, e -> {
+                	if (player.getX() < getX() && getX() > limiteIzquierdo) {
+                        setLocation(getX() - 3, getY());
+                    } else if (player.getX() > getX() && getX() + getWidth() <= limiteDerecho){
+                    	setLocation(getX() + 3, getY());
+                    }
+                
+            });
+            movimiento.start();
+    	
+    }
+    
+    public boolean restarVida(int cantidad) {
+        vida -= cantidad;
+        return vida <= 0;
     }
 }

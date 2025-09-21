@@ -15,10 +15,18 @@ public class Nivel1 extends NivelBase {
     @Override
     protected void construirNivel() {
         ImageIcon carbIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
-        Enemigo carboncini = new Enemigo(500, 391, 48, 45, 400, 700, carbIcon, false);
+        Enemigo carboncini = new Enemigo(500, 391, 48, 45, 400, 700, carbIcon, false, 3, this);
         contentPane.add(carboncini);
         enemigos.add(carboncini);
         carboncini.patrullar();
+        
+       
+        ImageIcon carbIcon2 = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
+        Enemigo carboncini2 = new Enemigo(900, 391, 48, 45, 700, 1000, carbIcon, false, 10, this);
+        contentPane.add(carboncini2);
+        enemigos.add(carboncini2);
+        carboncini2.movimientoJefe(player);
+        
 
         ImageIcon pastoIcon = new ImageIcon(getClass().getResource("/img/pisos/pastoFixed.png"));
         ImageIcon tierraIcon = new ImageIcon(getClass().getResource("/img/pisos/tierraFixed.png"));

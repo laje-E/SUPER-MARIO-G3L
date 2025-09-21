@@ -9,13 +9,13 @@ public class Nivel2 extends NivelBase {
     @Override
     protected void construirNivel() {
         ImageIcon mateIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/matecinini.png"));
-        Enemigo matecinini = new Enemigo(500, 386, 37, 50, 500, 801, mateIcon, true);
+        Enemigo matecinini = new Enemigo(500, 386, 37, 50, 500, 801, mateIcon, true, 1, this);
         contentPane.add(matecinini);
         enemigos.add(matecinini);
         matecinini.empezarADisparar(player);
 
         ImageIcon carbIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
-        Enemigo carboncini = new Enemigo(300, 391, 48, 45, 250, 600, carbIcon, false);
+        Enemigo carboncini = new Enemigo(300, 391, 48, 45, 250, 600, carbIcon, false, 1, this);
         contentPane.add(carboncini);
         enemigos.add(carboncini);
         carboncini.patrullar();

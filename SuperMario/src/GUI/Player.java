@@ -20,10 +20,12 @@ import java.awt.Rectangle;
 			public ArrayList<Obstaculo> obstaculos;
 			private NivelBase nivel;
 			private Timer gravedadTimer;
+			public ArrayList<Bala> balas;
 
-			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, NivelBase nivel) {
+			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, NivelBase nivel, ArrayList<Bala> balas) {
 		        setBounds(posX, posY, ancho, alto);
 		        
+		        this.balas = balas;
 		        this.obstaculos = obstaculos;
 		        this.nivel = nivel;
 				
@@ -63,6 +65,7 @@ import java.awt.Rectangle;
 			    // 👉 también iterar sobre una copia de enemigos
 			    for (Enemigo enemigo : new ArrayList<>(enemigos)) {
 			        if (colisionaConEnemigoDesdeArriba(enemigo)) {
+			        	if (enemigo.restarVida(1)){
 			            enemigo.detenerPatrulla();
 			            enemigo.setVisible(false);
 			            if (getParent() != null) {
@@ -70,7 +73,8 @@ import java.awt.Rectangle;
 			                getParent().repaint();
 			            }
 			            aEliminar.add(enemigo);
-			            rebote();
+			        	}
+			        	rebote();
 			        } else if (colisionaConEnemigoDesdeCostado(enemigo)) {
 			            // Evitar múltiples disparos de game over
 			            detenerTimers();
@@ -83,6 +87,21 @@ import java.awt.Rectangle;
 			            }
 			            nivel.mostrarPantallaGameOver();
 			            return; // salgo para no seguir procesando
+			        }
+			        
+			    }
+			    
+			    for (Bala bala : nivel.getBalas()) {
+			        if (colisionaConBala(bala)) {
+			            detenerTimers();
+			            Container parent = getParent(); // ✅ cachear antes
+			            setVisible(false);
+			            if (parent != null) {
+			                parent.remove(this);
+			                parent.repaint(); // ✅ ahora sí seguro
+			            }
+			            nivel.mostrarPantallaGameOver();
+			            return;
 			        }
 			    }
 
@@ -134,6 +153,11 @@ import java.awt.Rectangle;
 			    return jugadorCostado.intersects(enemigoCostado) && !colisionaConEnemigoDesdeArriba(enemigo);
 			}
 		    
+		    public boolean colisionaConBala(Bala bala) {
+		    	Rectangle jugador = getBounds();
+		        Rectangle balaRectangle = bala.getBounds();
+			    return jugador.intersects(balaRectangle);
+			}
 			
 
 			public boolean chequeoColisionArriba(int dy, Obstaculo obstaculo) {

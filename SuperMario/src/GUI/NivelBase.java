@@ -44,11 +44,24 @@ public abstract class NivelBase extends JFrame {
         configurarFondo();
         configurarMovimiento();
     }
+    
 
     protected abstract void construirNivel(); // cada nivel define sus obstáculos y enemigos
 
+    private ArrayList<Bala> balas = new ArrayList<>();
+
+    public void agregarBala(Bala b) {
+        balas.add(b);
+    }
+    public void eliminarBala(Bala b) {
+        balas.remove(b);
+    }
+    public ArrayList<Bala> getBalas() {
+        return new ArrayList<>(balas); // copia defensiva
+    }
+    
     protected void configurarJugador() {
-        player = new Player(100, 350, 30, 50, obstaculos, enemigos, this);
+        player = new Player(100, 350, 30, 50, obstaculos, enemigos, this, balas);
         player.setBackground(Color.RED);
         player.setFocusable(false);
         contentPane.add(player);
