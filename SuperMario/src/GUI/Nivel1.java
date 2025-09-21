@@ -28,7 +28,7 @@ public class Nivel1 extends NivelBase {
         carboncini2.movimientoJefe(player);
         
         ImageIcon mateIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/matecinini.png"));
-        Enemigo matecinini = new Enemigo(500, 386, 111, 150, 500, 801, mateIcon, true, 1, this);
+        Enemigo matecinini = new Enemigo(4000, 386, 37, 50, 500, 801, mateIcon, true, 1, this);
         contentPane.add(matecinini);
         enemigos.add(matecinini);
         matecinini.empezarADisparar(player);
