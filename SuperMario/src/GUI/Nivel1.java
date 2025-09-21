@@ -32,7 +32,7 @@ public class Nivel1 extends NivelBase {
         contentPane.add(matecinini);
         enemigos.add(matecinini);
         matecinini.empezarADisparar(player);
-        matecinini.movimientoVerical();
+        matecinini.movimientoVerical(5);
         
 
         ImageIcon pastoIcon = new ImageIcon(getClass().getResource("/img/pisos/pastoFixed.png"));

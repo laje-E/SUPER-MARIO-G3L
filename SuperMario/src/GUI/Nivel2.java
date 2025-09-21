@@ -19,6 +19,25 @@ public class Nivel2 extends NivelBase {
         contentPane.add(carboncini);
         enemigos.add(carboncini);
         carboncini.patrullar();
+        
+        ImageIcon pelotaIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/PelotaMaradona.png"));
+        Enemigo pelota = new Enemigo(4000, 391, 48, 45, 3700, 4000, pelotaIcon, false, 1, this);
+        contentPane.add(pelota);
+        enemigos.add(pelota);
+        pelota.patrullar();
+        pelota.movimientoVerical(10);
+        
+        Enemigo pelota2 = new Enemigo(4000, 300, 48, 45, 3600, 4000, pelotaIcon, false, 1, this);
+        contentPane.add(pelota2);
+        enemigos.add(pelota2);
+        pelota2.patrullar();
+        pelota2.movimientoVerical(10);
+        
+        Enemigo pelota3 = new Enemigo(4000, 400, 48, 45, 3400, 4000, pelotaIcon, false, 1, this);
+        contentPane.add(pelota3);
+        enemigos.add(pelota3);
+        pelota3.patrullar();
+        pelota3.movimientoVerical(10);
 
         ImageIcon troncoIcon = new ImageIcon(getClass().getResource("/img/pisos/tronco.png"));
         ImageIcon ladrilloPiedraIcon = new ImageIcon(getClass().getResource("/img/pisos/ladrilloPiedra.png"));

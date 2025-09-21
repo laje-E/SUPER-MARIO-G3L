@@ -126,17 +126,17 @@ public class Enemigo extends JPanel {
         return vida <= 0;
     }
     
-    public void movimientoVerical() {
-    	int dy = 5;
+    public void movimientoVerical(int dy) {
+
     	movimiento = new Timer(75, e -> {
         	if (haciaArriba) {
-                setLocation(getX(), getY() - 5);
+                setLocation(getX(), getY() - dy);
             } 
         	if (getY() <= 200) {
         		haciaArriba = false;
         	}
         	if (!haciaArriba){
-            	setLocation(getX(), getY() + 5);
+            	setLocation(getX(), getY() + dy);
             }
         	if (getY() + getHeight() >= 450) {
         		haciaArriba = true;
