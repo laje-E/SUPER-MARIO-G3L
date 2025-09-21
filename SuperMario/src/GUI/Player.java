@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.Container;
 import java.awt.Rectangle;
 	
 	import java.awt.event.ActionEvent;
@@ -13,26 +14,29 @@ import java.awt.Rectangle;
 			private static final long serialVersionUID = 1L;
 			
 			private int velocidadY = 0;
-			private int fuerzaSalto = -12; // negativa porque sube
+			private int fuerzaSalto = -13; // negativa porque sube
 			private int gravedad = 1;
 			private boolean enElAire = false;
-			
 			public ArrayList<Obstaculo> obstaculos;
-			
-			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos) {
+			private NivelBase nivel;
+			private Timer gravedadTimer;
+			public ArrayList<Bala> balas;
+
+			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, NivelBase nivel, ArrayList<Bala> balas) {
 		        setBounds(posX, posY, ancho, alto);
 		        
+		        this.balas = balas;
 		        this.obstaculos = obstaculos;
-				
+		        this.nivel = nivel;
 				
 				// Se va a ejecutar el timer de gravedad dentro del Player
-		        Timer gravedadTimer = new Timer(30, new ActionListener() {
+		        this.gravedadTimer = new Timer(30, new ActionListener() {
 		            @Override
 		            public void actionPerformed(ActionEvent e) {
 		                aplicarGravedad(enemigos);
 		            }
 		        });
-		        gravedadTimer.start();
+		        this.gravedadTimer.start();
 			}
 			
 			
@@ -42,6 +46,7 @@ import java.awt.Rectangle;
 
 			    enElAire = true; // asumimos que está en el aire hasta comprobar piso
 
+			    // 👉 copiar obstaculos para evitar CME si se limpian al cambiar de nivel
 			    for (Obstaculo obstaculo : new ArrayList<>(obstaculos)) {
 			        if (velocidadY > 0 && chequeoColisionAbajo(obstaculo)) { // solo si cae
 			            setLocation(getX(), obstaculo.getY() - getHeight());
@@ -49,26 +54,82 @@ import java.awt.Rectangle;
 			            enElAire = false;
 			        }
 			        if (!obstaculo.traspasable) {
-			        	if (chequeoColisionArriba(3, obstaculo)) {
-				        	// Si está subiendo, se va a detener el salto.
-			                velocidadY = 0;
+			            if (chequeoColisionArriba(3, obstaculo)) {
+			                velocidadY = 0; // tope al saltar
 			            }
 			        }
 			    }
 
+			    ArrayList<Enemigo> aEliminar = new ArrayList<>();
+
+			    // 👉 también iterar sobre una copia de enemigos
 			    for (Enemigo enemigo : new ArrayList<>(enemigos)) {
-			    	if (colisionaConEnemigoDesdeArriba(enemigo)) {
-	            		
-			    		enemigo.detenerPatrulla();
-			    		// Eliminar enemigo del panel
-			    		enemigo.setVisible(false);
-	           	    	getParent().remove(enemigo);
-	           	    	getParent().repaint();
-	           	    	enemigos.remove(enemigo); // Se elimina al enemigo de la lista para que deje de "rastrearlo".
-	           	    
-	           	    	rebote();
-			    	}
-	        	}
+			        if (colisionaConEnemigoDesdeArriba(enemigo)) {
+			        	if (enemigo.restarVida(1)){
+			            enemigo.detenerPatrulla();
+			            enemigo.setVisible(false);
+			            if (getParent() != null) {
+			                getParent().remove(enemigo);
+			                getParent().repaint();
+			            }
+			            aEliminar.add(enemigo);
+			        	}
+			        	rebote();
+			        } else if (colisionaConEnemigoDesdeCostado(enemigo)) {
+			            // Evitar múltiples disparos de game over
+			            detenerTimers();
+
+			            Container parent = getParent();
+			            setVisible(false);
+			            if (parent != null) {
+			                parent.remove(this);
+			                parent.repaint();
+			            }
+			            nivel.mostrarPantallaGameOver();
+			            return; // salgo para no seguir procesando
+			        }
+			        
+			    }
+			    
+			    for (Bala bala : nivel.getBalas()) {
+			        if (colisionaConBala(bala)) {
+			            detenerTimers();
+			            Container parent = getParent(); // ✅ cachear antes
+			            setVisible(false);
+			            if (parent != null) {
+			                parent.remove(this);
+			                parent.repaint(); // ✅ ahora sí seguro
+			            }
+			            nivel.mostrarPantallaGameOver();
+			            return;
+			        }
+			    }
+
+			    // eliminar todos juntos al final (y SOLO una vez)
+			    enemigos.removeAll(aEliminar);
+			}
+			
+			private void revisarMonedas() {
+				
+				for(Obstaculo obstaculo : new ArrayList<>(obstaculos)) {  // recorre todos los obstaculos
+					if(obstaculo.esMoneda && getBounds().intersects(obstaculo.getBounds())) { // solo lo que son monedas
+						
+						nivel.puntaje.sumarMoneda(); // actualiza el hud
+						nivel.puntaje.sumarPuntos(200); // cada moneda suma 200 puntos
+						obstaculos.remove(obstaculo); // elimina la moneda
+						Container parent = getParent();
+						if(parent != null) {
+							parent.remove(obstaculo);
+							parent.repaint();
+						}
+					}
+				}
+			}
+			
+			public void detenerTimers() {
+			    if (gravedadTimer != null) {
+			        gravedadTimer.stop();
+			    }
 			}
 
 
@@ -103,6 +164,17 @@ import java.awt.Rectangle;
 			    return abajoJugador.intersects(arribaEnemigo);
 			}
 		    
+		    public boolean colisionaConEnemigoDesdeCostado(Enemigo enemigo) {
+		    	Rectangle jugadorCostado = getBounds();
+		        Rectangle enemigoCostado = enemigo.getBounds();
+			    return jugadorCostado.intersects(enemigoCostado) && !colisionaConEnemigoDesdeArriba(enemigo);
+			}
+		    
+		    public boolean colisionaConBala(Bala bala) {
+		    	Rectangle jugador = getBounds();
+		        Rectangle balaRectangle = bala.getBounds();
+			    return jugador.intersects(balaRectangle);
+			}
 			
 
 			public boolean chequeoColisionArriba(int dy, Obstaculo obstaculo) {
