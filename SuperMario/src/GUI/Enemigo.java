@@ -111,7 +111,7 @@ public class Enemigo extends JPanel {
     public void movimientoJefe(Player player) {
     		movimiento = new Timer(75, e -> {
                 	if (player.getX() < getX() && getX() > limiteIzquierdo) {
-                        setLocation(getX() - 3, getY());
+                        setLocation(getX() - 5, getY());
                     } else if (player.getX() > getX() && getX() + getWidth() <= limiteDerecho){
                     	setLocation(getX() + 3, getY());
                     }
@@ -132,7 +132,7 @@ public class Enemigo extends JPanel {
         	if (haciaArriba) {
                 setLocation(getX(), getY() - dy);
             } 
-        	if (getY() <= 200) {
+        	if (getY() <= 100) {
         		haciaArriba = false;
         	}
         	if (!haciaArriba){

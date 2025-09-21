@@ -33,6 +33,9 @@ public abstract class NivelBase extends JFrame {
 	protected Timer movimientoFluido;
 	private int iteracion = 1;
 	public ImageIcon mario;
+	protected Puntaje puntaje;
+
+
 
     public NivelBase() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,6 +45,14 @@ public abstract class NivelBase extends JFrame {
         setContentPane(contentPane);
         contentPane.setFocusable(true);
         contentPane.setFocusTraversalKeysEnabled(false);
+        
+     // inicializo hud
+        puntaje = new Puntaje("Mario", 1, 300);
+        puntaje.setBounds(220, 10, 400, 30);
+        contentPane.add(puntaje);
+        
+        puntaje.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 15)); // cambia el tamaño de la fuente
+        puntaje.setForeground(java.awt.Color.BLACK); // cambia el color de la fuente
         
         configurarJugador();
         construirNivel(); // método abstracto
