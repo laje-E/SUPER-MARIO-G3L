@@ -10,6 +10,7 @@ public class Enemigo extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private boolean hacia_derecha = true;
+	boolean haciaArriba = true;
     private Timer movimiento;
     private Timer disparoTimer;
 
@@ -123,5 +124,25 @@ public class Enemigo extends JPanel {
     public boolean restarVida(int cantidad) {
         vida -= cantidad;
         return vida <= 0;
+    }
+    
+    public void movimientoVerical() {
+    	int dy = 5;
+    	movimiento = new Timer(75, e -> {
+        	if (haciaArriba) {
+                setLocation(getX(), getY() - 5);
+            } 
+        	if (getY() <= 200) {
+        		haciaArriba = false;
+        	}
+        	if (!haciaArriba){
+            	setLocation(getX(), getY() + 5);
+            }
+        	if (getY() + getHeight() >= 450) {
+        		haciaArriba = true;
+        	}
+        
+    });
+    movimiento.start();
     }
 }

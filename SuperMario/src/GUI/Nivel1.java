@@ -27,6 +27,13 @@ public class Nivel1 extends NivelBase {
         enemigos.add(carboncini2);
         carboncini2.movimientoJefe(player);
         
+        ImageIcon mateIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/matecinini.png"));
+        Enemigo matecinini = new Enemigo(500, 386, 111, 150, 500, 801, mateIcon, true, 1, this);
+        contentPane.add(matecinini);
+        enemigos.add(matecinini);
+        matecinini.empezarADisparar(player);
+        matecinini.movimientoVerical();
+        
 
         ImageIcon pastoIcon = new ImageIcon(getClass().getResource("/img/pisos/pastoFixed.png"));
         ImageIcon tierraIcon = new ImageIcon(getClass().getResource("/img/pisos/tierraFixed.png"));
@@ -57,14 +64,29 @@ public class Nivel1 extends NivelBase {
         ImageIcon ladrilloIcon = new ImageIcon(getClass().getResource("/img/pisos/ladrillo.png"));
 
         Obstaculo plataformaMetal1 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal1.setBounds(200, 380, 128, 16);
+        plataformaMetal1.setBounds(200, 350, 128, 16);
         contentPane.add(plataformaMetal1);
         obstaculos.add(plataformaMetal1);
 
         Obstaculo plataformaMetal2 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal2.setBounds(600, 300, 128, 16);
+        plataformaMetal2.setBounds(600, 310, 128, 16);
         contentPane.add(plataformaMetal2);
         obstaculos.add(plataformaMetal2);
+        
+        Obstaculo plataformaMetal3 = new Obstaculo(obstaculos, metalIcon, true);
+        plataformaMetal3.setBounds(4000, 200, 128, 16);
+        contentPane.add(plataformaMetal3);
+        obstaculos.add(plataformaMetal3);
+        
+        Obstaculo plataformaMetal4 = new Obstaculo(obstaculos, metalIcon, true);
+        plataformaMetal4.setBounds(4000, 280, 128, 16);
+        contentPane.add(plataformaMetal4);
+        obstaculos.add(plataformaMetal4);
+        
+        Obstaculo plataformaMetal5 = new Obstaculo(obstaculos, metalIcon, true);
+        plataformaMetal5.setBounds(4000, 360, 128, 16);
+        contentPane.add(plataformaMetal5);
+        obstaculos.add(plataformaMetal5);
 
         Obstaculo bloqueLadrillo1 = new Obstaculo(obstaculos, ladrilloIcon, false);
         bloqueLadrillo1.setBounds(400, 250, 48, 48);
