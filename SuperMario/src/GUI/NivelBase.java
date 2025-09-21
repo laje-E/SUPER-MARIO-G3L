@@ -5,8 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -29,6 +31,8 @@ public abstract class NivelBase extends JFrame {
 	boolean dPressed = false;
 	boolean wPressed = false;
 	protected Timer movimientoFluido;
+	private int iteracion = 1;
+	public ImageIcon mario;
 
     public NivelBase() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,7 +65,8 @@ public abstract class NivelBase extends JFrame {
     }
     
     protected void configurarJugador() {
-        player = new Player(100, 350, 30, 50, obstaculos, enemigos, this, balas);
+    	mario = new ImageIcon(getClass().getResource("/img/personajes/mario-parado-pixilart.png"));
+        player = new Player(100, 350, 30, 50, obstaculos, enemigos, this, balas, mario);
         player.setBackground(Color.RED);
         player.setFocusable(false);
         contentPane.add(player);
@@ -116,8 +121,26 @@ public abstract class NivelBase extends JFrame {
 
         movimientoFluido = new Timer(15, new ActionListener() { 
             public void actionPerformed(ActionEvent e) {
+            	iteracion *= -1;
             	
             	if (aPressed) {
+            		if (iteracion == 1) {
+            			URL url = getClass().getResource("/img/personajes/MARIO_corriendo6.png");
+            			if (url != null) {
+            			    player.setIcon(new ImageIcon(url));
+            			} else {
+            			    System.err.println("No se encontró la imagen: MARIO_corriendo6.png");
+            			}
+            		}
+            		if (iteracion != 1) {
+            			URL url = getClass().getResource("/img/personajes/mario_corriendo7.png");
+            			if (url != null) {
+            			    player.setIcon(new ImageIcon(url));
+            			} else {
+            			    System.err.println("No se encontró la imagen: mario_corriendo7.png");
+            			}
+            		}
+            		
             	    boolean puede_mover = true;
             	    for (Obstaculo o : obstaculos) {
             	        if (player.chequeoColisionX(-3, o)) {
@@ -148,6 +171,23 @@ public abstract class NivelBase extends JFrame {
                 
                 
                 if (dPressed) {                	
+                	if (iteracion == 1) {
+            			URL url = getClass().getResource("/img/personajes/MARIO_corriendo4.png");
+            			if (url != null) {
+            			    player.setIcon(new ImageIcon(url));
+            			} else {
+            			    System.err.println("No se encontró la imagen: MARIO_corriendo4.png");
+            			}
+            		}
+            		if (iteracion != 1) {
+            			URL url = getClass().getResource("/img/personajes/mario_corriendo5.png");
+            			if (url != null) {
+            			    player.setIcon(new ImageIcon(url));
+            			} else {
+            			    System.err.println("No se encontró la imagen: mario_corriendo5.png");
+            			}
+            		}
+            		
                     boolean puede_mover = true;
                     for (Obstaculo o : new ArrayList<>(obstaculos)) {
                         if (player.chequeoColisionX(3, o)) {

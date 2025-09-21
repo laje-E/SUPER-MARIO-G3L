@@ -1,12 +1,15 @@
 package GUI;
 
 import java.awt.Container;
+import java.awt.Graphics;
 import java.awt.Rectangle;
 	
 	import java.awt.event.ActionEvent;
 	import java.awt.event.ActionListener;
 	import java.util.ArrayList;
-	import javax.swing.JPanel;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 	import javax.swing.Timer;
 	
 		public class Player extends JPanel {
@@ -21,13 +24,17 @@ import java.awt.Rectangle;
 			private NivelBase nivel;
 			private Timer gravedadTimer;
 			public ArrayList<Bala> balas;
+			public ImageIcon icon;
 
-			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, NivelBase nivel, ArrayList<Bala> balas) {
+			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, NivelBase nivel, ArrayList<Bala> balas, ImageIcon icon) {
 		        setBounds(posX, posY, ancho, alto);
 		        
 		        this.balas = balas;
 		        this.obstaculos = obstaculos;
 		        this.nivel = nivel;
+		        this.icon = icon;
+		        
+		        setOpaque(false);
 				
 				// Se va a ejecutar el timer de gravedad dentro del Player
 		        this.gravedadTimer = new Timer(30, new ActionListener() {
@@ -38,6 +45,21 @@ import java.awt.Rectangle;
 		        });
 		        this.gravedadTimer.start();
 			}
+			
+			public void setIcon(ImageIcon nuevaImagen) {
+			    this.icon = nuevaImagen;
+			    repaint();
+			}
+			
+			@Override
+			protected void paintComponent(Graphics g) {
+			    super.paintComponent(g);
+			    if (icon != null) {
+			        g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
+			    }
+			}
+			
+			
 			
 			
 			private void aplicarGravedad(ArrayList<Enemigo> enemigos) {
