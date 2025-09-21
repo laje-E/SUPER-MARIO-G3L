@@ -1,15 +1,12 @@
 package GUI;
 
 import java.awt.Container;
-import java.awt.Graphics;
 import java.awt.Rectangle;
 	
 	import java.awt.event.ActionEvent;
 	import java.awt.event.ActionListener;
 	import java.util.ArrayList;
-
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+	import javax.swing.JPanel;
 	import javax.swing.Timer;
 	
 		public class Player extends JPanel {
@@ -24,17 +21,13 @@ import javax.swing.JPanel;
 			private NivelBase nivel;
 			private Timer gravedadTimer;
 			public ArrayList<Bala> balas;
-			public ImageIcon icon;
 
-			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, NivelBase nivel, ArrayList<Bala> balas, ImageIcon icon) {
+			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, NivelBase nivel, ArrayList<Bala> balas) {
 		        setBounds(posX, posY, ancho, alto);
 		        
 		        this.balas = balas;
 		        this.obstaculos = obstaculos;
 		        this.nivel = nivel;
-		        this.icon = icon;
-		        
-		        setOpaque(false);
 				
 				// Se va a ejecutar el timer de gravedad dentro del Player
 		        this.gravedadTimer = new Timer(30, new ActionListener() {
@@ -45,21 +38,6 @@ import javax.swing.JPanel;
 		        });
 		        this.gravedadTimer.start();
 			}
-			
-			public void setIcon(ImageIcon nuevaImagen) {
-			    this.icon = nuevaImagen;
-			    repaint();
-			}
-			
-			@Override
-			protected void paintComponent(Graphics g) {
-			    super.paintComponent(g);
-			    if (icon != null) {
-			        g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
-			    }
-			}
-			
-			
 			
 			
 			private void aplicarGravedad(ArrayList<Enemigo> enemigos) {
@@ -95,6 +73,17 @@ import javax.swing.JPanel;
 			                getParent().repaint();
 			            }
 			            aEliminar.add(enemigo);
+			            
+			            if (nivel != null && nivel.puntaje != null) {
+			            	if("mate".equals(enemigo.tipo)){
+			            		nivel.puntaje.sumarPuntos(200);
+			            	} else if("carbon".equals(enemigo.tipo)) {
+			            		nivel.puntaje.sumarPuntos(100);
+			            	} else if("pelota".equals(enemigo.tipo)) {
+			            		nivel.puntaje.sumarPuntos(500);
+			            	}
+			            	
+			            }
 			        	}
 			        	rebote();
 			        } else if (colisionaConEnemigoDesdeCostado(enemigo)) {
@@ -129,6 +118,23 @@ import javax.swing.JPanel;
 
 			    // eliminar todos juntos al final (y SOLO una vez)
 			    enemigos.removeAll(aEliminar);
+			}
+			
+			private void revisarMonedas() {
+				
+				for(Obstaculo obstaculo : new ArrayList<>(obstaculos)) {  // recorre todos los obstaculos
+					if(obstaculo.esMoneda && getBounds().intersects(obstaculo.getBounds())) { // solo lo que son monedas
+						
+						nivel.puntaje.sumarMoneda(); // actualiza el hud
+						nivel.puntaje.sumarPuntos(200); // cada moneda suma 200 puntos
+						obstaculos.remove(obstaculo); // elimina la moneda
+						Container parent = getParent();
+						if(parent != null) {
+							parent.remove(obstaculo);
+							parent.repaint();
+						}
+					}
+				}
 			}
 			
 			public void detenerTimers() {
