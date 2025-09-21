@@ -8,6 +8,11 @@ public class Nivel2 extends NivelBase {
 
     @Override
     protected void construirNivel() {
+    	Sonido.reproducirMusicaLoop("sonidos/temasInGame/tema2/tema2.wav");
+
+    	
+    	
+    	
         ImageIcon mateIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/matecinini.png"));
         Enemigo matecinini = new Enemigo(500, 386, 37, 50, 500, 801, mateIcon, true, 1, this);
         contentPane.add(matecinini);

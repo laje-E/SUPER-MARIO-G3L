@@ -14,20 +14,16 @@ public class Nivel1 extends NivelBase {
 
     @Override
     protected void construirNivel() {
+    	Sonido.reproducirMusicaLoop("sonidos/temasInGame/tema1/tema1.wav");
+    	
         ImageIcon carbIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
         Enemigo carboncini = new Enemigo(500, 391, 48, 45, 400, 700, carbIcon, false, 3, this);
         contentPane.add(carboncini);
         enemigos.add(carboncini);
         carboncini.patrullar();
         
-       
-        ImageIcon carbIcon2 = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
-        Enemigo carboncini2 = new Enemigo(900, 391, 48, 45, 700, 1000, carbIcon, false, 10, this);
-        contentPane.add(carboncini2);
-        enemigos.add(carboncini2);
-        carboncini2.movimientoJefe(player);
         
-        ImageIcon parrilleroIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/parrilleroInfernal.png"));
+        ImageIcon parrilleroIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/parrilleroInfernal.png"));
         Enemigo parrillero = new Enemigo(2800, 386, 102, 153, 500, 801, parrilleroIcon, true, 1, this);
         contentPane.add(parrillero);
         enemigos.add(parrillero);
@@ -60,41 +56,41 @@ public class Nivel1 extends NivelBase {
             }
         }
 
-        ImageIcon metalIcon = new ImageIcon(getClass().getResource("/img/pisos/metal.png"));
+        ImageIcon metalIcon = new ImageIcon(getClass().getResource("/img/pisos/plataformaMetal2.png"));
         ImageIcon ladrilloIcon = new ImageIcon(getClass().getResource("/img/pisos/ladrillo.png"));
 
         Obstaculo plataformaMetal1 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal1.setBounds(200, 350, 128, 16);
+        plataformaMetal1.setBounds(500, 350, 80, 10);
         contentPane.add(plataformaMetal1);
         obstaculos.add(plataformaMetal1);
 
         Obstaculo plataformaMetal2 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal2.setBounds(600, 310, 128, 16);
+        plataformaMetal2.setBounds(600, 310, 80, 10);
         contentPane.add(plataformaMetal2);
         obstaculos.add(plataformaMetal2);
         
         Obstaculo plataformaMetal3 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal3.setBounds(2800, 200, 128, 16);
+        plataformaMetal3.setBounds(2800, 200, 80, 10);
         contentPane.add(plataformaMetal3);
         obstaculos.add(plataformaMetal3);
         
         Obstaculo plataformaMetal4 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal4.setBounds(2800, 280, 128, 16);
+        plataformaMetal4.setBounds(2800, 280, 80, 10);
         contentPane.add(plataformaMetal4);
         obstaculos.add(plataformaMetal4);
         
         Obstaculo plataformaMetal5 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal5.setBounds(2800, 360, 128, 16);
+        plataformaMetal5.setBounds(2800, 360, 80, 10);
         contentPane.add(plataformaMetal5);
         obstaculos.add(plataformaMetal5);
 
         Obstaculo bloqueLadrillo1 = new Obstaculo(obstaculos, ladrilloIcon, false);
-        bloqueLadrillo1.setBounds(400, 250, 48, 48);
+        bloqueLadrillo1.setBounds(700, 250, 48, 48);
         contentPane.add(bloqueLadrillo1);
         obstaculos.add(bloqueLadrillo1);
 
         Obstaculo bloqueLadrillo2 = new Obstaculo(obstaculos, ladrilloIcon, false);
-        bloqueLadrillo2.setBounds(448, 250, 48, 48);
+        bloqueLadrillo2.setBounds(748, 250, 48, 48);
         contentPane.add(bloqueLadrillo2);
         obstaculos.add(bloqueLadrillo2);
     }

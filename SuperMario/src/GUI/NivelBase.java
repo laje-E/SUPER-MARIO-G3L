@@ -61,7 +61,7 @@ public abstract class NivelBase extends JFrame {
     }
     
     protected void configurarJugador() {
-        player = new Player(100, 350, 30, 50, obstaculos, enemigos, this, balas);
+        player = new Player(100, 200, 30, 50, obstaculos, enemigos, this, balas);
         player.setBackground(Color.RED);
         player.setFocusable(false);
         contentPane.add(player);
@@ -116,6 +116,10 @@ public abstract class NivelBase extends JFrame {
 
         movimientoFluido = new Timer(15, new ActionListener() { 
             public void actionPerformed(ActionEvent e) {
+            	if (player != null && player.estaMuerto()) {
+            	    return; // no mover al jugador si está muerto
+            	}
+            	
             	
             	if (aPressed) {
             	    boolean puede_mover = true;
@@ -189,7 +193,7 @@ public abstract class NivelBase extends JFrame {
                     
                     aPressed = false;
                     dPressed = true;
-                    
+                    Sonido.reproducirEfecto("sonidos/player/superarNivel.wav"); 
                     new Timer(1750, new ActionListener() {
                         public void actionPerformed(ActionEvent evt) {
                             ((Timer) evt.getSource()).stop();
@@ -229,7 +233,7 @@ public abstract class NivelBase extends JFrame {
     	        player.detenerTimers();
     	    }
 
-    	    // Limpieza
+    	    // Limpieza de todo para que no quede ningún objeto residual.
     	    contentPane.removeAll();
     	    obstaculos.clear();
     	    enemigos.clear();

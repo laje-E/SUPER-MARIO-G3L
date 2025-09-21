@@ -21,7 +21,9 @@ import java.awt.Rectangle;
 			private NivelBase nivel;
 			private Timer gravedadTimer;
 			public ArrayList<Bala> balas;
-
+			private boolean muerto = false;
+			
+			
 			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, NivelBase nivel, ArrayList<Bala> balas) {
 		        setBounds(posX, posY, ancho, alto);
 		        
@@ -36,11 +38,16 @@ import java.awt.Rectangle;
 		                aplicarGravedad(enemigos);
 		            }
 		        });
-		        this.gravedadTimer.start();
+		        	this.gravedadTimer.start();
+			}
+			
+			public boolean estaMuerto() {
+			    return muerto;
 			}
 			
 			
 			private void aplicarGravedad(ArrayList<Enemigo> enemigos) {
+				if (muerto) return;
 			    velocidadY += gravedad;
 			    setLocation(getX(), getY() + velocidadY);
 
@@ -66,6 +73,7 @@ import java.awt.Rectangle;
 			    for (Enemigo enemigo : new ArrayList<>(enemigos)) {
 			        if (colisionaConEnemigoDesdeArriba(enemigo)) {
 			        	if (enemigo.restarVida(1)){
+			        		Sonido.reproducirEfecto("sonidos/player/pop.wav");
 			            enemigo.detenerPatrulla();
 			            enemigo.setVisible(false);
 			            if (getParent() != null) {
@@ -76,16 +84,9 @@ import java.awt.Rectangle;
 			        	}
 			        	rebote();
 			        } else if (colisionaConEnemigoDesdeCostado(enemigo)) {
-			            // Evitar múltiples disparos de game over
-			            detenerTimers();
+			          
+			        	morir();    // <- en vez de todo el bloque que tenías
 
-			            Container parent = getParent();
-			            setVisible(false);
-			            if (parent != null) {
-			                parent.remove(this);
-			                parent.repaint();
-			            }
-			            nivel.mostrarPantallaGameOver();
 			            return; // salgo para no seguir procesando
 			        }
 			        
@@ -93,21 +94,38 @@ import java.awt.Rectangle;
 			    
 			    for (Bala bala : nivel.getBalas()) {
 			        if (colisionaConBala(bala)) {
-			            detenerTimers();
-			            Container parent = getParent(); // ✅ cachear antes
-			            setVisible(false);
-			            if (parent != null) {
-			                parent.remove(this);
-			                parent.repaint(); // ✅ ahora sí seguro
-			            }
-			            nivel.mostrarPantallaGameOver();
-			            return;
+			        	morir();    // <- en vez de todo el bloque que tenías
+
+			            return; // salgo para no seguir procesando
 			        }
 			    }
 
-			    // eliminar todos juntos al final (y SOLO una vez)
-			    enemigos.removeAll(aEliminar);
+			    enemigos.removeAll(aEliminar);	// eliminar todos juntos al final (y SOLO una vez)
+
 			}
+			
+			
+			private void morir() {
+		        muerto = true;       // <- bloquea todos los movimientos
+		        detenerTimers();
+		        setVisible(false);
+
+		        Container parent = getParent();
+		        if (parent != null) {
+		            parent.remove(this);
+		            parent.repaint();
+		        }
+
+		        Sonido.reproducirEfecto("sonidos/player/gameOver.wav");
+
+		        new javax.swing.Timer(6000, ev -> {
+		            ((javax.swing.Timer) ev.getSource()).stop();
+		            nivel.mostrarPantallaGameOver();
+		        }).start();
+		    }
+
+			
+			
 			
 			public void detenerTimers() {
 			    if (gravedadTimer != null) {
@@ -118,9 +136,12 @@ import java.awt.Rectangle;
 
 
 		    public void saltar() {
+		    	 if (muerto) return;
+		    	 
 		        if (!enElAire) { // solo salta si está en el piso
 		            velocidadY = fuerzaSalto;
 		            enElAire = true;
+		            Sonido.reproducirEfecto("sonidos/player/salto.wav"); 
 		        }
 		    }
 		    
@@ -169,6 +190,7 @@ import java.awt.Rectangle;
 
 			
 			public void moverDerecha(int anchoPanel, int velocidad) {
+				if (muerto) return;
 				int posX = getX();
 				int posY = getY();
 				if (posX + getWidth() < anchoPanel) {
@@ -177,6 +199,7 @@ import java.awt.Rectangle;
 			}	
 	
 			public void moverIzquierda(int velocidad) {
+				if (muerto) return;
 				int posX = getX();
 				int posY = getY();
 				if (posX > 0) {

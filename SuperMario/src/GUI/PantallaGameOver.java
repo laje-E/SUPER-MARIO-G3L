@@ -50,7 +50,10 @@ public class PantallaGameOver extends JPanel {
         });
 
         // Acción del botón salir → cierra el juego
-        exitButton.addActionListener(e -> System.exit(0));
+        exitButton.addActionListener(e -> {
+            Sonido.detenerMusica();   // <- corta cualquier música que esté sonando
+            System.exit(0);
+        });
     }
 
     @Override

@@ -9,7 +9,7 @@ public class SuperMario extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	public static void main(String[] args) {
-        Nivel3 juego = new Nivel3();
+        Nivel1 juego = new Nivel1();
         juego.setVisible(true);
     }
     
