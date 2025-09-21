@@ -1,15 +1,18 @@
 package GUI;
 
 import java.awt.Container;
+import java.awt.Graphics;
 import java.awt.Rectangle;
 	
 	import java.awt.event.ActionEvent;
 	import java.awt.event.ActionListener;
 	import java.util.ArrayList;
-	import javax.swing.JPanel;
-	import javax.swing.Timer;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 	
-		public class Player extends JPanel {
+	public class Player extends JPanel {
 	
 			private static final long serialVersionUID = 1L;
 			
@@ -22,14 +25,16 @@ import java.awt.Rectangle;
 			private Timer gravedadTimer;
 			public ArrayList<Bala> balas;
 			private boolean muerto = false;
+			public ImageIcon icon;
 			
 			
-			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, NivelBase nivel, ArrayList<Bala> balas) {
+			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, NivelBase nivel, ArrayList<Bala> balas, ImageIcon icono) {
 		        setBounds(posX, posY, ancho, alto);
 		        
 		        this.balas = balas;
 		        this.obstaculos = obstaculos;
 		        this.nivel = nivel;
+		        setOpaque(false);
 				
 				// Se va a ejecutar el timer de gravedad dentro del Player
 		        this.gravedadTimer = new Timer(30, new ActionListener() {
@@ -44,6 +49,21 @@ import java.awt.Rectangle;
 			public boolean estaMuerto() {
 			    return muerto;
 			}
+			
+			public void setIcon(ImageIcon nuevaImagen) {
+			    this.icon = nuevaImagen;
+			    repaint();
+			}
+			
+			@Override
+			protected void paintComponent(Graphics g) {
+			    super.paintComponent(g);
+			    if (icon != null) {
+			        g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
+			    }
+			}
+			
+			
 			
 			
 			private void aplicarGravedad(ArrayList<Enemigo> enemigos) {
@@ -81,6 +101,17 @@ import java.awt.Rectangle;
 			                getParent().repaint();
 			            }
 			            aEliminar.add(enemigo);
+			            
+			            if (nivel != null && nivel.puntaje != null) {
+			            	if("mate".equals(enemigo.tipo)){
+			            		nivel.puntaje.sumarPuntos(200);
+			            	} else if("carbon".equals(enemigo.tipo)) {
+			            		nivel.puntaje.sumarPuntos(100);
+			            	} else if("pelota".equals(enemigo.tipo)) {
+			            		nivel.puntaje.sumarPuntos(500);
+			            	}
+			            	
+			            }
 			        	}
 			        	rebote();
 			        } else if (colisionaConEnemigoDesdeCostado(enemigo)) {
@@ -124,8 +155,6 @@ import java.awt.Rectangle;
 		        }).start();
 		    }
 
-			
-			
 			
 			public void detenerTimers() {
 			    if (gravedadTimer != null) {

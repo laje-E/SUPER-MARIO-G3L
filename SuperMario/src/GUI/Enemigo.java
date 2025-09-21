@@ -20,19 +20,24 @@ public class Enemigo extends JPanel {
     public ImageIcon icon;
     public int vida;
     private NivelBase nivel;
+    
+    public String tipo; //mate o carbon
 
     private boolean dispara; // true si es Matecinini o similar
+    
+    private boolean fijoEnPantalla;
+
 
     public void ajustarLimites(int desplazamiento) {
         limiteIzquierdo += desplazamiento;
         limiteDerecho += desplazamiento;
     }
 
-    public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho, ImageIcon icon, NivelBase nivel) {
-        this(posX, posY, ancho, alto, limiteIzquierdo, limiteDerecho, icon, false, 1, nivel);
+    public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho, ImageIcon icon, NivelBase nivel, boolean fijoEnPantalla) {
+        this(posX, posY, ancho, alto, limiteIzquierdo, limiteDerecho, icon, false, 1, nivel, false);
     }
 
-    public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho, ImageIcon icon, boolean dispara, int vida, NivelBase nivel) {
+    public Enemigo(int posX, int posY, int ancho, int alto, int limiteIzquierdo, int limiteDerecho, ImageIcon icon, boolean dispara, int vida, NivelBase nivel, boolean fijoEnPantalla) {
         setBounds(posX, posY, ancho, alto);
         this.icon = icon;
         this.limiteDerecho = limiteDerecho;
@@ -40,8 +45,15 @@ public class Enemigo extends JPanel {
         this.dispara = dispara;
         this.vida = vida;
         this.nivel = nivel;
+        this.fijoEnPantalla = fijoEnPantalla;
+        this.tipo = tipo; 
         setOpaque(false);
     }
+    
+    public boolean isFijoEnPantalla() {
+        return fijoEnPantalla;
+    }
+
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -111,7 +123,7 @@ public class Enemigo extends JPanel {
     public void movimientoJefe(Player player) {
     		movimiento = new Timer(75, e -> {
                 	if (player.getX() < getX() && getX() > limiteIzquierdo) {
-                        setLocation(getX() - 3, getY());
+                        setLocation(getX() - 5, getY());
                     } else if (player.getX() > getX() && getX() + getWidth() <= limiteDerecho){
                     	setLocation(getX() + 3, getY());
                     }
@@ -132,13 +144,32 @@ public class Enemigo extends JPanel {
         	if (haciaArriba) {
                 setLocation(getX(), getY() - dy);
             } 
-        	if (getY() <= 200) {
+        	if (getY() <= 100) {
         		haciaArriba = false;
         	}
         	if (!haciaArriba){
             	setLocation(getX(), getY() + dy);
             }
         	if (getY() + getHeight() >= 450) {
+        		haciaArriba = true;
+        	}
+        
+    });
+    movimiento.start();
+    }
+    
+    public void movimientoJefe2(Player player) {
+    	movimiento = new Timer(75, e -> {
+        	if (haciaArriba) {
+                setLocation(getX(), getY() - 3);
+            } 
+        	if (getY() <= player.getY()) {
+        		haciaArriba = false;
+        	}
+        	if (!haciaArriba){
+            	setLocation(getX(), getY() + 3);
+            }
+        	if (getY() >= player.getY()) {
         		haciaArriba = true;
         	}
         

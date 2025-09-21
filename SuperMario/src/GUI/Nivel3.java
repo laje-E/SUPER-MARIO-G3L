@@ -10,22 +10,24 @@ public class Nivel3 extends NivelBase {
     protected void construirNivel() {
     	Sonido.reproducirMusicaLoop("sonidos/temasInGame/tema3/tema3.wav");
 
-    	
-    	
-        // Enemigos
-        ImageIcon mateIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/matecinini.png"));
-        Enemigo matecinini = new Enemigo(500, 386, 37, 50, 500, 801, mateIcon, true, 1, this);
-        contentPane.add(matecinini);
-        enemigos.add(matecinini);
-        matecinini.empezarADisparar(player);
+    	ImageIcon maradonaIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/MaradonaDer.png"));
+        Enemigo Maradona = new Enemigo(700, 391, 48, 45, 400, 700, maradonaIcon, true, 30, this, true);
+        contentPane.add(Maradona);
+        enemigos.add(Maradona);
+        Maradona.empezarADisparar(player);
+        Maradona.movimientoJefe2(player);
+        
+       
+        agregarPiso();
 
-        ImageIcon carbIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
-        Enemigo carboncini = new Enemigo(1000, 391, 48, 45, 950, 1300, carbIcon, false, 1, this);
-        contentPane.add(carboncini);
-        enemigos.add(carboncini);
-        carboncini.patrullar();
+       
+        agregarPlataformasHorizontales();
 
-        // Tiles del piso
+      
+        agregarObstaculosVerticales();
+    }
+
+    private void agregarPiso() {
         ImageIcon metalIcon = new ImageIcon(getClass().getResource("/img/pisos/metal.png"));
         ImageIcon ladrilloPiedraIcon = new ImageIcon(getClass().getResource("/img/pisos/ladrilloPiedra.png"));
 
@@ -35,6 +37,7 @@ public class Nivel3 extends NivelBase {
         int tilesX = anchoMapa / tileSize;
         int tilesAbajo = (alturaVentana - sueloY) / tileSize;
 
+        // Piso superior
         for (int i = 0; i < tilesX; i++) {
             Obstaculo sueloMetal = new Obstaculo(obstaculos, metalIcon, false);
             sueloMetal.setBounds(i * tileSize, sueloY - tileSize, tileSize, tileSize);
@@ -42,6 +45,7 @@ public class Nivel3 extends NivelBase {
             obstaculos.add(sueloMetal);
         }
 
+      
         for (int y = 0; y < tilesAbajo; y++) {
             for (int i = 0; i < tilesX; i++) {
                 Obstaculo ladrilloPiedra = new Obstaculo(obstaculos, ladrilloPiedraIcon, false);
@@ -50,34 +54,53 @@ public class Nivel3 extends NivelBase {
                 obstaculos.add(ladrilloPiedra);
             }
         }
+    }
 
-        // Plataformas extra
+    private void agregarPlataformasHorizontales() {
         ImageIcon ladrilloIcon = new ImageIcon(getClass().getResource("/img/pisos/ladrillo.png"));
+        ImageIcon metalIcon = new ImageIcon(getClass().getResource("/img/pisos/metal.png"));
 
-        Obstaculo p1 = new Obstaculo(obstaculos, metalIcon, true);
-        p1.setBounds(200, 400, 100, 16);
-        contentPane.add(p1);
-        obstaculos.add(p1);
+ 
+        int[][] plataformas = {
+            {180, 380, 120, 16},   // plataforma baja
+            {400, 320, 100, 16},
+            {650, 280, 120, 16},
+            {800, 350, 100, 16},
+            {1200, 300, 140, 16},
+            {1500, 400, 120, 16},
+            {1750, 360, 100, 16},
+            {2000, 310, 140, 16},
+            {2250, 380, 120, 16},
+            {2500, 340, 100, 16}
+        };
 
-        Obstaculo p2 = new Obstaculo(obstaculos, ladrilloIcon, false);
-        p2.setBounds(450, 300, 32, 32);
-        contentPane.add(p2);
-        obstaculos.add(p2);
+        for (int[] p : plataformas) {
+            Obstaculo plat;
+            if (p[3] <= 32) {
+                plat = new Obstaculo(obstaculos, ladrilloIcon, false); //ladrillo
+            } else {
+                plat = new Obstaculo(obstaculos, metalIcon, true); //  metal
+            }
+            plat.setBounds(p[0], p[1], p[2], p[3]);
+            contentPane.add(plat);
+            obstaculos.add(plat);
+        }
+    }
 
-        Obstaculo p3 = new Obstaculo(obstaculos, metalIcon, true);
-        p3.setBounds(700, 300, 120, 16);
-        contentPane.add(p3);
-        obstaculos.add(p3);
+    private void agregarObstaculosVerticales() {
+        ImageIcon ladrilloIcon = new ImageIcon(getClass().getResource("/img/pisos/ladrillo.png"));
+        
+        int[][] columnas = {
+            {600, 380, 32, 100}, {1000, 370, 32, 120}, {1400, 390, 32, 90},
+            {1800, 360, 32, 130}, {2200, 380, 32, 110}, {2600, 400, 32, 100}
+        };
 
-        Obstaculo p4 = new Obstaculo(obstaculos, ladrilloIcon, false);
-        p4.setBounds(950, 250, 32, 32);
-        contentPane.add(p4);
-        obstaculos.add(p4);
-
-        Obstaculo p5 = new Obstaculo(obstaculos, metalIcon, true);
-        p5.setBounds(1250, 350, 120, 16);
-        contentPane.add(p5);
-        obstaculos.add(p5);
+        for (int[] c : columnas) {
+            Obstaculo col = new Obstaculo(obstaculos, ladrilloIcon, false);
+            col.setBounds(c[0], c[1], c[2], c[3]);
+            contentPane.add(col);
+            obstaculos.add(col);
+        }
     }
 
     @Override

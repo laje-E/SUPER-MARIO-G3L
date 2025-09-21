@@ -16,15 +16,15 @@ public class Nivel1 extends NivelBase {
     protected void construirNivel() {
     	Sonido.reproducirMusicaLoop("sonidos/temasInGame/tema1/tema1.wav");
     	
-        ImageIcon carbIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
-        Enemigo carboncini = new Enemigo(500, 391, 48, 45, 400, 700, carbIcon, false, 3, this);
-        contentPane.add(carboncini);
-        enemigos.add(carboncini);
-        carboncini.patrullar();
-        
+    	ImageIcon carbIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
+    	Enemigo carboncini = new Enemigo(500, 391, 48, 45, 400, 700, carbIcon, false, 3, this, false);
+    	carboncini.tipo = "carbon";
+    	contentPane.add(carboncini);
+    	enemigos.add(carboncini);
+    	carboncini.patrullar();
         
         ImageIcon parrilleroIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/parrilleroInfernal.png"));
-        Enemigo parrillero = new Enemigo(2800, 386, 102, 153, 500, 801, parrilleroIcon, true, 1, this);
+        Enemigo parrillero = new Enemigo(2800, 386, 102, 153, 500, 801, parrilleroIcon, true, 1, this, false);
         contentPane.add(parrillero);
         enemigos.add(parrillero);
         parrillero.empezarADisparar(player);
