@@ -56,7 +56,7 @@ public class Nivel3 extends NivelBase {
         obstaculos.add(p1);
 
         Obstaculo p2 = new Obstaculo(obstaculos, ladrilloIcon, false);
-        p2.setBounds(450, 350, 32, 32);
+        p2.setBounds(450, 300, 32, 32);
         contentPane.add(p2);
         obstaculos.add(p2);
 

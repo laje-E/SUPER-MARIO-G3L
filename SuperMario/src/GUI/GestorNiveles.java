@@ -21,9 +21,9 @@ public class GestorNiveles {
 	            case 2:
 	                nuevoNivel = new Nivel2(); break;
 	            case 3:
-	                nuevoNivel = new Nivel2(); break;
+	                nuevoNivel = new Nivel3(); break;
 	            default:
-	                nuevoNivel = new Nivel2(); break;
+	                nuevoNivel = new Nivel1(); break;
 	        }
 	        nuevoNivel.setVisible(true);
 	    });
