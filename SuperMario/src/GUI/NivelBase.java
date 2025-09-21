@@ -171,8 +171,16 @@ public abstract class NivelBase extends JFrame {
             	                o.setLocation(o.getX() + 3, o.getY()); // mover obstáculos para la derecha.
             	            }
             	            for (Enemigo enemigo : new ArrayList<>(enemigos)) {
+            	            	if (!enemigo.isFijoEnPantalla()) {
             	            	enemigo.setLocation(enemigo.getX() + 3, enemigo.getY()); 
             	            	enemigo.ajustarLimites(3); // si el mundo se mueve a la derecha (A)
+            	            	}
+            	            	/*
+            	            	else {
+            	            		enemigo.setLocation(enemigo.getX() - 3, enemigo.getY()); 
+                	            	enemigo.ajustarLimites(-3);
+            	            	}
+            	            	*/
             	            }
             	            fondoPanel.repaint();
             	        }
@@ -218,9 +226,13 @@ public abstract class NivelBase extends JFrame {
                                 o.setLocation(o.getX() - 3, o.getY()); // mover obstáculos para la izquierda.
                             }
                             for (Enemigo enemigo : new ArrayList<>(enemigos)) {
+                            	if (!enemigo.isFijoEnPantalla()) {
                             	enemigo.setLocation(enemigo.getX() - 3, enemigo.getY());
                             	enemigo.ajustarLimites(-3); // si el mundo se mueve a la izquierda (D)
-            	            }
+                            	}
+                            	
+            	            	
+                            }
                             fondoPanel.repaint();
                         }
                     }

@@ -9,31 +9,31 @@ public class Nivel2 extends NivelBase {
     @Override
     protected void construirNivel() {
         ImageIcon mateIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/matecinini.png"));
-        Enemigo matecinini = new Enemigo(500, 386, 37, 50, 500, 801, mateIcon, true, 1, this);
+        Enemigo matecinini = new Enemigo(500, 386, 37, 50, 500, 801, mateIcon, true, 1, this, false);
         contentPane.add(matecinini);
         enemigos.add(matecinini);
         matecinini.empezarADisparar(player);
 
         ImageIcon carbIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
-        Enemigo carboncini = new Enemigo(300, 391, 48, 45, 250, 600, carbIcon, false, 1, this);
+        Enemigo carboncini = new Enemigo(300, 391, 48, 45, 250, 600, carbIcon, false, 1, this, false);
         contentPane.add(carboncini);
         enemigos.add(carboncini);
         carboncini.patrullar();
         
         ImageIcon pelotaIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/PelotaMaradona.png"));
-        Enemigo pelota = new Enemigo(2800, 391, 30, 30, 2000, 2800, pelotaIcon, false, 1, this);
+        Enemigo pelota = new Enemigo(2800, 391, 30, 30, 2000, 2800, pelotaIcon, false, 1, this, false);
         contentPane.add(pelota);
         enemigos.add(pelota);
         pelota.patrullar();
         pelota.movimientoVerical(10);
         
-        Enemigo pelota2 = new Enemigo(2800, 300, 30, 30, 2100, 2800, pelotaIcon, false, 1, this);
+        Enemigo pelota2 = new Enemigo(2800, 300, 30, 30, 2100, 2800, pelotaIcon, false, 1, this, false);
         contentPane.add(pelota2);
         enemigos.add(pelota2);
         pelota2.patrullar();
         pelota2.movimientoVerical(10);
         
-        Enemigo pelota3 = new Enemigo(2800, 400, 30, 30, 2200, 2800, pelotaIcon, false, 1, this);
+        Enemigo pelota3 = new Enemigo(2800, 400, 30, 30, 2200, 2800, pelotaIcon, false, 1, this, false);
         contentPane.add(pelota3);
         enemigos.add(pelota3);
         pelota3.patrullar();

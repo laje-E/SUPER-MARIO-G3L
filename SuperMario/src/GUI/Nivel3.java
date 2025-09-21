@@ -8,7 +8,13 @@ public class Nivel3 extends NivelBase {
 
     @Override
     protected void construirNivel() {
-
+    	ImageIcon maradonaIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/MaradonaDer.png"));
+        Enemigo Maradona = new Enemigo(700, 391, 48, 45, 400, 700, maradonaIcon, true, 30, this, true);
+        contentPane.add(Maradona);
+        enemigos.add(Maradona);
+        Maradona.empezarADisparar(player);
+        Maradona.movimientoJefe2(player);
+        
        
         agregarPiso();
 

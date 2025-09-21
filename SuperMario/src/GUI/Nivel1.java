@@ -15,20 +15,20 @@ public class Nivel1 extends NivelBase {
     @Override
     protected void construirNivel() {
         ImageIcon carbIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
-        Enemigo carboncini = new Enemigo(500, 391, 48, 45, 400, 700, carbIcon, false, 3, this);
+        Enemigo carboncini = new Enemigo(500, 391, 48, 45, 400, 700, carbIcon, false, 3, this, false);
         contentPane.add(carboncini);
         enemigos.add(carboncini);
         carboncini.patrullar();
         
        
         ImageIcon carbIcon2 = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/carboncini.png"));
-        Enemigo carboncini2 = new Enemigo(900, 391, 48, 45, 700, 1000, carbIcon, false, 10, this);
+        Enemigo carboncini2 = new Enemigo(900, 391, 48, 45, 700, 1000, carbIcon, false, 10, this, false);
         contentPane.add(carboncini2);
         enemigos.add(carboncini2);
         carboncini2.movimientoJefe(player);
         
         ImageIcon parrilleroIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/parrilleroInfernal.png"));
-        Enemigo parrillero = new Enemigo(2800, 386, 102, 153, 500, 801, parrilleroIcon, true, 1, this);
+        Enemigo parrillero = new Enemigo(2800, 386, 102, 153, 500, 801, parrilleroIcon, true, 1, this, false);
         contentPane.add(parrillero);
         enemigos.add(parrillero);
         parrillero.empezarADisparar(player);
