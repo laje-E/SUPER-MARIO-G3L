@@ -1,59 +1,85 @@
 package GUI;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Container;
+import java.awt.Graphics;
+import java.net.URL;
+
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class Bala extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    private int dx; // velocidad en X
+    private int dx; 
     private Timer movimientoBala;
     private boolean destruida = false;
+    private ImageIcon icon;
 
+    // Constructor sin imagen
     public Bala(int x, int y, int dx) {
-        setBounds(x, y, 10, 10); // tamaño de la bala
+        this(x, y, dx, null);
+        System.out.println("Hola soy una bala sin imagen");
+    }
+
+    public Bala(int x, int y, int dx, ImageIcon icon) { 
         this.dx = dx;
+        this.icon = icon;
         setOpaque(false);
 
-        movimientoBala = new Timer(20, e -> mover()); // timer que mueve la bala
+        int w;
+        int h;
+
+        if (icon != null) {
+            w = 30;  // tamaño mayor si tiene imagen (pelota, yerba)
+            h = 30;
+        } else {
+            w = 20;  // tamaño por defecto (bala "normal")
+            h = 20;
+        }
+
+        setBounds(x, y, w, h);
+
+        movimientoBala = new Timer(15, e -> mover());
         movimientoBala.start();
     }
 
     private void mover() {
-        if (destruida) return; // ya destruida, no mover más
-
+        if (destruida) return;
         setLocation(getX() + dx, getY());
 
-        // si sale de la pantalla se elimina
-        if (getX() < 0 || getX() > 800) {
-            destruir();
-            return;
+        Container p = getParent();
+        if (p != null) {
+            int ancho = p.getWidth();
+            if (getX() < 0 || getX() > ancho) {
+                destruir();
+            }
         }
     }
 
     public void destruir() {
-        if (destruida) return; // evita doble ejecución
+        if (destruida) return;
         destruida = true;
 
         if (movimientoBala != null) {
-            movimientoBala.stop(); // detener primero el timer
+            movimientoBala.stop();
         }
 
-        // ¡Clave!: cachear el parent antes de remover
         Container p = getParent();
         if (p != null) {
-            p.remove(this);   // después de esto getParent() ya puede ser null
-            p.repaint();      // por eso usamos la variable 'p'
+            p.remove(this);
         }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.CYAN);
-        g.fillOval(0, 0, getWidth(), getHeight());
+
+        if (icon != null) {
+            g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
+        } else {
+            g.setColor(java.awt.Color.CYAN);
+            g.fillOval(0, 0, getWidth(), getHeight());
+        }
     }
 }

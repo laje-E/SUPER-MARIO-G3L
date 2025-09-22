@@ -84,7 +84,7 @@ public class FondoPanel extends JPanel {
             int width = edificio.getWidth(this);
             int height = edificio.getHeight(this);
 
-            if (width <= 0) width = 120;   // fallback si no cargó bien
+            if (width <= 0) width = 120; 
             if (height <= 0) height = 200;
 
             int baseY = getHeight() - height - 164; // se apoyan sobre el suelo, con un poco de margen
@@ -94,10 +94,10 @@ public class FondoPanel extends JPanel {
 
         
         
-     // Casa de Mirtha Legrand:
+     
         
         if (nivel == 1) {
-            g.drawImage(mirthaCasa, 150 - desplazamiento, 266, 200, 170, this);
+            g.drawImage(mirthaCasa, 150 - desplazamiento, 266, 200, 170, this); // La Casa de Mirtha Legrand:
         }
         
         g.drawImage(obelisco, 3000 - desplazamiento, 234, 50, 202, this); // obelisco dibujado, se mueve en primer plano como si fuera un obstáculo solo que sin las colisiones.

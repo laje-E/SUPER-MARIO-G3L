@@ -6,7 +6,6 @@ public class Sonido {
     private static Clip musicaFondo;  // loop (nivel)
     private static Clip efecto;       // efectos cortos (pop, game over, disparo, etc.)
 
-    // --- Música de fondo (loop) ---
     public static void reproducirMusicaLoop(String rutaClasspath) {
         try {
             detenerMusica();
@@ -29,7 +28,6 @@ public class Sonido {
         }
     }
 
-    // --- Efectos de sonido (no afectan la música de fondo) ---
     public static void reproducirEfecto(String rutaClasspath) {
         try {
             AudioInputStream in = AudioSystem.getAudioInputStream(

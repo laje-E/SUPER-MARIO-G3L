@@ -12,53 +12,54 @@ public class Nivel2 extends NivelBase {
     protected void construirNivel() {
         Sonido.reproducirMusicaLoop("sonidos/temasInGame/tema2/tema2.wav");
 
-
-       
+        this.nivelActual = 2;
+        
         ImageIcon matecininiIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/matecinini.png"));
-        Enemigo matecinini1 = new Enemigo(700, 391, 48, 45, 400, 700, matecininiIcon, false, 3, this, false);
+        Enemigo matecinini1 = new Enemigo(700, 391, 35, 45, 400, 700, matecininiIcon, false, 3, this, false);
         matecinini1.tipo = "matecinini";
         contentPane.add(matecinini1);
         enemigos.add(matecinini1);
         matecinini1.patrullar();
 
-        Enemigo matecinini2 = new Enemigo(1500, 391, 48, 45, 1100, 1400, matecininiIcon, false, 3, this, false);
+        Enemigo matecinini2 = new Enemigo(1500, 391, 35, 45, 1100, 1400, matecininiIcon, false, 3, this, false);
         matecinini2.tipo = "matecinini";
         contentPane.add(matecinini2);
         enemigos.add(matecinini2);
         matecinini2.patrullar();
 
-        Enemigo matecinini3 = new Enemigo(1700, 391, 48, 45, 1700, 2000, matecininiIcon, false, 3, this, false);
+        Enemigo matecinini3 = new Enemigo(1700, 391, 35, 45, 1700, 2000, matecininiIcon, false, 3, this, false);
         matecinini3.tipo = "matecinini";
         contentPane.add(matecinini3);
         enemigos.add(matecinini3);
         matecinini3.patrullar();
         
-        Enemigo matecinini4 = new Enemigo(2000, 391, 48, 45, 1700, 3000, matecininiIcon, false, 3, this, false);
+        Enemigo matecinini4 = new Enemigo(2000, 391, 35, 45, 1700, 3000, matecininiIcon, false, 3, this, false);
         matecinini4.tipo = "carbon";
         contentPane.add(matecinini4);
         enemigos.add(matecinini4);
         matecinini4.patrullar();
 
-        Enemigo matecinini5 = new Enemigo(2288, 160, 48, 45, 1700, 3000, matecininiIcon, false, 3, this, false);
+        Enemigo matecinini5 = new Enemigo(2288, 160, 35, 45, 2000, 2728, matecininiIcon, false, 3, this, false);
         matecinini5.tipo = "matecinini";
         contentPane.add(matecinini5);
         enemigos.add(matecinini5);
         matecinini5.patrullar();
         
-        Enemigo matecinini6 = new Enemigo(2350, 391, 48, 45, 1700, 3000, matecininiIcon, false, 3, this, false);
+        Enemigo matecinini6 = new Enemigo(2350, 391, 35, 45, 1700, 2728, matecininiIcon, false, 3, this, false);
         matecinini6.tipo = "matecinini";
         contentPane.add(matecinini6);
         enemigos.add(matecinini6);
         matecinini6.patrullar();
 
-        Enemigo matecinini7 = new Enemigo(2650, 391, 48, 45, 1700, 3000, matecininiIcon, false, 3, this, false);
+        Enemigo matecinini7 = new Enemigo(2650, 391, 35, 45, 1700, 2728, matecininiIcon, false, 3, this, false);
         matecinini7.tipo = "matecinini";
         contentPane.add(matecinini7);
         enemigos.add(matecinini7);
         matecinini7.patrullar();
         
         ImageIcon mateciniIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/matecini.png"));
-        Enemigo matecini = new Enemigo(2800, 386, 102, 153, 2500, 3000, mateciniIcon, true, 1, this, false);
+        Enemigo matecini = new Enemigo(2800, 386, 102, 113, 2500, 3000, mateciniIcon, true, 1, this, false);
+        matecini.tipo = "jefe";
         contentPane.add(matecini);
         enemigos.add(matecini);
         matecini.empezarADisparar(player);
@@ -117,24 +118,24 @@ public class Nivel2 extends NivelBase {
         obstaculos.add(plataformaMetal4);
 
         Obstaculo plataformaMetal5 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal5.setBounds(900, 250, 80, 10);
+        plataformaMetal5.setBounds(900, 250, 100, 10);
         contentPane.add(plataformaMetal5);
         obstaculos.add(plataformaMetal5);
 
 
         
         Obstaculo plataformaMetal6 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal6.setBounds(1450, 300, 80, 10);
+        plataformaMetal6.setBounds(1450, 300, 150, 10);
         contentPane.add(plataformaMetal6);
         obstaculos.add(plataformaMetal6);
 
         Obstaculo plataformaMetal7 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal7.setBounds(1600, 230, 80, 10);
+        plataformaMetal7.setBounds(1600, 230, 150, 10);
         contentPane.add(plataformaMetal7);
         obstaculos.add(plataformaMetal7);
         
         Obstaculo plataformaMetal8 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal8.setBounds(1750, 160, 80, 10);
+        plataformaMetal8.setBounds(1750, 160, 150, 10);
         contentPane.add(plataformaMetal8);
         obstaculos.add(plataformaMetal8);
 

@@ -1,21 +1,27 @@
 package GUI;
 
 import javax.swing.ImageIcon;
+import javax.swing.Timer;
 
 public class Nivel3 extends NivelBase {
 
     private static final long serialVersionUID = 1L;
+    private Enemigo maradona;
+
 
     @Override
     protected void construirNivel() {
     	Sonido.reproducirMusicaLoop("sonidos/temasInGame/tema3/tema3.wav");
 
+    	this.nivelActual = 3;
+    	
     	ImageIcon maradonaIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/MaradonaDer.png"));
-        Enemigo Maradona = new Enemigo(700, 391, 48, 45, 400, 700, maradonaIcon, true, 30, this, true);
-        contentPane.add(Maradona);
-        enemigos.add(Maradona);
-        Maradona.empezarADisparar(player);
-        Maradona.movimientoJefe2(player);
+    	this.maradona = new Enemigo(700, 391, 85, 100, 400, 700, maradonaIcon, true, 30, this, true);
+    	this.maradona.tipo = "jefe";
+    	contentPane.add(this.maradona);
+    	enemigos.add(this.maradona);
+    	this.maradona.empezarADisparar(player);
+    	this.maradona.movimientoJefe2(player);
         
        
         agregarPiso();
@@ -25,6 +31,8 @@ public class Nivel3 extends NivelBase {
 
       
         agregarObstaculosVerticales();
+        
+        
     }
 
     private void agregarPiso() {
@@ -64,7 +72,7 @@ public class Nivel3 extends NivelBase {
         int[][] plataformas = {
             {180, 380, 120, 16},   // plataforma baja
             {400, 320, 100, 16},
-            {650, 280, 120, 16},
+            {599, 280, 120, 16},
             {800, 350, 100, 16},
             {1200, 300, 140, 16},
             {1500, 400, 120, 16},
@@ -102,15 +110,45 @@ public class Nivel3 extends NivelBase {
             obstaculos.add(col);
         }
     }
+    
+    
+    protected void jugadorGano() {
+        if (nivelSuperado) return;
+        nivelSuperado = true;
+        
+        // sonido
+        Sonido.reproducirEfecto("sonidos/player/pop.wav");
+        
+
+        // saca a maradona
+        if (maradona != null) {
+            maradona.detenerPatrulla();    // frena timers internos
+            maradona.setVisible(false);
+            contentPane.remove(maradona);
+            enemigos.remove(maradona);
+            contentPane.revalidate();
+            contentPane.repaint();
+        }
+
+        // que el jugador no se siga moviendo
+        aPressed = false;
+        dPressed = true;
+        
+        Sonido.reproducirEfecto("sonidos/player/superarNivel.wav");
+        Sonido.detenerMusica();
+        // volver al menú
+        new javax.swing.Timer(1600, ev -> {
+            ((javax.swing.Timer) ev.getSource()).stop();
+            cerrarNivel();                 // limpia timers y objetos del nivel
+            new menuInicio().setVisible(true);
+        }).start();
+    }
+
+    
 
     @Override
     protected int getNumeroNivel() {
         return 3;
     }
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            Nivel1 nivel1 = new Nivel1();
-            nivel1.setVisible(true);
-        });
-    }
+ 
 }

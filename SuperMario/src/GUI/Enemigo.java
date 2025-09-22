@@ -72,7 +72,7 @@ public class Enemigo extends JPanel {
         }
     }
 
-    // --- Enemigos que caminan ---
+ 
     public void patrullar() {
         if (dispara) return; // si dispara, no se mueve
         movimiento = new Timer(30, e -> {
@@ -101,23 +101,29 @@ public class Enemigo extends JPanel {
     
     public void empezarADisparar(Player jugador) { // Para enemigos que van a disparar
         if (!dispara) return;
-        disparoTimer = new Timer(1500, e -> disparar(jugador));
+        disparoTimer = new Timer(2000, e -> disparar(jugador));
         disparoTimer.start();
     }
 
     private void disparar(Player jugador) {
-        hacia_derecha = (jugador.getX() > getX());   // actualiza la direccion antes de disparar
+        hacia_derecha = (jugador.getX() > getX());   
 
         int dx = hacia_derecha ? 5 : -5;
-        Bala bala = new Bala(getX() + getWidth() / 2, getY() + getHeight() / 2, dx);
+
+        ImageIcon iconBala = null;
+        if ("jefe".equals(tipo) && nivel.getNumeroNivel() == 2) {
+            iconBala = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/yerbaMate.png"));
+        } else if ("jefe".equals(tipo) && nivel.getNumeroNivel() == 3) {
+            iconBala = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/pelotaMaradona.png"));
+        }
+
+        Bala bala = new Bala(getX() + getWidth() / 2, getY() + getHeight() / 2, dx, iconBala);
 
         if (getParent() != null) {
             getParent().add(bala);
             getParent().setComponentZOrder(bala, 0);
-            getParent().repaint();
         }
         nivel.agregarBala(bala);
-        repaint(); // fuerza redibujo con la dirección actualizada
     }
     
     public void movimientoJefe(Player player) {

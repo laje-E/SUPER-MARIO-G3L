@@ -32,9 +32,9 @@ public abstract class NivelBase extends JFrame {
 	boolean wPressed = false;
 	protected Timer movimientoFluido;
 	private int iteracion = 1;
-//	public ImageIcon mario;
 	protected Puntaje puntaje;
-
+	protected int nivelActual = 1;
+	protected int puntosAcumulados = 0;
 
 
     public NivelBase() {
@@ -47,16 +47,9 @@ public abstract class NivelBase extends JFrame {
         contentPane.setFocusable(true);
         contentPane.setFocusTraversalKeysEnabled(false);
         
-     // inicializo hud
-        puntaje = new Puntaje(1, 300);
-        puntaje.setBounds(220, 10, 400, 30);
-        contentPane.add(puntaje);
-        
-        puntaje.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 15)); // cambia el tamaño de la fuente
-        puntaje.setForeground(java.awt.Color.BLACK); // cambia el color de la fuente
-        
         configurarJugador();
         construirNivel(); // método abstracto
+        configurarPuntaje();
         configurarFondo();
         configurarMovimiento();
     }
@@ -77,26 +70,25 @@ public abstract class NivelBase extends JFrame {
     }
     
     protected void configurarJugador() {
-        // crear al jugador
-        player = new Player(100, 100, 30, 50, obstaculos, enemigos, this, balas);
+        // crea al jugador
+        player = new Player(100, 300, 30, 50, obstaculos, enemigos, this, balas);
         player.setBackground(Color.RED);
         player.setFocusable(false);
 
-        // cargar el sprite inicial (idle / parado)
+        // carga el sprite inicial
         URL url = getClass().getResource("/img/personajes/marioParado.png");
         if (url != null) {
             player.setIcon(new ImageIcon(url));
         } else {
             System.err.println("No se encontró la imagen: marioParado.png");
         }
-
-        // agregar al contentPane
+        
         contentPane.add(player);
     }
 
 
     protected void configurarFondo() {
-        int numeroNivel = getNumeroNivel();  // <- método que cada subnivel implementa
+        int numeroNivel = getNumeroNivel();  // método get que cada nivel implementa
         fondoPanel = new FondoPanel(numeroNivel);
         fondoPanel.setBounds(0, 0, anchoMapa, 600);
         contentPane.add(fondoPanel);
@@ -192,12 +184,6 @@ public abstract class NivelBase extends JFrame {
             	            	enemigo.setLocation(enemigo.getX() + 3, enemigo.getY()); 
             	            	enemigo.ajustarLimites(3); // si el mundo se mueve a la derecha (A)
             	            	}
-            	            	/*
-            	            	else {
-            	            		enemigo.setLocation(enemigo.getX() - 3, enemigo.getY()); 
-                	            	enemigo.ajustarLimites(-3);
-            	            	}
-            	            	*/
             	            }
             	            fondoPanel.repaint();
             	        }
@@ -262,20 +248,7 @@ public abstract class NivelBase extends JFrame {
                 
                 int posicionJugador = worldOffset + player.getX();
                 if (posicionJugador >= 3000 && !nivelSuperado) {
-                    nivelSuperado = true; 				// evita que se vuelva a superar el nivel.
-                    fondoPanel.setearNivelSuperado(true);
-                    repaint();
-                    System.out.println("Nivel superado!");
-                    
-                    aPressed = false;
-                    dPressed = true;
-                    Sonido.reproducirEfecto("sonidos/player/superarNivel.wav"); 
-                    new Timer(1750, new ActionListener() {
-                        public void actionPerformed(ActionEvent evt) {
-                            ((Timer) evt.getSource()).stop();
-                            GestorNiveles.avanzarNivel(NivelBase.this);
-                        }
-                    }).start();
+                    jugadorGano();   // <- delega en el hook
                 }
                 
             }
@@ -283,6 +256,41 @@ public abstract class NivelBase extends JFrame {
         });
         movimientoFluido.start();
     }
+    
+    
+    protected void configurarPuntaje() {
+        puntosAcumulados = GestorNiveles.getPuntosTotales();
+        puntaje = new Puntaje(nivelActual, 300, puntosAcumulados, this);
+        puntaje.setBounds(220, 10, 400, 30);
+        puntaje.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 15));
+        puntaje.setForeground(java.awt.Color.BLACK);
+        contentPane.add(puntaje);
+    }
+    
+    
+
+    protected void jugadorGano() {
+
+        if (nivelSuperado) return;
+        nivelSuperado = true;
+
+        puntaje.siguienteNivel();
+        fondoPanel.setearNivelSuperado(true);
+        repaint();
+
+        aPressed = false;
+        dPressed = true;
+        Sonido.reproducirEfecto("sonidos/player/superarNivel.wav");
+
+        new Timer(1750, new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                ((Timer) evt.getSource()).stop();
+                GestorNiveles.avanzarNivel(NivelBase.this);
+            }
+        }).start();
+    }
+
+    
     
     public void mostrarPantallaGameOver() {
         if (movimientoFluido != null) movimientoFluido.stop();
@@ -295,6 +303,7 @@ public abstract class NivelBase extends JFrame {
         repaint();
     }
 
+    
     
     
     

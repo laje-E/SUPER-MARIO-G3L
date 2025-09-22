@@ -5,8 +5,9 @@ import javax.swing.SwingUtilities;
 
 public class GestorNiveles {
 	private static int nivelActual = 1;
+    private static int puntosTotales = 0; //  acá guardamos todos los puntos
 
-	public static void cargarNivel(JFrame ventana) {
+  	public static void cargarNivel(JFrame ventana) {
 	    if (ventana instanceof NivelBase) {
 	        ((NivelBase) ventana).cerrarNivel();
 	    } else {
@@ -29,6 +30,20 @@ public class GestorNiveles {
 	    });
 	}
 
+  	
+    public static int getPuntosTotales() {
+        return puntosTotales;
+    }
+
+    public static void setPuntosTotales(int puntos) {
+        puntosTotales = puntos;
+    }
+
+    public static void sumarPuntos(int puntos) {
+        puntosTotales += puntos;
+    }
+  	
+  	
 
     public static void avanzarNivel(JFrame ventana) {
         nivelActual++;

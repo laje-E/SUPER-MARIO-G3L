@@ -43,8 +43,6 @@ public class menuInicio extends JFrame implements KeyListener {
 		catch (Exception e) {
 			System.out.println("Error al cargar música: " + e.getMessage());
 		}
-	
-		// Cargar sonido de inicio
 		
 		
 		// Cargar fuente personalizada
@@ -58,7 +56,7 @@ public class menuInicio extends JFrame implements KeyListener {
 	
 		panelInicio = new panelInicio();
 		setContentPane(panelInicio);
-		panelInicio.setFocusable(true);  // ← El panel debe ser focusable
+		panelInicio.setFocusable(true);
 	    panelInicio.requestFocusInWindow();
 		addKeyListener(this);
 		setFocusable(true);

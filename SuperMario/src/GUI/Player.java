@@ -100,7 +100,10 @@ import javax.swing.Timer;
 			            aEliminar.add(enemigo);
 			            
 			            if (nivel != null && nivel.puntaje != null) {
-			            	if("mate".equals(enemigo.tipo)){
+			            	if("jefe".equals(enemigo.tipo)) {
+			            		nivel.puntaje.sumarPuntos(1000);
+			            	}
+			            	if("matecinini".equals(enemigo.tipo)){
 			            		nivel.puntaje.sumarPuntos(200);
 			            	} else if("carbon".equals(enemigo.tipo)) {
 			            		nivel.puntaje.sumarPuntos(100);
