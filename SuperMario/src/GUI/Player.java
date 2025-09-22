@@ -28,7 +28,7 @@ import javax.swing.Timer;
 			public ImageIcon icon;
 			
 			
-			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, NivelBase nivel, ArrayList<Bala> balas, ImageIcon icono) {
+			public Player(int posX, int posY, int ancho, int alto, ArrayList<Obstaculo> obstaculos, ArrayList<Enemigo> enemigos, NivelBase nivel, ArrayList<Bala> balas) {
 		        setBounds(posX, posY, ancho, alto);
 		        
 		        this.balas = balas;
@@ -62,9 +62,6 @@ import javax.swing.Timer;
 			        g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
 			    }
 			}
-			
-			
-			
 			
 			private void aplicarGravedad(ArrayList<Enemigo> enemigos) {
 				if (muerto) return;

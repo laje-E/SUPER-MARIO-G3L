@@ -32,7 +32,7 @@ public abstract class NivelBase extends JFrame {
 	boolean wPressed = false;
 	protected Timer movimientoFluido;
 	private int iteracion = 1;
-	public ImageIcon mario;
+//	public ImageIcon mario;
 	protected Puntaje puntaje;
 
 
@@ -41,6 +41,7 @@ public abstract class NivelBase extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setBounds(100, 100, 800, 600);
+        setLocationRelativeTo(null); // Centrar en pantalla
         contentPane = new JPanel(null);
         setContentPane(contentPane);
         contentPane.setFocusable(true);
@@ -76,18 +77,23 @@ public abstract class NivelBase extends JFrame {
     }
     
     protected void configurarJugador() {
-    	   URL url = getClass().getResource("/img/personajes/marioParadopng.png");
-    	   if (url != null) {
-    		   mario = new ImageIcon(url);
-    	   } else {
-    		   System.err.println("No se encontró la imagen: marioParadopng.png");
-  	  }
-
-        player = new Player(100, 350, 30, 50, obstaculos, enemigos, this, balas, mario);
+        // crear al jugador
+        player = new Player(100, 100, 30, 50, obstaculos, enemigos, this, balas);
         player.setBackground(Color.RED);
         player.setFocusable(false);
+
+        // cargar el sprite inicial (idle / parado)
+        URL url = getClass().getResource("/img/personajes/marioParado.png");
+        if (url != null) {
+            player.setIcon(new ImageIcon(url));
+        } else {
+            System.err.println("No se encontró la imagen: marioParado.png");
+        }
+
+        // agregar al contentPane
         contentPane.add(player);
     }
+
 
     protected void configurarFondo() {
         int numeroNivel = getNumeroNivel();  // <- método que cada subnivel implementa

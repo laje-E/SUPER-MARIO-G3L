@@ -271,7 +271,7 @@ public class Nivel2 extends NivelBase {
 
     @Override
     protected int getNumeroNivel() {
-        return 1;
+        return 2;
     }
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(() -> {

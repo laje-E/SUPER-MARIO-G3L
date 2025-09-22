@@ -35,7 +35,7 @@ public class menuInicio extends JFrame implements KeyListener {
 		// Cargar música de fondo
 		try {
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(
-					getClass().getResource("/sonidos/temasInGame/creditos.wav"));
+					getClass().getResource("/sonidos/temasInGame/menuInicio.wav"));
 			musicaMenu = AudioSystem.getClip();
 			musicaMenu.open(audioIn);
 			musicaMenu.loop(Clip.LOOP_CONTINUOUSLY);
