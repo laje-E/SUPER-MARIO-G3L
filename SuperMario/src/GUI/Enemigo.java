@@ -101,7 +101,7 @@ public class Enemigo extends JPanel {
     
     public void empezarADisparar(Player jugador) { // Para enemigos que van a disparar
         if (!dispara) return;
-        disparoTimer = new Timer(1500, e -> disparar(jugador));
+        disparoTimer = new Timer(2000, e -> disparar(jugador));
         disparoTimer.start();
     }
 

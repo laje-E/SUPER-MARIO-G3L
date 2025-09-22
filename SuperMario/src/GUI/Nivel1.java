@@ -37,11 +37,12 @@ public class Nivel1 extends NivelBase {
         carboncini4.patrullar();
 
         ImageIcon parrilleroIcon = new ImageIcon(getClass().getResource("/img/personajes/enemigos/yaEscalados/parrilleroInfernal.png"));
-        Enemigo parrillero = new Enemigo(2800, 386, 102, 153, 2500, 3000, parrilleroIcon, true, 1, this, false);
+        Enemigo parrillero = new Enemigo(2800, 386, 102, 113, 2500, 3000, parrilleroIcon, true, 1, this, false);
+        parrillero.tipo = "jefe";
         contentPane.add(parrillero);
         enemigos.add(parrillero);
         parrillero.empezarADisparar(player);
-        parrillero.movimientoVerical(5);
+        parrillero.movimientoVerical(3);
 
        
         ImageIcon pastoIcon = new ImageIcon(getClass().getResource("/img/pisos/pastoFixed.png"));
@@ -80,28 +81,28 @@ public class Nivel1 extends NivelBase {
         obstaculos.add(plataformaMetal1);
 
         Obstaculo plataformaMetal2 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal2.setBounds(700, 300, 80, 10);
+        plataformaMetal2.setBounds(650, 300, 130, 10);
         contentPane.add(plataformaMetal2);
         obstaculos.add(plataformaMetal2);
 
         Obstaculo plataformaMetal3 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal3.setBounds(900, 250, 80, 10);
+        plataformaMetal3.setBounds(870, 250, 130, 10);
         contentPane.add(plataformaMetal3);
         obstaculos.add(plataformaMetal3);
 
         // 3 plataformas en el medio del nivel
         Obstaculo plataformaMetal4 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal4.setBounds(1400, 350, 80, 10);
+        plataformaMetal4.setBounds(1350, 350, 100, 10);
         contentPane.add(plataformaMetal4);
         obstaculos.add(plataformaMetal4);
 
         Obstaculo plataformaMetal5 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal5.setBounds(1600, 300, 80, 10);
+        plataformaMetal5.setBounds(1550, 325, 150, 10);
         contentPane.add(plataformaMetal5);
         obstaculos.add(plataformaMetal5);
 
         Obstaculo plataformaMetal6 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal6.setBounds(1800, 250, 80, 10);
+        plataformaMetal6.setBounds(1800, 300, 80, 10);
         contentPane.add(plataformaMetal6);
         obstaculos.add(plataformaMetal6);
 
@@ -112,7 +113,7 @@ public class Nivel1 extends NivelBase {
         obstaculos.add(plataformaMetal7);
 
         Obstaculo plataformaMetal8 = new Obstaculo(obstaculos, metalIcon, true);
-        plataformaMetal8.setBounds(2500, 270, 80, 10);
+        plataformaMetal8.setBounds(2450, 270, 200, 10);
         contentPane.add(plataformaMetal8);
         obstaculos.add(plataformaMetal8);
 

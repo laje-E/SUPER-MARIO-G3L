@@ -47,7 +47,7 @@ public abstract class NivelBase extends JFrame {
         contentPane.setFocusTraversalKeysEnabled(false);
         
      // inicializo hud
-        puntaje = new Puntaje(1, 300);
+        puntaje = new Puntaje("mario", 1, 300);
         puntaje.setBounds(220, 10, 400, 30);
         contentPane.add(puntaje);
         
@@ -257,9 +257,11 @@ public abstract class NivelBase extends JFrame {
                 int posicionJugador = worldOffset + player.getX();
                 if (posicionJugador >= 3000 && !nivelSuperado) {
                     nivelSuperado = true; 				// evita que se vuelva a superar el nivel.
+                    puntaje.siguienteNivel();
                     fondoPanel.setearNivelSuperado(true);
                     repaint();
                     System.out.println("Nivel superado!");
+                    
                     
                     aPressed = false;
                     dPressed = true;

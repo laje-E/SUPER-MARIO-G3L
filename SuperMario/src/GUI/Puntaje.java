@@ -8,14 +8,14 @@ import java.awt.event.ActionListener;
 public class Puntaje extends JLabel{
 	private String nombreJugador;
 	private int Puntos;
-	private int Nivel;
+	private int Nivel = 1;
 	private int Monedas;
 	private int Tiempo;
 	private Timer timer;
 	
 	public Puntaje(String nombreJugador, int nivelInicial, int tiempoInicial) {
 		this.nombreJugador = nombreJugador;
-		this.Nivel = nivelInicial;
+		this.Nivel = 1;
 		this.Tiempo = tiempoInicial;
 		this.Puntos = 0;
 		this.Monedas = 0;
@@ -40,7 +40,7 @@ public class Puntaje extends JLabel{
 	}
 	private void actualizarTexto() {
 		setText(
-				nombreJugador + " | Puntos: " + Puntos + " | Nivel: " + Nivel + " | Monedas: " + " | Tiempo; " + Tiempo
+				nombreJugador + " | Puntos: " + Puntos + " | Nivel: " + Nivel + " | Tiempo; " + Tiempo + " |"
 				);
 	}
 	public void sumarPuntos(int cantidad) {
@@ -50,7 +50,10 @@ public class Puntaje extends JLabel{
 	
 	public void siguienteNivel() {
 		Nivel++;
-		actualizarTexto();
+	    System.out.println("Nivel actualizado a: " + Nivel);
+	    actualizarTexto();
+	    revalidate(); // si estás en un JPanel
+	    repaint();
 	}
 	
 	public int getPuntos() {
