@@ -16,7 +16,7 @@ import javax.swing.Timer;
 	
 			private static final long serialVersionUID = 1L;
 			
-			private int velocidadY = 0;
+			private int velocidadY = 80;
 			private int fuerzaSalto = -13; // negativa porque sube
 			private int gravedad = 1;
 			private boolean enElAire = false;

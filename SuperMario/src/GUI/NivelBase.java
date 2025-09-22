@@ -47,7 +47,7 @@ public abstract class NivelBase extends JFrame {
         contentPane.setFocusTraversalKeysEnabled(false);
         
      // inicializo hud
-        puntaje = new Puntaje("Mario", 1, 300);
+        puntaje = new Puntaje(1, 300);
         puntaje.setBounds(220, 10, 400, 30);
         contentPane.add(puntaje);
         
@@ -310,5 +310,5 @@ public abstract class NivelBase extends JFrame {
 
     	    dispose();
     }
-        
+   
 }

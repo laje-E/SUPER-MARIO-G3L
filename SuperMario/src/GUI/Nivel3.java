@@ -107,4 +107,10 @@ public class Nivel3 extends NivelBase {
     protected int getNumeroNivel() {
         return 3;
     }
+    public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            Nivel1 nivel1 = new Nivel1();
+            nivel1.setVisible(true);
+        });
+    }
 }
